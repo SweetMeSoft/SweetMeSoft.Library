@@ -1,8 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <PackageId>SweetMeSoft.Tools</PackageId>
+    <Version>1.01.000</Version>
+    <Authors>Erick Velasco</Authors>
+    <Company>SweetMeSoft</Company>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="2captcha-csharp" Version="1.1.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SweetMeSoft.Base\SweetMeSoft.Base.csproj" />
+  </ItemGroup>
 
 </Project>

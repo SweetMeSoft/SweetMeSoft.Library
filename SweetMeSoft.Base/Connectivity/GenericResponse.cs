@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http;
 
-namespace SweetMeSoft.Base
+namespace SweetMeSoft.Base.Connectivity
 {
     public class GenericResponse
     {

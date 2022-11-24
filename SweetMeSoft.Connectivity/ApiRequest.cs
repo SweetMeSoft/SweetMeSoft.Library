@@ -6,9 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using System.Text;
-using SweetMeSoft.Base;
 using SweetMeSoft.Base.Attributes;
 using Newtonsoft.Json;
+using SweetMeSoft.Base.Connectivity;
 
 namespace SweetMeSoft.Connectivity
 {
@@ -85,6 +85,7 @@ namespace SweetMeSoft.Connectivity
                             CookieContainer = cookies
                         };
                 }
+
                 var content = new StringContent(JsonConvert.SerializeObject(request.Data), Encoding.UTF8, "application/json");
                 return new GenericResponse()
                 {

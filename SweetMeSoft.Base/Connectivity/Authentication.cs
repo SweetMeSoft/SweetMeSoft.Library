@@ -1,4 +1,4 @@
-﻿namespace SweetMeSoft.Base
+﻿namespace SweetMeSoft.Base.Connectivity
 {
     public class Authentication
     {

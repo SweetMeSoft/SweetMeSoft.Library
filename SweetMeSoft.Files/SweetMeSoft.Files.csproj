@@ -2,6 +2,23 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <PackageId>SweetMeSoft.Files</PackageId>
+    <Version>1.01.000</Version>
+    <Authors>Erick Velasco</Authors>
+    <Company>SweetMeSoft</Company>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="30.0.1" />
+    <PackageReference Include="EPPlus" Version="6.1.1" />
+    <PackageReference Include="NPOI" Version="2.6.0" />
+    <PackageReference Include="System.Linq.Async" Version="6.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SweetMeSoft.Base\SweetMeSoft.Base.csproj" />
+    <ProjectReference Include="..\SweetMeSoft.Tools\SweetMeSoft.Tools.csproj" />
+  </ItemGroup>
 
 </Project>

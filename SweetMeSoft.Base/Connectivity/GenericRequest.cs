@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SweetMeSoft.Base
+namespace SweetMeSoft.Base.Connectivity
 {
     public class GenericRequest<T>
     {
@@ -14,7 +14,7 @@ namespace SweetMeSoft.Base
 
         public List<KeyValuePair<string, string>> Headers { get; set; } = new List<KeyValuePair<string, string>>();
 
-        public List<KeyValuePair<string,string>> AdditionalParams { get; set; } = new List<KeyValuePair<string, string>>();
+        public List<KeyValuePair<string, string>> AdditionalParams { get; set; } = new List<KeyValuePair<string, string>>();
     }
 
     public enum HeaderType
