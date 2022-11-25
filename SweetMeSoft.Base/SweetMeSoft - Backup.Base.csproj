@@ -3,13 +3,11 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <PackageId>SweetMeSoft.Base</PackageId>
-    <Version>1.10.101</Version>
+    <Version>1.10.000</Version>
     <Authors>Erick Velasco</Authors>
     <Company>SweetMeSoft</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Copyright>SweetMeSoft</Copyright>
-    <Title>SweetMeSoft Base</Title>
-    <Description>SweetMeSoft Base Library is the base of SweetMeSoft Libraries</Description>
   </PropertyGroup>
 
   <ItemGroup>

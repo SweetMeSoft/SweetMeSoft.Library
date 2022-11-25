@@ -3,10 +3,13 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <PackageId>SweetMeSoft.Files</PackageId>
-    <Version>1.01.000</Version>
+    <Version>1.10.101</Version>
     <Authors>Erick Velasco</Authors>
     <Company>SweetMeSoft</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Title>SweetMeSoft Files</Title>
+    <Description>SweetMeSoft Files Library is a compilation of ways to read and generate different types of files like Excel, CSV, TXT, ZIP and more</Description>
+    <Copyright>SweetMeSoft</Copyright>
   </PropertyGroup>
 
   <ItemGroup>

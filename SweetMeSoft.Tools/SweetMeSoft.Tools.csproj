@@ -3,10 +3,13 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <PackageId>SweetMeSoft.Tools</PackageId>
-    <Version>1.01.000</Version>
+    <Version>1.10.101</Version>
     <Authors>Erick Velasco</Authors>
     <Company>SweetMeSoft</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Title>SweetMeSoft Tools</Title>
+    <Description>SweetMeSoft Tools Library is a compilation of basic tools to use</Description>
+    <Copyright>SweetMeSoft</Copyright>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,23 +1,20 @@
-﻿using CsvHelper;
-using CsvHelper.Configuration;
-
-using NPOI.HSSF.UserModel;
+﻿using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 
 using OfficeOpenXml;
 
 using SweetMeSoft.Base;
 using SweetMeSoft.Base.Attributes;
+using SweetMeSoft.Base.Files;
+using SweetMeSoft.Tools;
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 
-namespace SweetMeSoft.Tools
+namespace SweetMeSoft.Files
 {
     public class Excel
     {
@@ -247,31 +244,6 @@ namespace SweetMeSoft.Tools
             return new MemoryStream(book.GetAsByteArray());
         }
 
-        public static async Task<List<T>> ReadCsv<T>(Stream stream, bool hasHeader = true, string delimiter = "|")
-        {
-            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
-            {
-                Delimiter = delimiter,
-                IgnoreBlankLines = true,
-                HasHeaderRecord = hasHeader,
-                BadDataFound = null,
-                ReadingExceptionOccurred = (ex) =>
-                {
-                    return false;
-                }
-            };
-
-            var copiedStream = new MemoryStream();
-            stream.Position = 0;
-            await stream.CopyToAsync(copiedStream);
-            copiedStream.Position = 0;
-
-            using var reader = new StreamReader(copiedStream);
-            using var csv = new CsvReader(reader, config);
-            //csv.Context.RegisterClassMap<TMap>();
-            return await csv.GetRecordsAsync<T>().ToListAsync();
-        }
-
         private static void WriteHeader(ExcelWorksheet sheet, Type type)
         {
             var rowIndex = 1;
@@ -325,59 +297,5 @@ namespace SweetMeSoft.Tools
 
             return rowIndex + 1;
         }
-
-        public static async Task<List<T>> ReadCsv<T>(StreamFile streamFile, bool hasHeader = true)
-        {
-            var list = new List<T>();
-            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
-            {
-                Delimiter = "|",
-                IgnoreBlankLines = true,
-                IgnoreReferences = true,
-                HasHeaderRecord = hasHeader,
-                MissingFieldFound = (data) =>
-                {
-                    var a = data;
-                },
-                BadDataFound = (data) =>
-                {
-                    var a = data;
-                },
-                ReadingExceptionOccurred = (ex) =>
-                {
-                    return false;
-                }
-            };
-
-            var copiedStream = new MemoryStream();
-            streamFile.Stream.Position = 0;
-            await streamFile.Stream.CopyToAsync(copiedStream);
-            copiedStream.Position = 0;
-            var file = new StreamReader(copiedStream);
-
-            using var reader = new StreamReader(copiedStream);
-            using var csv = new CsvReader(reader, config);
-            //csv.Context.RegisterClassMap<PayUPaymentMap>();
-            return await csv.GetRecordsAsync<T>().ToListAsync();
-        }
-
-        public static MemoryStream CreateCsv<T>(List<T> list)
-        {
-            using var memoryStream = new MemoryStream();
-            using var writer = new StreamWriter(memoryStream);
-            using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
-            csv.WriteRecords(list);
-            return memoryStream;
-        }
-    }
-
-    public class ExcelSheet
-    {
-
-        public string Name { get; set; }
-
-        public IList List { get; set; }
-
-        public Type Type { get; set; }
     }
 }

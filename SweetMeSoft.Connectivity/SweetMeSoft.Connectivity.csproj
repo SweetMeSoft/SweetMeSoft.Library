@@ -3,10 +3,13 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <PackageId>SweetMeSoft.Connectivity</PackageId>
-    <Version>1.01.000</Version>
+    <Version>1.10.101</Version>
     <Authors>Erick Velasco</Authors>
     <Company>SweetMeSoft</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Title>SweetMeSoft Connectivity</Title>
+    <Description>SweetMeSoft Connectivity Library is a compilation of easy to use tools to connect with ThirdParties services and APIs</Description>
+    <Copyright>SweetMeSoft</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
