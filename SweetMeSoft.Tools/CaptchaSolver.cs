@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using SweetMeSoft.Base.Tools;
@@ -21,24 +19,31 @@ namespace SweetMeSoft.Tools
             };
 
             var captcha = new ReCaptcha();
-            captcha.SetSiteKey(options.SiteKey); //"6LdTfb4UAAAAAEsThcpWARtYaTPhGjVhZYlX-aC8"
-            captcha.SetUrl(options.SiteUrl); //"https://edocnube.com/consulta/wfrmLoginNube.aspx"
+            captcha.SetSiteKey(options.SiteKey);
+            captcha.SetUrl(options.SiteUrl);
 
-            var code = Console.ReadLine();
+            var code = "";
             try
             {
-                var balance = await solver.Balance();
-                if (balance < 1)
+                var balance = (await solver.Balance()) / 100000.0;
+                Console.WriteLine("Balance: " + balance.ToString("#.00"));
+                if (balance < 1 && !string.IsNullOrEmpty(options.EmailNotifications))
                 {
-                    Email.Send(options.EmailNotifications, "Captcha solver Funds", "The balance of your Captcha Solver is under 1 USD. Please recharge your account.");
+                    Email.Send(new EmailOptions(options.EmailNotifications)
+                    {
+                        Subject = "Captcha solver Funds",
+                        HtmlBody = "The balance of your Captcha Solver is under 1 USD. Please recharge your account."
+                    });
                 }
 
                 var captchaId = await solver.Send(captcha);
                 while (code == "" || code == null)
                 {
                     Thread.Sleep(2000);
-                    return await solver.GetResult(captchaId);
+                    code = await solver.GetResult(captchaId);
                 }
+
+                return code;
             }
             catch (Exception e)
             {

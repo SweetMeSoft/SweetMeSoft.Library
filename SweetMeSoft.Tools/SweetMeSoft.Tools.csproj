@@ -1,9 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
     <PackageId>SweetMeSoft.Tools</PackageId>
-    <Version>1.10.101</Version>
+    <Version>1.10.103</Version>
     <Authors>Erick Velasco</Authors>
     <Company>SweetMeSoft</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>

@@ -116,18 +116,23 @@ namespace SweetMeSoft.Files
             return ReadExcelFile<T>(file.Stream, headerRow);
         }
 
-        public static List<T> ReadExcelFile<T>(Stream stream, int headerRow = 1) where T : new()
+        public static List<T> ReadExcelFile<T>(Stream file, int headerRow = 1) where T : new()
+        {
+            return ReadExcelFile<T>(new ExcelOptions(file, headerRow));
+        }
+
+        public static List<T> ReadExcelFile<T>(ExcelOptions options) where T : new()
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             var list = new List<T>();
-            using var excelFile = new ExcelPackage(stream);
+            using var excelFile = new ExcelPackage(options.Stream);
             foreach (var sheet in excelFile.Workbook.Worksheets)
             {
                 var headerFilled = false;
                 var header = new List<string>();
                 var start = sheet.Dimension.Start;
                 var end = sheet.Dimension.End;
-                headerRow = headerRow < start.Row ? start.Row : headerRow;
+                options.HeaderRow = options.HeaderRow < start.Row ? start.Row : options.HeaderRow;
                 for (int rowIndex = start.Row; rowIndex <= end.Row; rowIndex++)
                 {
                     try
@@ -136,10 +141,10 @@ namespace SweetMeSoft.Files
                         {
                             for (int columnIndex = start.Column; columnIndex <= end.Column; columnIndex++)
                             {
-                                header.Add(sheet.Cells[headerRow, columnIndex].Text);
+                                header.Add(sheet.Cells[options.HeaderRow, columnIndex].Text);
                             }
 
-                            rowIndex = headerRow;
+                            rowIndex = options.HeaderRow;
                             headerFilled = true;
                         }
                         else
@@ -154,44 +159,47 @@ namespace SweetMeSoft.Files
                                 if (headerCell != -1)
                                 {
                                     var cell = sheet.Cells[rowIndex, headerCell + start.Column];
-                                    if (property.PropertyType == typeof(DateTime) || property.PropertyType == typeof(DateTime?))
+                                    if (cell.Value != null)
                                     {
-                                        if (cell.Value is double)
+                                        if (property.PropertyType == typeof(DateTime) || property.PropertyType == typeof(DateTime?))
                                         {
-                                            property.SetValue(row, DateTime.FromOADate(cell.GetValue<double>()));
-                                        }
-                                        else
-                                        {
-                                            if (cell.Value is DateTime)
+                                            if (cell.Value is double)
                                             {
-                                                property.SetValue(row, cell.GetValue<DateTime>());
+                                                property.SetValue(row, DateTime.FromOADate(cell.GetValue<double>()));
                                             }
                                             else
                                             {
-                                                property.SetValue(row, DateTime.ParseExact(cell.GetValue<string>(), columnAttr.Format, null));
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        if (property.PropertyType == typeof(decimal) || property.PropertyType == typeof(decimal?))
-                                        {
-                                            var value = cell.GetValue<string>();
-                                            if (value != null)
-                                            {
-                                                value = value.Replace(".", CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
-                                                property.SetValue(row, Convert.ToDecimal(value));
+                                                if (cell.Value is DateTime)
+                                                {
+                                                    property.SetValue(row, cell.GetValue<DateTime>());
+                                                }
+                                                else
+                                                {
+                                                    property.SetValue(row, DateTime.ParseExact(cell.GetValue<string>(), columnAttr.Format, null));
+                                                }
                                             }
                                         }
                                         else
                                         {
-                                            if (cell.Value is ExcelErrorValue)
+                                            if (property.PropertyType == typeof(decimal) || property.PropertyType == typeof(decimal?))
                                             {
-                                                property.SetValue(row, cell.GetValue<ExcelErrorValue>().ToString());
+                                                var value = cell.GetValue<string>();
+                                                if (value != null)
+                                                {
+                                                    value = value.Replace(".", CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+                                                    property.SetValue(row, Convert.ToDecimal(value));
+                                                }
                                             }
                                             else
                                             {
-                                                property.SetValue(row, cell.GetValue<string>());
+                                                if (cell.Value is ExcelErrorValue)
+                                                {
+                                                    property.SetValue(row, cell.GetValue<ExcelErrorValue>().ToString());
+                                                }
+                                                else
+                                                {
+                                                    property.SetValue(row, cell.GetValue<string>());
+                                                }
                                             }
                                         }
                                     }
@@ -203,7 +211,7 @@ namespace SweetMeSoft.Files
                     }
                     catch (Exception ex)
                     {
-                        var a = ex.Message;
+                        options.ErrorCallback?.Invoke(rowIndex, ex);
                     }
                 }
             }

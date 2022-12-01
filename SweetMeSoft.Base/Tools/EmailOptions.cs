@@ -4,38 +4,35 @@ namespace SweetMeSoft.Base.Tools
 {
     public class EmailOptions
     {
-        public EmailOptions()
+        public static string Sender { get; set; }
+
+        public static string Password { get; set; }
+
+
+        public EmailOptions(string destinatary)
         {
-            StreamFiles = new List<StreamFile>();
-            AdditionalDestinataries = new List<string>();
-            CC = new List<string>();
+            Destinatary = destinatary;
         }
 
-        public EmailOptions(StreamFile file)
+        public EmailOptions(string destinatary, StreamFile file)
         {
+            Destinatary = destinatary;
             StreamFiles = new List<StreamFile>()
             {
                 file
             };
-            AdditionalDestinataries = new List<string>();
-            CC = new List<string>();
         }
 
-        public EmailOptions(List<StreamFile> files)
-        {
-            StreamFiles = files;
-            AdditionalDestinataries = new List<string>();
-            CC = new List<string>();
-        }
+        public string Destinatary { get; init; }
 
-        public string EmailFrom { get; set; }
+        public string Subject { get; init; } = "";
 
-        public string Password { get; set; }
+        public string HtmlBody { get; init; } = "";
 
-        public List<string> AdditionalDestinataries { get; set; }
+        public List<string> AdditionalDestinataries { get; set; } = new List<string>();
 
-        public List<string> CC { get; set; }
+        public List<string> CC { get; set; } = new List<string>();
 
-        public List<StreamFile> StreamFiles { get; set; }
+        public List<StreamFile> StreamFiles { get; set; } = new List<StreamFile>();
     }
 }
