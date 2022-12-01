@@ -23,11 +23,11 @@ namespace SweetMeSoft.Base.Tools
             };
         }
 
-        public string Destinatary { get; init; }
+        public string Destinatary { get; set; }
 
-        public string Subject { get; init; } = "";
+        public string Subject { get; set; } = "";
 
-        public string HtmlBody { get; init; } = "";
+        public string HtmlBody { get; set; } = "";
 
         public List<string> AdditionalDestinataries { get; set; } = new List<string>();
 
