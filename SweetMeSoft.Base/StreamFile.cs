@@ -29,7 +29,7 @@ namespace SweetMeSoft.Base
         {
             get
             {
-                return fileName.EndsWith(ContentType.ToString()) ? fileName : fileName + "." + ContentType.ToString();
+                return fileName.ToLower().EndsWith(ContentType.ToString()) ? fileName : fileName + "." + ContentType.ToString();
             }
             set
             {
