@@ -47,7 +47,7 @@ namespace SweetMeSoft.Tools
             number = number.Replace(".", CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
             if (number.Contains(CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator))
             {
-                number = number[..number.IndexOf(CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator)];
+                number = number.Substring(0, number.IndexOf(CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator));
             }
 
             return int.Parse(number);

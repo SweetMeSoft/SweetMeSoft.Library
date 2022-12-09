@@ -153,6 +153,15 @@ namespace SweetMeSoft.Connectivity
                 AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
             };
 
+            if (request.BypassSSL)
+            {
+                handler.ClientCertificateOptions = ClientCertificateOption.Manual;
+                handler.ServerCertificateCustomValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) =>
+                {
+                    return true;
+                };
+            }
+
             var client = new HttpClient(handler);
             client.DefaultRequestHeaders.Clear();
             client.Timeout = TimeSpan.FromSeconds(600);

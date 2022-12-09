@@ -15,6 +15,8 @@ namespace SweetMeSoft.Base.Connectivity
         public List<KeyValuePair<string, string>> Headers { get; set; } = new List<KeyValuePair<string, string>>();
 
         public List<KeyValuePair<string, string>> AdditionalParams { get; set; } = new List<KeyValuePair<string, string>>();
+
+        public bool BypassSSL { get; set; } = false;
     }
 
     public enum HeaderType

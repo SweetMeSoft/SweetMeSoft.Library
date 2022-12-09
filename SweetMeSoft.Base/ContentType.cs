@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace SweetMeSoft.Base
 {
@@ -41,5 +42,11 @@ namespace SweetMeSoft.Base
             { ContentType.txt, "text/plain" },
         };
 
+        public static ContentType GetContentType(string extension)
+        {
+            extension = extension.ToLower();
+            var key = ContentTypesDict.FirstOrDefault(model => model.Key.ToString().ToLower() == extension);
+            return key.Value == null ? ContentType.txt : key.Key;
+        }
     }
 }
