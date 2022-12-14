@@ -11,12 +11,17 @@ namespace SweetMeSoft.Files
 {
     public class Csv
     {
-        public static async Task<List<T>> ReadCsv<T>(StreamFile streamFile, bool hasHeader = true, string delimiter = "|")
+        public static async Task<List<T>> Read<T>(StreamFile streamFile, bool hasHeader = true, string delimiter = "|")
         {
-            return await ReadCsv<T>(streamFile.Stream, hasHeader, delimiter);
+            return await Read<T>(streamFile.Stream, hasHeader, delimiter);
         }
 
-        public static async Task<List<T>> ReadCsv<T>(Stream stream, bool hasHeader = true, string delimiter = "|")
+        public static async Task<List<T>> Read<T, TMap>(StreamFile streamFile, bool hasHeader = true, string delimiter = "|") where TMap : ClassMap
+        {
+            return await Read<T, TMap>(streamFile.Stream, hasHeader, delimiter);
+        }
+
+        public static async Task<List<T>> Read<T>(Stream stream, bool hasHeader = true, string delimiter = "|")
         {
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
@@ -40,7 +45,32 @@ namespace SweetMeSoft.Files
             return await csv.GetRecordsAsync<T>().ToListAsync();
         }
 
-        public static MemoryStream CreateCsv<T>(List<T> list)
+        public static async Task<List<T>> Read<T, TMap>(Stream stream, bool hasHeader = true, string delimiter = "|") where TMap : ClassMap
+        {
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                Delimiter = delimiter,
+                IgnoreBlankLines = true,
+                HasHeaderRecord = hasHeader,
+                BadDataFound = null,
+                ReadingExceptionOccurred = (ex) =>
+                {
+                    return false;
+                }
+            };
+
+            var copiedStream = new MemoryStream();
+            stream.Position = 0;
+            await stream.CopyToAsync(copiedStream);
+            copiedStream.Position = 0;
+
+            using var reader = new StreamReader(copiedStream);
+            using var csv = new CsvReader(reader, config);
+            csv.Context.RegisterClassMap<TMap>();
+            return await csv.GetRecordsAsync<T>().ToListAsync();
+        }
+
+        public static MemoryStream Create<T>(List<T> list)
         {
             using var memoryStream = new MemoryStream();
             using var writer = new StreamWriter(memoryStream);

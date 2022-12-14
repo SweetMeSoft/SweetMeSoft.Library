@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;</TargetFrameworks>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <PackageId>SweetMeSoft.Tools</PackageId>
     <Version>1.10.105</Version>
@@ -15,6 +15,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SweetMeSoft.Base\SweetMeSoft.Base.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="TwoCaptcha">
+      <HintPath>..\..\..\2captcha-csharp\TwoCaptcha\bin\Debug\netstandard2.0\TwoCaptcha.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

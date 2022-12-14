@@ -18,12 +18,12 @@ namespace SweetMeSoft.Files
 {
     public class Excel
     {
-        public static List<T> ReadExcel2003File<T>(StreamFile file, int headerRowIndex = 0) where T : new()
+        public static List<T> Read2003File<T>(StreamFile file, int headerRowIndex = 0) where T : new()
         {
-            return ReadExcel2003File<T>(file.Stream, headerRowIndex);
+            return Read2003File<T>(file.Stream, headerRowIndex);
         }
 
-        public static List<T> ReadExcel2003File<T>(Stream stream, int headerRowIndex = 0) where T : new()
+        public static List<T> Read2003File<T>(Stream stream, int headerRowIndex = 0) where T : new()
         {
             var list = new List<T>();
             var workbook = new HSSFWorkbook(stream);
@@ -111,17 +111,17 @@ namespace SweetMeSoft.Files
             return list;
         }
 
-        public static List<T> ReadExcelFile<T>(StreamFile file, int headerRow = 1) where T : new()
+        public static List<T> Read<T>(StreamFile file, int headerRow = 1) where T : new()
         {
-            return ReadExcelFile<T>(file.Stream, headerRow);
+            return Read<T>(file.Stream, headerRow);
         }
 
-        public static List<T> ReadExcelFile<T>(Stream file, int headerRow = 1) where T : new()
+        public static List<T> Read<T>(Stream file, int headerRow = 1) where T : new()
         {
-            return ReadExcelFile<T>(new ExcelOptions(file, headerRow));
+            return Read<T>(new ExcelOptions(file, headerRow));
         }
 
-        public static List<T> ReadExcelFile<T>(ExcelOptions options) where T : new()
+        public static List<T> Read<T>(ExcelOptions options) where T : new()
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             var list = new List<T>();
@@ -219,9 +219,9 @@ namespace SweetMeSoft.Files
             return list;
         }
 
-        public static MemoryStream GenerateExcelFile<T>(List<T> list, string sheetName)
+        public static MemoryStream Generate<T>(List<T> list, string sheetName)
         {
-            return GenerateExcelFile(new List<ExcelSheet>()
+            return Generate(new List<ExcelSheet>()
             {
                 new ExcelSheet
                 {
@@ -232,7 +232,7 @@ namespace SweetMeSoft.Files
             });
         }
 
-        public static MemoryStream GenerateExcelFile(List<ExcelSheet> sheets)
+        public static MemoryStream Generate(List<ExcelSheet> sheets)
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using var book = new ExcelPackage();
