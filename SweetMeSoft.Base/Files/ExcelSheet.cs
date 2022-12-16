@@ -8,8 +8,6 @@ namespace SweetMeSoft.Base.Files
 
         public string Name { get; set; }
 
-        public IList List { get; set; }
-
-        public Type Type { get; set; }
+        public IEnumerable List { get; set; }
     }
 }

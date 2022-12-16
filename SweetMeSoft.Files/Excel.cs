@@ -219,15 +219,14 @@ namespace SweetMeSoft.Files
             return list;
         }
 
-        public static MemoryStream Generate<T>(List<T> list, string sheetName)
+        public static MemoryStream Generate<T>(IEnumerable<T> list, string sheetName)
         {
             return Generate(new List<ExcelSheet>()
             {
                 new ExcelSheet
                 {
                     Name = sheetName,
-                    List = list,
-                    Type = typeof(T)
+                    List = list
                 }
             });
         }
@@ -240,10 +239,11 @@ namespace SweetMeSoft.Files
             {
                 var rowIndex = 2;
                 var realSheet = book.Workbook.Worksheets.Add(sheet.Name);
-                WriteHeader(realSheet, sheet.Type);
+                var type = sheet.List.GetType().GetGenericArguments()[0];
+                WriteHeader(realSheet, type);
                 foreach (var item in sheet.List)
                 {
-                    rowIndex = WriteRow(realSheet, rowIndex, item, sheet.Type);
+                    rowIndex = WriteRow(realSheet, rowIndex, item, type);
                 }
 
                 realSheet.Cells.AutoFitColumns();
