@@ -18,12 +18,12 @@ namespace SweetMeSoft.Files
 {
     public class Excel
     {
-        public static List<T> Read2003File<T>(StreamFile file, int headerRowIndex = 0) where T : new()
+        public static IEnumerable<T> Read2003File<T>(StreamFile file, int headerRowIndex = 0) where T : new()
         {
             return Read2003File<T>(file.Stream, headerRowIndex);
         }
 
-        public static List<T> Read2003File<T>(Stream stream, int headerRowIndex = 0) where T : new()
+        public static IEnumerable<T> Read2003File<T>(Stream stream, int headerRowIndex = 0) where T : new()
         {
             var list = new List<T>();
             var workbook = new HSSFWorkbook(stream);
@@ -111,17 +111,17 @@ namespace SweetMeSoft.Files
             return list;
         }
 
-        public static List<T> Read<T>(StreamFile file, int headerRow = 1) where T : new()
+        public static IEnumerable<T> Read<T>(StreamFile file, int headerRow = 1) where T : new()
         {
             return Read<T>(file.Stream, headerRow);
         }
 
-        public static List<T> Read<T>(Stream file, int headerRow = 1) where T : new()
+        public static IEnumerable<T> Read<T>(Stream file, int headerRow = 1) where T : new()
         {
             return Read<T>(new ExcelOptions(file, headerRow));
         }
 
-        public static List<T> Read<T>(ExcelOptions options) where T : new()
+        public static IEnumerable<T> Read<T>(ExcelOptions options) where T : new()
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             var list = new List<T>();

@@ -11,12 +11,12 @@ namespace SweetMeSoft.Files
 {
     public class Csv
     {
-        public static async Task<List<T>> Read<T>(StreamFile streamFile, bool hasHeader = true, string delimiter = "|")
+        public static async Task<IEnumerable<T>> Read<T>(StreamFile streamFile, bool hasHeader = true, string delimiter = "|")
         {
             return await Read<T>(streamFile.Stream, hasHeader, delimiter);
         }
 
-        public static async Task<List<T>> Read<T>(Stream stream, bool hasHeader = true, string delimiter = "|")
+        public static async Task<IEnumerable<T>> Read<T>(Stream stream, bool hasHeader = true, string delimiter = "|")
         {
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
@@ -40,12 +40,12 @@ namespace SweetMeSoft.Files
             return await csv.GetRecordsAsync<T>().ToListAsync();
         }
 
-        public static async Task<List<T>> Read<T, TMap>(StreamFile streamFile, bool hasHeader = true, string delimiter = "|") where TMap : ClassMap
+        public static async Task<IEnumerable<T>> Read<T, TMap>(StreamFile streamFile, bool hasHeader = true, string delimiter = "|") where TMap : ClassMap
         {
             return await Read<T, TMap>(streamFile.Stream, hasHeader, delimiter);
         }
 
-        public static async Task<List<T>> Read<T, TMap>(Stream stream, bool hasHeader = true, string delimiter = "|") where TMap : ClassMap
+        public static async Task<IEnumerable<T>> Read<T, TMap>(Stream stream, bool hasHeader = true, string delimiter = "|") where TMap : ClassMap
         {
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
@@ -70,7 +70,7 @@ namespace SweetMeSoft.Files
             return await csv.GetRecordsAsync<T>().ToListAsync();
         }
 
-        public static async Task<MemoryStream> Create<T>(List<T> list)
+        public static async Task<MemoryStream> Create<T>(IEnumerable<T> list)
         {
             var stream = new MemoryStream();
             using var writer = new StreamWriter(stream);
