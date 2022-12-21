@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using System.Xml;
+using SweetMeSoft.Base.Files;
 
 namespace SweetMeSoft.Files
 {
@@ -37,18 +38,16 @@ namespace SweetMeSoft.Files
 
         public static string CreateString<T>(T obj)
         {
-            XmlSerializer xsSubmit = new(typeof(T));
-            using var sww = new StringWriter();
-            var settings = new XmlWriterSettings
+            using var stream = new MemoryStream();
+            var serializer = new XmlSerializer(typeof(T));
+            var writer = new MyXmlTextWriter(stream)
             {
-                Indent = true,
-                IndentChars = "\t",
-                NewLineChars = "\r\n",
-                NewLineHandling = NewLineHandling.Replace
+                Formatting = Formatting.Indented,
+                IndentChar = '\t',
+                Indentation = 1
             };
-            using XmlWriter writer = XmlWriter.Create(sww, settings);
-            xsSubmit.Serialize(writer, obj);
-            return sww.ToString();
+            serializer.Serialize(writer, obj);
+            return Encoding.UTF8.GetString(stream.ToArray());
         }
     }
 }
