@@ -46,7 +46,10 @@ namespace SweetMeSoft.Files
                 IndentChar = '\t',
                 Indentation = 1
             };
-            serializer.Serialize(writer, obj);
+
+            var namespaces = new XmlSerializerNamespaces();
+            namespaces.Add(string.Empty, string.Empty);
+            serializer.Serialize(writer, obj, namespaces);
             return Encoding.UTF8.GetString(stream.ToArray());
         }
     }
