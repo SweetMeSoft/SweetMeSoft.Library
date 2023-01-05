@@ -30,10 +30,11 @@ namespace SweetMeSoft.Base
             xml,
             zip,
             txt,
-            dat
+            dat,
+            pagos
         }
 
-        public static readonly Dictionary<ContentType, string> ContentTypesDict = new Dictionary<ContentType, string>
+        public static readonly Dictionary<ContentType, string> ContentTypesDict = new()
         {
             { ContentType.xlsx, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" },
             { ContentType.xls, "application/vnd.ms-excel" },
@@ -42,6 +43,7 @@ namespace SweetMeSoft.Base
             { ContentType.zip, "application/zip" },
             { ContentType.txt, "text/plain" },
             { ContentType.dat, "text/plain" },
+            { ContentType.pagos, "text/plain" },
         };
 
         public static ContentType GetContentType(string extension)
