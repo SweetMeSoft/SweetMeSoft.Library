@@ -30,6 +30,9 @@ namespace SweetMeSoft.Base
             xml,
             zip,
             txt,
+            jpg,
+            png,
+            gif,
             dat,
             pagos
         }
@@ -42,6 +45,9 @@ namespace SweetMeSoft.Base
             { ContentType.xml, "text/xml" },
             { ContentType.zip, "application/zip" },
             { ContentType.txt, "text/plain" },
+            { ContentType.jpg, "image/jpeg" },
+            { ContentType.png, "image/png" },
+            { ContentType.gif, "image/gif" },
             { ContentType.dat, "text/plain" },
             { ContentType.pagos, "text/plain" },
         };
