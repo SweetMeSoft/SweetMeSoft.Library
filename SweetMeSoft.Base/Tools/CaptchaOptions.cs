@@ -14,7 +14,7 @@
             this.hintText = hintText;
         }
 
-        public void InitReCaptchaV2(string siteKey, string siteUrl)
+        public void InitReCaptcha(string siteKey, string siteUrl)
         {
             this.siteKey = siteKey;
             this.siteUrl = siteUrl;

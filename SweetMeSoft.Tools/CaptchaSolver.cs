@@ -26,6 +26,16 @@ namespace SweetMeSoft.Tools
             return captcha;
         }
 
+        private static Captcha SolveReCaptchaEnterprise(CaptchaOptions options)
+        {
+            var captcha = new ReCaptcha();
+            captcha.SetSiteKey(options.SiteKey);
+            captcha.SetUrl(options.SiteUrl);
+            captcha.SetInvisible(true);
+            captcha.SetEnterprise(true);
+            return captcha;
+        }
+
         public static async Task<string> SolveAsync(CaptchaOptions options)
         {
             Console.WriteLine("Resolving Captcha...");
@@ -44,6 +54,9 @@ namespace SweetMeSoft.Tools
                     break;
                 case CaptchaType.ReCaptchaV2:
                     captcha = SolveReCaptchaV2(options);
+                    break;
+                case CaptchaType.ReCaptchaEnterprise:
+                    captcha = SolveReCaptchaEnterprise(options);
                     break;
                 default:
                     return "Captcha " + options.CaptchaType + " it's not implemented yet.";
