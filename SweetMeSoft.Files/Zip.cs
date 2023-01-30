@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO.Compression;
 using System.IO;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace SweetMeSoft.Files
 {
@@ -28,6 +29,11 @@ namespace SweetMeSoft.Files
             }
 
             return streams;
+        }
+
+        public async static Task<MemoryStream> Compress(params StreamFile[] files)
+        {
+            return await Compress(files.ToList());
         }
 
         public async static Task<MemoryStream> Compress(List<StreamFile> fileStreams)
