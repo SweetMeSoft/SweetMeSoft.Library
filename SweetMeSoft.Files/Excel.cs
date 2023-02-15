@@ -165,7 +165,10 @@ namespace SweetMeSoft.Files
                                         {
                                             if (cell.Value is double)
                                             {
-                                                property.SetValue(row, DateTime.FromOADate(cell.GetValue<double>()));
+                                                if (cell.Value.ToString() != "NaN")
+                                                {
+                                                    property.SetValue(row, DateTime.FromOADate(cell.GetValue<double>()));
+                                                }
                                             }
                                             else
                                             {
