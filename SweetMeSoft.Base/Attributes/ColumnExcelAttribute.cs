@@ -6,8 +6,14 @@ namespace SweetMeSoft.Base.Attributes
     public class ColumnExcelAttribute : Attribute
     {
         public string Name { get; set; }
+
         public string Type { get; set; }
-        public string Format { get; set; }
+
+        public string DateFormat { get; set; }
+
+        public string BoolTrueValue { get; set; }
+
+        public string BoolFalseValue { get; set; }
 
         public ColumnExcelAttribute()
         {
@@ -16,7 +22,9 @@ namespace SweetMeSoft.Base.Attributes
         public ColumnExcelAttribute(string name)
         {
             Name = name;
-            Format = "yyyy-MM-dd";
+            DateFormat = "yyyy-MM-dd";
+            BoolTrueValue = "1";
+            BoolFalseValue = "0";
         }
     }
 }
