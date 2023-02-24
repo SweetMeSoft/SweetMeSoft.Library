@@ -10,6 +10,7 @@ using Google.Apis.Auth.OAuth2;
 using SweetMeSoft.Tools;
 using Google.Apis.Bigquery.v2.Data;
 using SweetMeSoft.Base.Attributes;
+using SweetMeSoft.Base.GCP;
 
 namespace SweetMeSoft.GCP
 {
@@ -147,7 +148,7 @@ namespace SweetMeSoft.GCP
         public async Task<IEnumerable<T>> GetByField<T>(Expression<Func<T, bool>> where) where T : new()
         {
             var attr = GetTableAttr<T>();
-            var translator = new MyQueryTranslator();
+            var translator = new QueryTranslator();
             string whereExp = translator.Translate(where);
             return await ExecuteQuery<T>("SELECT * FROM `intl-rosa-sandbox." + attr.Dataset + "." + attr.Name + "` WHERE " + whereExp + ";");
         }
@@ -166,7 +167,7 @@ namespace SweetMeSoft.GCP
         public async Task<long> Update<T>(T obj, Expression<Func<T, bool>> where) where T : new()
         {
             var attr = GetTableAttr<T>();
-            var translator = new MyQueryTranslator();
+            var translator = new QueryTranslator();
             string whereExp = translator.Translate(where);
             string setExt = GetSetExpression(obj);
             var results = await client.ExecuteQueryAsync("UPDATE `intl-rosa-sandbox." + attr.Dataset + "." + attr.Name + "` SET " + setExt + " WHERE " + whereExp + ";", null);
@@ -176,7 +177,7 @@ namespace SweetMeSoft.GCP
         public async Task<long> Update<T, TKey>(T original, T edited, Expression<Func<T, TKey>> key) where T : new()
         {
             var attr = GetTableAttr<T>();
-            var translator = new MyQueryTranslator();
+            var translator = new QueryTranslator();
             string whereExp = translator.Translate(key);
             var propInfo = edited.GetType().GetProperty(whereExp);
             var itemValue = propInfo.GetValue(edited, null);
@@ -189,7 +190,7 @@ namespace SweetMeSoft.GCP
         public async Task<long> Delete<T>(Expression<Func<T, bool>> where) where T : new()
         {
             var attr = GetTableAttr<T>();
-            var translator = new MyQueryTranslator();
+            var translator = new QueryTranslator();
             string whereExp = translator.Translate(where);
             var results = await client.ExecuteQueryAsync("DELETE `intl-rosa-sandbox." + attr.Dataset + "." + attr.Name + "` WHERE " + whereExp + ";", null);
             return results.NumDmlAffectedRows ?? 0;

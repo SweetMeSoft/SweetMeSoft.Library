@@ -57,7 +57,7 @@ namespace SweetMeSoft.Files
                                 {
                                     if (cell.CellType == CellType.String)
                                     {
-                                        property.SetValue(row, DateTime.ParseExact(cell.StringCellValue, columnAttr.Format, null));
+                                        property.SetValue(row, DateTime.ParseExact(cell.StringCellValue, columnAttr.DateFormat, null));
                                     }
                                     else
                                     {
@@ -178,7 +178,7 @@ namespace SweetMeSoft.Files
                                                 }
                                                 else
                                                 {
-                                                    property.SetValue(row, DateTime.ParseExact(cell.GetValue<string>(), columnAttr.Format, null));
+                                                    property.SetValue(row, DateTime.ParseExact(cell.GetValue<string>(), columnAttr.DateFormat, null));
                                                 }
                                             }
                                         }
