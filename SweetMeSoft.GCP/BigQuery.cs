@@ -15,6 +15,8 @@ namespace SweetMeSoft.GCP
     public class BigQuery
     {
         public static string CredentialsFileName;
+        public static string CredentialsJson;
+        public static string CredentialsToken;
         public static string ProjectId;
 
         private readonly BigQueryClient client;
@@ -25,7 +27,22 @@ namespace SweetMeSoft.GCP
 
         public BigQuery()
         {
-            var gc = GoogleCredential.FromFile(CredentialsFileName);
+            GoogleCredential gc = null;
+            if (string.IsNullOrEmpty(CredentialsFileName))
+            {
+                gc = GoogleCredential.FromFile(CredentialsFileName);
+            }
+
+            if (string.IsNullOrEmpty(CredentialsJson))
+            {
+                gc = GoogleCredential.FromJson(CredentialsJson);
+            }
+
+            if (string.IsNullOrEmpty(CredentialsToken))
+            {
+                gc = GoogleCredential.FromAccessToken(CredentialsToken);
+            }
+
             client = BigQueryClient.Create(ProjectId, gc);
         }
 
