@@ -4,6 +4,9 @@ using System.IO.Compression;
 using System.IO;
 using System.Threading.Tasks;
 using System.Linq;
+using NPOI.HPSF;
+using System.Text;
+using System;
 
 namespace SweetMeSoft.Files
 {
@@ -31,12 +34,12 @@ namespace SweetMeSoft.Files
             return streams;
         }
 
-        public async static Task<MemoryStream> Compress(params StreamFile[] files)
+        public async static Task<StreamFile> Compress(string fileName = "", params StreamFile[] files)
         {
-            return await Compress(files.ToList());
+            return await Compress(files.ToList(), fileName);
         }
 
-        public async static Task<MemoryStream> Compress(List<StreamFile> fileStreams)
+        public async static Task<StreamFile> Compress(List<StreamFile> fileStreams, string fileName = "")
         {
             using var stream = new MemoryStream();
             stream.Seek(0, SeekOrigin.Begin);
@@ -65,7 +68,8 @@ namespace SweetMeSoft.Files
             await stream.CopyToAsync(copiedStream);
             copiedStream.Position = 0L;
 
-            return copiedStream;
+            fileName = string.IsNullOrEmpty(fileName) ? Guid.NewGuid().ToString("N") : fileName;
+            return new StreamFile(fileName, copiedStream, Constants.ContentType.zip);
         }
 
     }

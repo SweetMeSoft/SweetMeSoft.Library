@@ -222,7 +222,7 @@ namespace SweetMeSoft.Files
             return list;
         }
 
-        public static MemoryStream Generate<T>(IEnumerable<T> list, string sheetName)
+        public static StreamFile Generate<T>(IEnumerable<T> list, string sheetName, string fileName = "")
         {
             return Generate(new List<ExcelSheet>()
             {
@@ -231,10 +231,10 @@ namespace SweetMeSoft.Files
                     Name = sheetName,
                     List = list
                 }
-            });
+            }, fileName);
         }
 
-        public static MemoryStream Generate(List<ExcelSheet> sheets)
+        public static StreamFile Generate(List<ExcelSheet> sheets, string fileName = "")
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using var book = new ExcelPackage();
@@ -252,7 +252,8 @@ namespace SweetMeSoft.Files
                 realSheet.Cells.AutoFitColumns();
             }
 
-            return new MemoryStream(book.GetAsByteArray());
+            fileName = string.IsNullOrEmpty(fileName) ? Guid.NewGuid().ToString("N") : fileName;
+            return new StreamFile(fileName, new MemoryStream(book.GetAsByteArray()), Constants.ContentType.xlsx);
         }
 
         private static void WriteHeader(ExcelWorksheet sheet, Type type)

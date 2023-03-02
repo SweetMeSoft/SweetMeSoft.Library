@@ -6,6 +6,8 @@ using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 using System.Linq;
+using NPOI.HPSF;
+using System;
 
 namespace SweetMeSoft.Files
 {
@@ -70,7 +72,7 @@ namespace SweetMeSoft.Files
             return await csv.GetRecordsAsync<T>().ToListAsync();
         }
 
-        public static async Task<MemoryStream> Create<T>(IEnumerable<T> list)
+        public static async Task<StreamFile> Create<T>(IEnumerable<T> list, string fileName = "")
         {
             var stream = new MemoryStream();
             using var writer = new StreamWriter(stream);
@@ -82,7 +84,8 @@ namespace SweetMeSoft.Files
             await stream.CopyToAsync(copiedStream);
             copiedStream.Position = 0L;
 
-            return copiedStream;
+            fileName = string.IsNullOrEmpty(fileName) ? Guid.NewGuid().ToString("N") : fileName;
+            return new StreamFile(fileName, copiedStream, Constants.ContentType.csv);
         }
     }
 }

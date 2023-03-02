@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using System.Xml;
 using SweetMeSoft.Base.Files;
+using SweetMeSoft.Base;
 
 namespace SweetMeSoft.Files
 {
@@ -31,9 +32,10 @@ namespace SweetMeSoft.Files
             }
         }
 
-        public static Stream Create<T>(T obj)
+        public static StreamFile Create<T>(T obj, string fileName = "")
         {
-            return new MemoryStream(Encoding.UTF8.GetBytes(CreateString(obj)));
+            fileName = string.IsNullOrEmpty(fileName) ? Guid.NewGuid().ToString("N") : fileName;
+            return new StreamFile(fileName, new MemoryStream(Encoding.UTF8.GetBytes(CreateString(obj))), Constants.ContentType.xml);
         }
 
         public static string CreateString<T>(T obj)

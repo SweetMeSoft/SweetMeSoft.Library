@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using SweetMeSoft.Base;
+
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace SweetMeSoft.Files
@@ -49,6 +53,16 @@ namespace SweetMeSoft.Files
             var text = await file.ReadToEndAsync();
             file.Close();
             return text;
+        }
+
+        public async static Task<StreamFile> Generate(List<string> lines, string fileName = "")
+        {
+            var stream = new MemoryStream();
+            var info = new UTF8Encoding(true).GetBytes(string.Join("\n", lines));
+            await stream.WriteAsync(info, 0, info.Length);
+            stream.Position = 0;
+            fileName = string.IsNullOrEmpty(fileName) ? Guid.NewGuid().ToString("N") : fileName;
+            return new StreamFile(fileName, stream, Constants.ContentType.txt);
         }
     }
 }
