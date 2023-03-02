@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using Google.Cloud.BigQuery.V2;
 using Google.Apis.Auth.OAuth2;
@@ -14,8 +12,12 @@ using SweetMeSoft.Base.GCP;
 
 namespace SweetMeSoft.GCP
 {
-    internal class BigQuery
+    public class BigQuery
     {
+        public static string CredentialsFileName;
+        public static string CredentialsJson;
+        public static string CredentialsToken;
+        public static string ProjectId;
 
         private readonly BigQueryClient client;
 
@@ -25,8 +27,23 @@ namespace SweetMeSoft.GCP
 
         public BigQuery()
         {
-            var gc = GoogleCredential.FromFile("intl-rosa-sandbox-7936597cb05b.json");
-            client = BigQueryClient.Create("intl-rosa-sandbox", gc);
+            GoogleCredential gc = null;
+            if (string.IsNullOrEmpty(CredentialsFileName))
+            {
+                gc = GoogleCredential.FromFile(CredentialsFileName);
+            }
+
+            if (string.IsNullOrEmpty(CredentialsJson))
+            {
+                gc = GoogleCredential.FromJson(CredentialsJson);
+            }
+
+            if (string.IsNullOrEmpty(CredentialsToken))
+            {
+                gc = GoogleCredential.FromAccessToken(CredentialsToken);
+            }
+
+            client = BigQueryClient.Create(ProjectId, gc);
         }
 
         public IEnumerable<T> ConvertToObject<T>(List<BigQueryRow> googleList) where T : new()

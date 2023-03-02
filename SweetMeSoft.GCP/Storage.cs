@@ -13,6 +13,7 @@ namespace SweetMeSoft.GCP
 {
     internal class Storage
     {
+        public static string CredentialsFileName;
 
         private static Storage instance;
 
@@ -22,7 +23,7 @@ namespace SweetMeSoft.GCP
 
         public Storage()
         {
-            var gc = GoogleCredential.FromFile("intl-rosa-sandbox-7936597cb05b.json");
+            var gc = GoogleCredential.FromFile(CredentialsFileName);
             storage = StorageClient.Create(gc);
         }
 
