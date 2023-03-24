@@ -133,7 +133,7 @@ namespace SweetMeSoft.Files
                 var start = sheet.Dimension.Start;
                 var end = sheet.Dimension.End;
                 options.HeaderRow = options.HeaderRow < start.Row ? start.Row : options.HeaderRow;
-                for (int rowIndex = start.Row; rowIndex <= end.Row; rowIndex++)
+                for (int rowIndex = options.HeaderRow; rowIndex <= end.Row; rowIndex++)
                 {
                     try
                     {
@@ -195,13 +195,20 @@ namespace SweetMeSoft.Files
                                             }
                                             else
                                             {
-                                                if (cell.Value is ExcelErrorValue)
+                                                if (property.PropertyType == typeof(int) || property.PropertyType == typeof(int?))
                                                 {
-                                                    property.SetValue(row, cell.GetValue<ExcelErrorValue>().ToString());
+                                                    property.SetValue(row, cell.GetValue<int>());
                                                 }
                                                 else
                                                 {
-                                                    property.SetValue(row, cell.GetValue<string>());
+                                                    if (cell.Value is ExcelErrorValue)
+                                                    {
+                                                        property.SetValue(row, cell.GetValue<ExcelErrorValue>().ToString());
+                                                    }
+                                                    else
+                                                    {
+                                                        property.SetValue(row, cell.GetValue<string>());
+                                                    }
                                                 }
                                             }
                                         }

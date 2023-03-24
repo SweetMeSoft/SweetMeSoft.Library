@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using System.Threading;
 using SweetMeSoft.Base.Tools;
 using TwoCaptcha.Captcha;
-using System.Buffers.Text;
 
 namespace SweetMeSoft.Tools
 {
