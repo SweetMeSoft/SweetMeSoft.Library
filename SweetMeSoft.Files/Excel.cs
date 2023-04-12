@@ -233,11 +233,7 @@ namespace SweetMeSoft.Files
         {
             return Generate(new List<ExcelSheet>()
             {
-                new ExcelSheet
-                {
-                    Name = sheetName,
-                    List = list
-                }
+                new ExcelSheet(sheetName, list)
             }, fileName);
         }
 
