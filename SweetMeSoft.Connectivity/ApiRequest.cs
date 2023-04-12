@@ -124,13 +124,19 @@ namespace SweetMeSoft.Connectivity
                 var cookies = new CookieContainer();
                 using var httpClient = CreateClient(request, cookies);
 
-                if (request.Data == null)
+                switch (request.HeaderType)
                 {
-                    return new GenericResponse()
-                    {
-                        HttpResponse = await httpClient.PutAsync(request.Url, null),
-                        CookieContainer = cookies
-                    };
+                    case HeaderType.json:
+                        var content = new StringContent(JsonConvert.SerializeObject(request.Data), Encoding.UTF8, "application/json");
+                        return new GenericResponse()
+                        {
+                            HttpResponse = await httpClient.PutAsync(request.Url, content),
+                            CookieContainer = cookies
+                        };
+                    case HeaderType.formdata:
+                    case HeaderType.xwwwunlercoded:
+                        //TODO
+                        break;
                 }
 
                 return new GenericResponse()
