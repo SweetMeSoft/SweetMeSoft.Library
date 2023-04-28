@@ -259,6 +259,36 @@ namespace SweetMeSoft.Files
             return new StreamFile(fileName, new MemoryStream(book.GetAsByteArray()), Constants.ContentType.xlsx);
         }
 
+        public static string ValidateFormat<T>(StreamFile streamFile, int headerRow = 1)
+        {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            using var excelFile = new ExcelPackage(streamFile.Stream);
+            var validations = "";
+            var header = new List<string>();
+            var sheet = excelFile.Workbook.Worksheets[0];
+            var start = sheet.Dimension.Start;
+            var end = sheet.Dimension.End;
+
+            for (int columnIndex = start.Column; columnIndex <= end.Column; columnIndex++)
+            {
+                header.Add(sheet.Cells[headerRow, columnIndex].Text);
+            }
+
+            var properties = typeof(T).GetProperties();
+            foreach (var property in properties)
+            {
+                var attr = property.GetCustomAttributes(true).FirstOrDefault(model => model.GetType().Name == "ColumnExcelAttribute");
+                var columnAttr = attr == null ? new ColumnExcelAttribute(property.Name) : attr as ColumnExcelAttribute;
+                var headerCell = header.FindIndex(a => a == columnAttr.Name);
+                if (headerCell == -1)
+                {
+                    validations += "El campo " + columnAttr.Name + " no está en el archivo.\n";
+                }
+            }
+
+            return validations;
+        }
+
         private static void WriteHeader(ExcelWorksheet sheet, Type type)
         {
             var rowIndex = 1;
