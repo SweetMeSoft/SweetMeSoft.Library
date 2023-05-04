@@ -259,6 +259,11 @@ namespace SweetMeSoft.Files
             return new StreamFile(fileName, new MemoryStream(book.GetAsByteArray()), Constants.ContentType.xlsx);
         }
 
+        public static StreamFile GenerateTemplate<T>()
+        {
+            return Generate(new List<T>(), "Template");
+        }
+
         public static string ValidateFormat<T>(StreamFile streamFile, int headerRow = 1)
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
