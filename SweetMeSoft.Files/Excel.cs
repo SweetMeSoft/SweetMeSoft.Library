@@ -1,4 +1,5 @@
-﻿using NPOI.HSSF.UserModel;
+﻿using NPOI.HPSF;
+using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 
 using OfficeOpenXml;
@@ -261,7 +262,12 @@ namespace SweetMeSoft.Files
 
         public static StreamFile GenerateTemplate<T>()
         {
-            return Generate(new List<T>(), "Template");
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            using var book = new ExcelPackage();
+            var realSheet = book.Workbook.Worksheets.Add("Template");
+            WriteHeader(realSheet, typeof(T), true);
+            realSheet.Cells.AutoFitColumns(); 
+            return new StreamFile("Template", new MemoryStream(book.GetAsByteArray()), Constants.ContentType.xlsx);
         }
 
         public static string ValidateFormat<T>(StreamFile streamFile, int headerRow = 1)
@@ -294,7 +300,7 @@ namespace SweetMeSoft.Files
             return validations;
         }
 
-        private static void WriteHeader(ExcelWorksheet sheet, Type type)
+        private static void WriteHeader(ExcelWorksheet sheet, Type type, bool writeExplanations = false)
         {
             var rowIndex = 1;
             var columnIndex = 1;
@@ -308,6 +314,16 @@ namespace SweetMeSoft.Files
                     var columnAttr = attr == null ? new ColumnExcelAttribute(property.Name) : attr as ColumnExcelAttribute;
 
                     sheet.SetValue(rowIndex, columnIndex, columnAttr.Name);
+
+                    if (writeExplanations)
+                    {
+                        var templateAttr = property.GetCustomAttributes(true).FirstOrDefault(model => model.GetType().Name == "TemplateAttribute");
+                        if (templateAttr != null)
+                        {
+                            sheet.SetValue(rowIndex + 1, columnIndex, (templateAttr as TemplateAttribute).Explanation);
+                        }
+                    }
+
                     columnIndex++;
                 }
             }
