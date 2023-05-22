@@ -25,6 +25,7 @@ namespace SweetMeSoft.Files
                 IgnoreBlankLines = true,
                 HasHeaderRecord = hasHeader,
                 BadDataFound = null,
+                MissingFieldFound = null,
                 ReadingExceptionOccurred = (ex) =>
                 {
                     return false;
@@ -54,6 +55,7 @@ namespace SweetMeSoft.Files
                 IgnoreBlankLines = true,
                 HasHeaderRecord = hasHeader,
                 BadDataFound = null,
+                MissingFieldFound = null,
                 ReadingExceptionOccurred = (ex) =>
                 {
                     return false;

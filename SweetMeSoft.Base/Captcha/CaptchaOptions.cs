@@ -1,4 +1,4 @@
-﻿namespace SweetMeSoft.Base.Tools
+﻿namespace SweetMeSoft.Base.Captcha
 {
     public class CaptchaOptions
     {

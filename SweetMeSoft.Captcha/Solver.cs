@@ -3,12 +3,14 @@ using System.Threading.Tasks;
 using System.Threading;
 using SweetMeSoft.Base.Tools;
 using TwoCaptcha.Captcha;
+using SweetMeSoft.Tools;
+using SweetMeSoft.Base.Captcha;
 
-namespace SweetMeSoft.Tools
+namespace SweetMeSoft.Captcha
 {
-    public class CaptchaSolver
+    public class Solver
     {
-        private static Captcha SolveNormal(CaptchaOptions options)
+        private static TwoCaptcha.Captcha.Captcha SolveNormal(CaptchaOptions options)
         {
             var captcha = new Normal();
             captcha.SetBase64(options.ImageBase64);
@@ -17,7 +19,7 @@ namespace SweetMeSoft.Tools
             return captcha;
         }
 
-        private static Captcha SolveReCaptchaV2(CaptchaOptions options)
+        private static TwoCaptcha.Captcha.Captcha SolveReCaptchaV2(CaptchaOptions options)
         {
             var captcha = new ReCaptcha();
             captcha.SetSiteKey(options.SiteKey);
@@ -25,7 +27,7 @@ namespace SweetMeSoft.Tools
             return captcha;
         }
 
-        private static Captcha SolveReCaptchaEnterprise(CaptchaOptions options)
+        private static TwoCaptcha.Captcha.Captcha SolveReCaptchaEnterprise(CaptchaOptions options)
         {
             var captcha = new ReCaptcha();
             captcha.SetSiteKey(options.SiteKey);
@@ -45,7 +47,7 @@ namespace SweetMeSoft.Tools
                 PollingInterval = 10
             };
 
-            Captcha captcha;
+            TwoCaptcha.Captcha.Captcha captcha;
             switch (options.CaptchaType)
             {
                 case CaptchaType.Normal:

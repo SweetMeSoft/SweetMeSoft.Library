@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <LangVersion>latest</LangVersion>
     <PackageId>SweetMeSoft.Tools</PackageId>
-    <Version>1.10.110</Version>
+    <Version>1.10.111</Version>
     <Authors>Erick Velasco</Authors>
     <Company>SweetMeSoft</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -15,12 +15,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SweetMeSoft.Base\SweetMeSoft.Base.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="TwoCaptcha">
-      <HintPath>..\Libraries\TwoCaptcha.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

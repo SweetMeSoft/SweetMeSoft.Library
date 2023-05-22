@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 
 using Microsoft.AspNetCore.Http;
@@ -14,6 +15,15 @@ namespace SweetMeSoft.Base
             FileName = fileName;
             Stream = stream;
             ContentType = contentType;
+            Created = DateTime.Now;
+        }
+
+        public StreamFile(string fileName, Stream stream, Constants.ContentType contentType, DateTime created)
+        {
+            FileName = fileName;
+            Stream = stream;
+            ContentType = contentType;
+            Created = created;
         }
 
         public StreamFile(IFormFile file)
@@ -21,6 +31,7 @@ namespace SweetMeSoft.Base
             FileName = file.FileName;
             ContentType = Constants.ContentTypesDict.FirstOrDefault(model => model.Value == file.ContentType).Key;
             Stream = file.OpenReadStream();
+            Created = DateTime.Now;
         }
 
         private string fileName;
@@ -40,6 +51,8 @@ namespace SweetMeSoft.Base
         public Stream Stream { get; set; }
 
         public Constants.ContentType ContentType { get; set; }
+
+        public DateTime Created { get; set; }
 
         public string GetContentType()
         {
