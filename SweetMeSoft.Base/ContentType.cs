@@ -33,6 +33,7 @@ namespace SweetMeSoft.Base
             jpg,
             png,
             gif,
+            pdf,
             dat,
             pagos
         }
@@ -48,6 +49,7 @@ namespace SweetMeSoft.Base
             { ContentType.jpg, "image/jpeg" },
             { ContentType.png, "image/png" },
             { ContentType.gif, "image/gif" },
+            { ContentType.pdf, "application/pdf" },
             { ContentType.dat, "text/plain" },
             { ContentType.pagos, "text/plain" },
         };

@@ -12,7 +12,7 @@ using SweetMeSoft.Base.GCP;
 
 namespace SweetMeSoft.GCP
 {
-    public class BigQuery
+    public class BigQueryRepo
     {
         public static string CredentialsFileName;
         public static string CredentialsJson;
@@ -21,11 +21,11 @@ namespace SweetMeSoft.GCP
 
         private readonly BigQueryClient client;
 
-        private static BigQuery instance;
+        private static BigQueryRepo instance;
 
-        public static BigQuery Instance => instance ??= new BigQuery();
+        public static BigQueryRepo Instance => instance ??= new BigQueryRepo();
 
-        public BigQuery()
+        public BigQueryRepo()
         {
             GoogleCredential gc = null;
             if (string.IsNullOrEmpty(CredentialsFileName))
