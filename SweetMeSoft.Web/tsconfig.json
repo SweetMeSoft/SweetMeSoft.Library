@@ -1,0 +1,17 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    //"charset": "iso-8859-1",
+    "emitBOM": true,
+    "esModuleInterop": true,
+    "module": "ES6",
+    "declaration": true,
+    "noImplicitAny": false,
+    "noImplicitThis": false,
+    "skipLibCheck": true,
+    "strict": false,
+    "strictNullChecks": false,
+    "target": "es2019"
+  },
+  "exclude": [ "bin", "obj" ]
+}

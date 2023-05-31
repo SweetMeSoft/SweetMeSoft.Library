@@ -1,0 +1,45 @@
+﻿<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>SweetMeSoft.Web</id>
+    <version>1.10.103</version>
+    <title>SweetMeSoft Web</title>
+    <authors>SweetMeSoft</authors>
+    <owners>SweetMeSoft</owners>
+    <!--<license type="file">license.txt</license>-->
+    <!--<projectUrl>https://www.iwglogistics.com</projectUrl>-->
+    <!--<icon>logo.png</icon>-->
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Libraría compartida de IWG</description>
+    <releaseNotes></releaseNotes>
+    <copyright>SweetMeSoft Web Library is a compilation of basic tools in TypeScript to use in Web Projects</copyright>
+    <tags></tags>
+    <dependencies>
+      <dependency id="" />
+    </dependencies>
+    <summary>SweetMeSoft Web Library is a compilation of basic tools in TypeScript to use in Web Projects</summary>
+  </metadata>
+  <files>
+    <file src="license/license.txt" target="" />
+    <!--<file src="images/logo.png" target="" />-->
+    <file src="js/sweetmesoft/Ajax.d.ts" target="wwwroot/lib/sweetmesoft/"/>
+    <file src="js/sweetmesoft/Classes.d.ts" target="wwwroot/lib/sweetmesoft/"/>
+    <file src="js/sweetmesoft/Common.d.ts" target="wwwroot/lib/sweetmesoft/"/>
+    <file src="js/sweetmesoft/JQueryAddOns.d.ts" target="wwwroot/lib/sweetmesoft/"/>
+    <file src="js/sweetmesoft/Tools.d.ts" target="wwwroot/lib/sweetmesoft/"/>
+    <file src="js/typings/cropper/index.d.ts" target="wwwroot/lib/typings/cropper/"/>
+    <file src="js/typings/datatables/index.d.ts" target="wwwroot/lib/typings/datatables/"/>
+    <file src="js/typings/select2/index.d.ts" target="wwwroot/lib/typings/select2/"/>
+    <file src="js/typings/sweetalert2/index.d.ts" target="wwwroot/lib/typings/sweetalert2/"/>
+
+    <file src="js/sweetmesoft/Ajax.js" target="wwwroot/lib/sweetmesoft/"/>
+    <file src="js/sweetmesoft/Classes.js" target="wwwroot/lib/sweetmesoft/"/>
+    <file src="js/sweetmesoft/Common.js" target="wwwroot/lib/sweetmesoft/"/>
+    <file src="js/sweetmesoft/JQueryAddOns.js" target="wwwroot/lib/sweetmesoft/"/>
+    <file src="js/sweetmesoft/Tools.js" target="wwwroot/lib/sweetmesoft/"/>
+    <file src="js/cropper/cropper.min.js" target="wwwroot/lib/js/cropper/"/>
+    <file src="js/datatables/datatables.min.js" target="wwwroot/lib/js/datatables/"/>
+    <file src="js/select2/select2.min.js" target="wwwroot/lib/js/select2/"/>
+    <file src="js/sweetalert2/sweetalert2.min.js" target="wwwroot/lib/js/sweetalert2/"/>
+  </files>
+</package>
