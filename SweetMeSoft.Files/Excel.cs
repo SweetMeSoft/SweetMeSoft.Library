@@ -78,6 +78,12 @@ namespace SweetMeSoft.Files
                                     break;
                                 }
 
+                                if (property.PropertyType == typeof(Guid) || property.PropertyType == typeof(Guid?))
+                                {
+                                    property.SetValue(row, Guid.Parse(cell.StringCellValue));
+                                    break;
+                                }
+
                                 property.SetValue(row, cell.StringCellValue);
                             }
                         }
@@ -179,6 +185,12 @@ namespace SweetMeSoft.Files
                                         if (property.PropertyType == typeof(bool) || property.PropertyType == typeof(bool?))
                                         {
                                             property.SetValue(row, cell.GetValue<bool>());
+                                            break;
+                                        }
+
+                                        if (property.PropertyType == typeof(Guid) || property.PropertyType == typeof(Guid?))
+                                        {
+                                            property.SetValue(row, Guid.Parse(cell.GetValue<string>()));
                                             break;
                                         }
 
