@@ -57,31 +57,26 @@ namespace SweetMeSoft.Files
                                 if (property.PropertyType == typeof(DateTime) || property.PropertyType == typeof(DateTime?))
                                 {
                                     property.SetValue(row, cell.CellType == CellType.String ? DateTime.ParseExact(cell.StringCellValue, columnAttr.DateFormat, null) : cell.DateCellValue);
-                                    break;
                                 }
 
                                 if (property.PropertyType == typeof(decimal) || property.PropertyType == typeof(decimal?))
                                 {
                                     property.SetValue(row, cell.CellType == CellType.String ? Converters.StringToDecimal(cell.StringCellValue) : (decimal)cell.NumericCellValue);
-                                    break;
                                 }
 
                                 if (property.PropertyType == typeof(int) || property.PropertyType == typeof(int?))
                                 {
                                     property.SetValue(row, cell.CellType == CellType.String ? Converters.StringToInt(cell.StringCellValue) : (int)cell.NumericCellValue);
-                                    break;
                                 }
 
                                 if (property.PropertyType == typeof(bool) || property.PropertyType == typeof(bool?))
                                 {
                                     property.SetValue(row, cell.CellType == CellType.String ? Converters.StringToBool(cell.StringCellValue) : cell.BooleanCellValue);
-                                    break;
                                 }
 
                                 if (property.PropertyType == typeof(Guid) || property.PropertyType == typeof(Guid?))
                                 {
                                     property.SetValue(row, Guid.Parse(cell.StringCellValue));
-                                    break;
                                 }
 
                                 property.SetValue(row, cell.StringCellValue);
@@ -160,8 +155,6 @@ namespace SweetMeSoft.Files
                                             {
                                                 property.SetValue(row, cell.Value is DateTime ? cell.GetValue<DateTime>() : DateTime.ParseExact(cell.GetValue<string>(), columnAttr.DateFormat, null));
                                             }
-
-                                            break;
                                         }
 
                                         if (property.PropertyType == typeof(decimal) || property.PropertyType == typeof(decimal?))
@@ -172,32 +165,26 @@ namespace SweetMeSoft.Files
                                                 value = value.Replace(".", CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
                                                 property.SetValue(row, Convert.ToDecimal(value));
                                             }
-
-                                            break;
                                         }
 
                                         if (property.PropertyType == typeof(int) || property.PropertyType == typeof(int?))
                                         {
                                             property.SetValue(row, cell.GetValue<int>());
-                                            break;
                                         }
 
                                         if (property.PropertyType == typeof(bool) || property.PropertyType == typeof(bool?))
                                         {
                                             property.SetValue(row, cell.GetValue<bool>());
-                                            break;
                                         }
 
                                         if (property.PropertyType == typeof(Guid) || property.PropertyType == typeof(Guid?))
                                         {
                                             property.SetValue(row, Guid.Parse(cell.GetValue<string>()));
-                                            break;
                                         }
 
                                         if (cell.Value is ExcelErrorValue)
                                         {
                                             property.SetValue(row, cell.GetValue<ExcelErrorValue>().ToString());
-                                            break;
                                         }
 
                                         property.SetValue(row, cell.GetValue<string>());
