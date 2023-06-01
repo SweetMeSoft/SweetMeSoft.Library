@@ -79,7 +79,10 @@ namespace SweetMeSoft.Files
                                     property.SetValue(row, Guid.Parse(cell.StringCellValue));
                                 }
 
-                                property.SetValue(row, cell.StringCellValue);
+                                if (property.PropertyType == typeof(string))
+                                {
+                                    property.SetValue(row, cell.StringCellValue);
+                                }
                             }
                         }
                         catch (Exception ex)
@@ -187,7 +190,10 @@ namespace SweetMeSoft.Files
                                             property.SetValue(row, cell.GetValue<ExcelErrorValue>().ToString());
                                         }
 
-                                        property.SetValue(row, cell.GetValue<string>());
+                                        if (property.PropertyType == typeof(string))
+                                        {
+                                            property.SetValue(row, cell.GetValue<string>());
+                                        }
                                     }
                                 }
                             }
