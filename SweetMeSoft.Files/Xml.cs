@@ -32,22 +32,22 @@ namespace SweetMeSoft.Files
             }
         }
 
-        public static StreamFile Create<T>(T obj, string fileName = "")
+        public static StreamFile Create<T>(T obj, string fileName = "", bool indent = false)
         {
             fileName = string.IsNullOrEmpty(fileName) ? Guid.NewGuid().ToString("N") : fileName;
-            return new StreamFile(fileName, new MemoryStream(Encoding.UTF8.GetBytes(CreateString(obj))), Constants.ContentType.xml);
+            return new StreamFile(fileName, new MemoryStream(Encoding.UTF8.GetBytes(CreateString(obj, indent))), Constants.ContentType.xml);
         }
 
-        public static string CreateString<T>(T obj)
+        public static string CreateString<T>(T obj, bool indent = false)
         {
             using var stream = new MemoryStream();
             var serializer = new XmlSerializer(typeof(T));
-            var writer = new MyXmlTextWriter(stream)
+            var writer = indent ? new MyXmlTextWriter(stream)
             {
                 Formatting = Formatting.Indented,
                 IndentChar = '\t',
                 Indentation = 1
-            };
+            } : new MyXmlTextWriter(stream);
 
             var namespaces = new XmlSerializerNamespaces();
             namespaces.Add(string.Empty, string.Empty);

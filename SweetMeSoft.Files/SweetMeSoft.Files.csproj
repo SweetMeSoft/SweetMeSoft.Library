@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <LangVersion>latest</LangVersion>
     <PackageId>SweetMeSoft.Files</PackageId>
-    <Version>1.10.122</Version>
+    <Version>1.10.123</Version>
     <Authors>Erick Velasco</Authors>
     <Company>SweetMeSoft</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
