@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
@@ -12,6 +12,32 @@
     <Description>SweetMeSoft Web Library is a compilation of basic tools in TypeScript to use in Web Projects</Description>
     <Copyright>SweetMeSoft</Copyright>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="js\sweetmesoft\Ajax.d.ts" />
+    <None Remove="js\sweetmesoft\Classes.d.ts" />
+    <None Remove="js\sweetmesoft\Common.d.ts" />
+    <None Remove="js\sweetmesoft\JQueryAddOns.d.ts" />
+    <None Remove="js\sweetmesoft\Tools.d.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="js\sweetmesoft\Ajax.d.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\sweetmesoft\Classes.d.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\sweetmesoft\Common.d.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\sweetmesoft\JQueryAddOns.d.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\sweetmesoft\Tools.d.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="NuGet.Build" Version="2.12.1" />

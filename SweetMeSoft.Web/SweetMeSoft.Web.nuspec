@@ -2,15 +2,15 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
     <id>SweetMeSoft.Web</id>
-    <version>1.10.103</version>
+    <version>1.10.104</version>
     <title>SweetMeSoft Web</title>
     <authors>SweetMeSoft</authors>
     <owners>SweetMeSoft</owners>
-    <!--<license type="file">license.txt</license>-->
+    <license type="file">license.txt</license>
     <!--<projectUrl>https://www.iwglogistics.com</projectUrl>-->
     <!--<icon>logo.png</icon>-->
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Libraría compartida de IWG</description>
+    <description>SweetMeSoft Web Library is a compilation of basic tools in TypeScript to use in Web Projects</description>
     <releaseNotes></releaseNotes>
     <copyright>SweetMeSoft Web Library is a compilation of basic tools in TypeScript to use in Web Projects</copyright>
     <tags></tags>

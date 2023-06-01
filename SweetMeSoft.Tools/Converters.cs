@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 
 namespace SweetMeSoft.Tools
 {
@@ -61,6 +62,26 @@ namespace SweetMeSoft.Tools
         public static string DecimalToString(decimal number)
         {
             return number.ToString("0.#0", CultureInfo.InvariantCulture);
+        }
+
+        public static bool StringToBool(string stringCellValue)
+        {
+            if (string.IsNullOrEmpty(stringCellValue))
+            {
+                throw new ArgumentNullException(nameof(stringCellValue));
+            }
+
+            if (stringCellValue.ToLower() == "true" || stringCellValue.ToLower() == "1" || stringCellValue.ToLower() == "t")
+            {
+                return true;
+            }
+
+            if (stringCellValue.ToLower() == "false" || stringCellValue.ToLower() == "0" || stringCellValue.ToLower() == "f")
+            {
+                return false;
+            }
+
+            throw new ArgumentException("String value is not a boolean value");
         }
     }
 }

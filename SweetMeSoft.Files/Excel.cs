@@ -56,47 +56,29 @@ namespace SweetMeSoft.Files
                                 var cell = sheet.GetRow(indexRow).Cells[headerCell];
                                 if (property.PropertyType == typeof(DateTime) || property.PropertyType == typeof(DateTime?))
                                 {
-                                    if (cell.CellType == CellType.String)
-                                    {
-                                        property.SetValue(row, DateTime.ParseExact(cell.StringCellValue, columnAttr.DateFormat, null));
-                                    }
-                                    else
-                                    {
-                                        property.SetValue(row, cell.DateCellValue);
-                                    }
+                                    property.SetValue(row, cell.CellType == CellType.String ? DateTime.ParseExact(cell.StringCellValue, columnAttr.DateFormat, null) : cell.DateCellValue);
+                                    break;
                                 }
-                                else
+
+                                if (property.PropertyType == typeof(decimal) || property.PropertyType == typeof(decimal?))
                                 {
-                                    if (property.PropertyType == typeof(decimal) || property.PropertyType == typeof(decimal?))
-                                    {
-                                        if (cell.CellType == CellType.String)
-                                        {
-                                            property.SetValue(row, Converters.StringToDecimal(cell.StringCellValue));
-                                        }
-                                        else
-                                        {
-                                            property.SetValue(row, (decimal)cell.NumericCellValue);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        if (property.PropertyType == typeof(int) || property.PropertyType == typeof(int?))
-                                        {
-                                            if (cell.CellType == CellType.String)
-                                            {
-                                                property.SetValue(row, Converters.StringToInt(cell.StringCellValue));
-                                            }
-                                            else
-                                            {
-                                                property.SetValue(row, (int)cell.NumericCellValue);
-                                            }
-                                        }
-                                        else
-                                        {
-                                            property.SetValue(row, cell.StringCellValue);
-                                        }
-                                    }
+                                    property.SetValue(row, cell.CellType == CellType.String ? Converters.StringToDecimal(cell.StringCellValue) : (decimal)cell.NumericCellValue);
+                                    break;
                                 }
+
+                                if (property.PropertyType == typeof(int) || property.PropertyType == typeof(int?))
+                                {
+                                    property.SetValue(row, cell.CellType == CellType.String ? Converters.StringToInt(cell.StringCellValue) : (int)cell.NumericCellValue);
+                                    break;
+                                }
+
+                                if (property.PropertyType == typeof(bool) || property.PropertyType == typeof(bool?))
+                                {
+                                    property.SetValue(row, cell.CellType == CellType.String ? Converters.StringToBool(cell.StringCellValue) : cell.BooleanCellValue);
+                                    break;
+                                }
+
+                                property.SetValue(row, cell.StringCellValue);
                             }
                         }
                         catch (Exception ex)
@@ -164,55 +146,49 @@ namespace SweetMeSoft.Files
                                     {
                                         if (property.PropertyType == typeof(DateTime) || property.PropertyType == typeof(DateTime?))
                                         {
-                                            if (cell.Value is double)
+                                            if (cell.Value is double && cell.Value.ToString() != "NaN")
                                             {
-                                                if (cell.Value.ToString() != "NaN")
-                                                {
-                                                    property.SetValue(row, DateTime.FromOADate(cell.GetValue<double>()));
-                                                }
+                                                property.SetValue(row, DateTime.FromOADate(cell.GetValue<double>()));
                                             }
                                             else
                                             {
-                                                if (cell.Value is DateTime)
-                                                {
-                                                    property.SetValue(row, cell.GetValue<DateTime>());
-                                                }
-                                                else
-                                                {
-                                                    property.SetValue(row, DateTime.ParseExact(cell.GetValue<string>(), columnAttr.DateFormat, null));
-                                                }
+                                                property.SetValue(row, cell.Value is DateTime ? cell.GetValue<DateTime>() : DateTime.ParseExact(cell.GetValue<string>(), columnAttr.DateFormat, null));
                                             }
+
+                                            break;
                                         }
-                                        else
+
+                                        if (property.PropertyType == typeof(decimal) || property.PropertyType == typeof(decimal?))
                                         {
-                                            if (property.PropertyType == typeof(decimal) || property.PropertyType == typeof(decimal?))
+                                            var value = cell.GetValue<string>();
+                                            if (value != null)
                                             {
-                                                var value = cell.GetValue<string>();
-                                                if (value != null)
-                                                {
-                                                    value = value.Replace(".", CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
-                                                    property.SetValue(row, Convert.ToDecimal(value));
-                                                }
+                                                value = value.Replace(".", CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+                                                property.SetValue(row, Convert.ToDecimal(value));
                                             }
-                                            else
-                                            {
-                                                if (property.PropertyType == typeof(int) || property.PropertyType == typeof(int?))
-                                                {
-                                                    property.SetValue(row, cell.GetValue<int>());
-                                                }
-                                                else
-                                                {
-                                                    if (cell.Value is ExcelErrorValue)
-                                                    {
-                                                        property.SetValue(row, cell.GetValue<ExcelErrorValue>().ToString());
-                                                    }
-                                                    else
-                                                    {
-                                                        property.SetValue(row, cell.GetValue<string>());
-                                                    }
-                                                }
-                                            }
+
+                                            break;
                                         }
+
+                                        if (property.PropertyType == typeof(int) || property.PropertyType == typeof(int?))
+                                        {
+                                            property.SetValue(row, cell.GetValue<int>());
+                                            break;
+                                        }
+
+                                        if (property.PropertyType == typeof(bool) || property.PropertyType == typeof(bool?))
+                                        {
+                                            property.SetValue(row, cell.GetValue<bool>());
+                                            break;
+                                        }
+
+                                        if (cell.Value is ExcelErrorValue)
+                                        {
+                                            property.SetValue(row, cell.GetValue<ExcelErrorValue>().ToString());
+                                            break;
+                                        }
+
+                                        property.SetValue(row, cell.GetValue<string>());
                                     }
                                 }
                             }
@@ -266,7 +242,7 @@ namespace SweetMeSoft.Files
             using var book = new ExcelPackage();
             var realSheet = book.Workbook.Worksheets.Add("Template");
             WriteHeader(realSheet, typeof(T), true);
-            realSheet.Cells.AutoFitColumns(); 
+            realSheet.Cells.AutoFitColumns();
             return new StreamFile("Template", new MemoryStream(book.GetAsByteArray()), Constants.ContentType.xlsx);
         }
 
