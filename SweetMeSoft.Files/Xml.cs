@@ -32,13 +32,13 @@ namespace SweetMeSoft.Files
             }
         }
 
-        public static StreamFile Create<T>(T obj, string fileName = "", bool indent = false)
+        public static StreamFile Create<T>(T obj, string fileName = "", bool indent = true)
         {
             fileName = string.IsNullOrEmpty(fileName) ? Guid.NewGuid().ToString("N") : fileName;
             return new StreamFile(fileName, new MemoryStream(Encoding.UTF8.GetBytes(CreateString(obj, indent))), Constants.ContentType.xml);
         }
 
-        public static string CreateString<T>(T obj, bool indent = false)
+        public static string CreateString<T>(T obj, bool indent = true)
         {
             using var stream = new MemoryStream();
             var serializer = new XmlSerializer(typeof(T));
