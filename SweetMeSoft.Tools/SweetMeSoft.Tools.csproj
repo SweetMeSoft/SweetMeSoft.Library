@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <LangVersion>latest</LangVersion>
     <PackageId>SweetMeSoft.Tools</PackageId>
-    <Version>1.10.112</Version>
+    <Version>1.10.114</Version>
     <Authors>Erick Velasco</Authors>
     <Company>SweetMeSoft</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -12,6 +12,10 @@
     <Description>SweetMeSoft Tools Library is a compilation of basic tools to use</Description>
     <Copyright>SweetMeSoft</Copyright>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SweetMeSoft.Base\SweetMeSoft.Base.csproj" />
