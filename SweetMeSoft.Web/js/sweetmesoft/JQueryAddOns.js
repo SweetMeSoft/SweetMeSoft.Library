@@ -24,21 +24,10 @@
     initializeSelect: function () {
         return this.each(function () {
             const dropDown = $(this);
-            let closeOnSelect;
-            let allowClear;
-            let isForModal = $('#modal').is(':visible');
-            if (dropDown.attr('multiple') === undefined) {
-                closeOnSelect = true;
-            }
-            else {
-                allowClear = true;
-            }
-            dropDown.select2({
-                theme: 'bootstrap-5',
-                closeOnSelect: closeOnSelect,
-                allowClear: allowClear,
-                dropdownParent: isForModal ? $('#modal') : ''
+            dropDown.selectpicker({
+                width: 'auto'
             });
+            dropDown.selectpicker('refresh');
         });
     },
     toBlob: function () {

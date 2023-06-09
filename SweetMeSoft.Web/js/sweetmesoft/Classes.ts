@@ -20,6 +20,7 @@ namespace SweetMeSoft {
         internal?: string;
         urlValues?: string;
         value?: number | string | string[];
+        isCountries?: boolean;
     }
 
     export interface OptionsCropper {
@@ -145,7 +146,7 @@ namespace SweetMeSoft {
     interface CustomColumn {
         originalName: string;
         name: string;
-        format: 'currency' | 'right' | 'image';
+        format: 'currency' | 'percentaje' | 'right' | 'image' | 'date';
         backgroundColor?: string;
     }
 
@@ -153,6 +154,7 @@ namespace SweetMeSoft {
         url: string;
         filename?: string;
         data?: string | Object;
+        uploadControl?: JQuery;
         successCallback?: (response) => void;
         successMessage?: string;
         errorCallback?: (response) => void;
@@ -277,7 +279,8 @@ namespace SweetMeSoft {
         text: 'description',
         internal: 'id',
         urlValues: '',
-        value: 0
+        value: 0,
+        isCountries: false
     };
 
     export const defaultCropper = {
@@ -334,7 +337,8 @@ namespace SweetMeSoft {
         url: '',
         filename: '',
         data: '',
-        callback: (response: any) => {
+        uploadControl: null,
+        successCallback: (response: any) => {
         },
         errorCallback: (response: any) => {
         },

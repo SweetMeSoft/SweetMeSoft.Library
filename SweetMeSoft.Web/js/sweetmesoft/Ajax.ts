@@ -47,16 +47,22 @@ namespace SweetMeSoft {
                                 extraText += ' data-' + options.extraOption3 + '="' + val[options.extraOption3] + '"';
                             }
 
-                            if (val != null && options.text != undefined) {
-                                const route = options.text.split('.');
-                                let text = '';
-                                let copy = val;
-                                for (let item of route) {
-                                    text = copy[item]
-                                    copy = val[item]
-                                }
+                            if (val != null && options.text == '') {
+                                dropDown.append('<option value="' + val + '"' + extraText + '>' + val + '</option>');
+                            } else {
+                                if (val != null && options.text != undefined) {
+                                    const route = options.text.split('.');
+                                    let text = '';
+                                    let copy = val;
+                                    for (let item of route) {
+                                        text = copy[item]
+                                        copy = val[item]
+                                    }
 
-                                dropDown.append('<option value="' + val[options.internal] + '"' + extraText + '>' + text + '</option>');
+                                    let flag = options.isCountries ? 'data-content="<img src=\'https://flagsapi.com/' + val.code + '/flat/24.png\' style=\'margin-right: .7rem;\'>' + text + '"' : '';
+
+                                    dropDown.append('<option ' + flag + ' value="' + val[options.internal] + '"' + extraText + '>' + text + '</option>');
+                                }																					
                             }
                         });
                     if (options.urlValues != undefined && options.urlValues !== '') {
@@ -94,13 +100,10 @@ namespace SweetMeSoft {
                         }
                     }
 
-                    let isForModal = $('#modal').is(':visible');
-                    dropDown.select2({
-                        theme: 'bootstrap-5',
-                        closeOnSelect: closeOnSelect,
-                        allowClear: allowClear,
-                        dropdownParent: isForModal ? $('#modal') : ''
+                    dropDown.selectpicker({
+                        width: 'auto'
                     });
+                    dropDown.selectpicker('refresh');
                 }
 
                 if (options.callback != undefined) {
@@ -120,6 +123,7 @@ namespace SweetMeSoft {
         $.ajax({
             url: options.url,
             data: options.data,
+            traditional: true,
             type: 'GET',
             success: (response) => {
                 handleAjaxSuccess(options, response);
@@ -186,9 +190,27 @@ namespace SweetMeSoft {
         on();
         options = <OptionsRequest>(setDefaults(options, defaultsRequest));
         var form = new FormData();
-        for (let item of Object.keys(options.data)) {
-            form.append(item, options.data[item]);
+        if (options.uploadControl != null && options.uploadControl != undefined) {
+            const files = (options.uploadControl.get(0) as HTMLInputElement).files;
+            if (files != null) {
+                for (let i = 0; i < files.length; i++) {
+                    form.append('files', files[i]);
+                }
+            } else {
+                swal.fire('Error', 'There is no files selected.', 'error')
+            }
         }
+
+        for (const item of Object.keys(options.data)) {
+            if (Array.isArray(options.data[item])) {
+                for (const item2 of options.data[item]) {
+                    form.append(item, item2);
+                }
+            } else {
+                form.append(item, options.data[item]);
+            }
+        }
+
         $.ajax({
             type: 'POST',
             url: options.url,

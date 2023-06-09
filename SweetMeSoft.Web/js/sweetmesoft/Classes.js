@@ -43,7 +43,8 @@
         text: 'description',
         internal: 'id',
         urlValues: '',
-        value: 0
+        value: 0,
+        isCountries: false
     };
     SweetMeSoft.defaultCropper = {
         callback: (blob) => { }
@@ -95,7 +96,8 @@
         url: '',
         filename: '',
         data: '',
-        callback: (response) => {
+        uploadControl: null,
+        successCallback: (response) => {
         },
         errorCallback: (response) => {
         },

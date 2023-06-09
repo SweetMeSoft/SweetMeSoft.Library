@@ -17,6 +17,7 @@
         internal?: string;
         urlValues?: string;
         value?: number | string | string[];
+        isCountries?: boolean;
     }
     export interface OptionsCropper {
         uploadControl: JQuery;
@@ -122,13 +123,14 @@
     interface CustomColumn {
         originalName: string;
         name: string;
-        format: 'currency' | 'right' | 'image';
+        format: 'currency' | 'percentaje' | 'right' | 'image' | 'date';
         backgroundColor?: string;
     }
     export interface OptionsRequest {
         url: string;
         filename?: string;
         data?: string | Object;
+        uploadControl?: JQuery;
         successCallback?: (response: any) => void;
         successMessage?: string;
         errorCallback?: (response: any) => void;
@@ -218,6 +220,7 @@
         internal: string;
         urlValues: string;
         value: number;
+        isCountries: boolean;
     };
     export const defaultCropper: {
         callback: (blob: any) => void;
@@ -268,7 +271,8 @@
         url: string;
         filename: string;
         data: string;
-        callback: (response: any) => void;
+        uploadControl: any;
+        successCallback: (response: any) => void;
         errorCallback: (response: any) => void;
         errorMessage: string;
         successMessage: string;

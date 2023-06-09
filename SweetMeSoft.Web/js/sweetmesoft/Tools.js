@@ -165,9 +165,9 @@
                         columns.push({
                             targets: index,
                             data: key,
-                            title: capitalizeFirstLetter(key),
+                            title: customFormat != undefined ? customFormat.name : capitalizeFirstLetter(key),
                             visible: !options.hiddenColumns.includes(key.toLowerCase()),
-                            className: customFormat != undefined && (customFormat.format == 'currency' || customFormat.format == 'right') ? 'dt-body-right' : '',
+                            className: customFormat != undefined && (customFormat.format == 'currency' || customFormat.format == 'right' || customFormat.format == 'percentaje') ? 'dt-body-right' : '',
                             createdCell: (cell, cellData, rowData, rowIndex, colIndex) => {
                                 if (customFormat != undefined) {
                                     if (customFormat.backgroundColor != undefined) {
@@ -175,11 +175,14 @@
                                     }
                                     switch (customFormat.format) {
                                         case 'currency':
-                                            if (cellData > 0) {
+                                        case 'percentaje':
+                                            if (+cellData > 0) {
                                                 $(cell).css('color', 'green');
                                             }
-                                            else if (cellData < 0) {
-                                                $(cell).css('color', 'red');
+                                            else {
+                                                if (+cellData < 0) {
+                                                    $(cell).css('color', 'red');
+                                                }
                                             }
                                             break;
                                     }
@@ -207,6 +210,16 @@
                                                 return '<img src="/images/default-product.png" class="rounded-circle" style="height:40px; width: 40px;"/>';
                                             }
                                             return '<img src="' + data + '" class="rounded-circle" style="height:40px; width: 40px;"/>';
+                                        case 'percentaje':
+                                            if (data == null || data == undefined) {
+                                                return '0.00%';
+                                            }
+                                            if (data.toString().indexOf('%') == -1) {
+                                                return data + '%';
+                                            }
+                                            return data;
+                                        case 'date':
+                                            return SweetMeSoft.getFormatedDate(data, 'yyyy-MM-dd', true);
                                     }
                                 }
                                 return data;
