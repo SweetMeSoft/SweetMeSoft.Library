@@ -241,7 +241,7 @@ namespace SweetMeSoft {
 
                                             return data;
                                         case 'date':
-                                            return SweetMeSoft.getFormatedDate(data, 'yyyy-MM-dd', true)
+                                            return SweetMeSoft.getFormatedDate(new Date(data), 'yyyy-MM-dd', true)
                                     }
                                 }
 
