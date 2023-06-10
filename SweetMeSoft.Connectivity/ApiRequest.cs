@@ -9,6 +9,7 @@ using System.Text;
 using SweetMeSoft.Base.Attributes;
 using Newtonsoft.Json;
 using SweetMeSoft.Base.Connectivity;
+using System.Web;
 
 namespace SweetMeSoft.Connectivity
 {
@@ -99,15 +100,29 @@ namespace SweetMeSoft.Connectivity
             }
         }
 
-        public async Task<GenericResponse> GetRequest<T>(GenericRequest<T> request)
+        public async Task<GenericResponse> GetRequest<T>(GenericRequest<T> request) where T : class
         {
             try
             {
                 var cookies = new CookieContainer();
                 using var httpClient = CreateClient(request, cookies);
+                var parameters = "";
+                if (request.Data != null)
+                {
+                    var properties = request.Data.GetType().GetProperties()
+                        .Select(model => new
+                        {
+                            Key = model.Name,
+                            Value = model.GetValue(request.Data)?.ToString()
+                        })
+                        .Where(p => !string.IsNullOrEmpty(p.Value))
+                        .Select(p => $"{HttpUtility.UrlEncode(p.Key)}={HttpUtility.UrlEncode(p.Value)}");
+                    parameters = "?" + string.Join("&", properties);
+                }
+
                 return new GenericResponse()
                 {
-                    HttpResponse = await httpClient.GetAsync(request.Url),
+                    HttpResponse = await httpClient.GetAsync(request.Url + parameters),
                     CookieContainer = cookies
                 };
             }
