@@ -61,9 +61,9 @@ namespace SweetMeSoft.Tools
                     }
                     else
                     {
-                        if (!copyNames.Contains(property.PropertyType.Name) && property.GetValue(entity, null) != null)
+                        if (!copyNames.Contains(property.Name) && property.GetValue(entity, null) != null)
                         {
-                            copyNames.Add(property.PropertyType.Name);
+                            copyNames.Add(property.Name);
                             dynamic obj = property.GetValue(entity, null);
                             CleanVirtualProperties(obj, copyNames);
                         }
