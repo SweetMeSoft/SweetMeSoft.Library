@@ -177,11 +177,11 @@ namespace SweetMeSoft {
                 if (data.length > 0) {
                     const keys = Object.keys(data[0]);
                     for (const key of keys) {
-                        const customFormat = options.customColumns.find(model => model.originalName.toLowerCase() == key.toLowerCase());
+                        const customFormat = options.customColumns.find(model => model.originalTitle.toLowerCase() == key.toLowerCase());
                         columns.push({
                             targets: index,
                             data: key,
-                            title: customFormat != undefined ? customFormat.name : capitalizeFirstLetter(key),
+                            title: customFormat != undefined ? customFormat.title : capitalizeFirstLetter(key),
                             visible: !options.hiddenColumns.includes(key.toLowerCase()),
                             className: customFormat != undefined && (customFormat.format == 'currency' || customFormat.format == 'right' || customFormat.format == 'percentaje') ? 'dt-body-right' : '',
                             createdCell: (cell, cellData, rowData, rowIndex, colIndex) => {
@@ -240,6 +240,9 @@ namespace SweetMeSoft {
                                             }
 
                                             return data;
+                                        case 'boolean':
+                                            const isChecked = (data == 'true' || data == 'True' || data == 'TRUE' || data == true || data == 1 || data == '1') ? 'checked' : '';
+                                            return '<div class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" id="chk" ' + isChecked + '><label class="form-check-label" for="chk"></label></div>'
                                         case 'date':
                                             return SweetMeSoft.getFormatedDate(new Date(data), 'yyyy-MM-dd', true)
                                     }
