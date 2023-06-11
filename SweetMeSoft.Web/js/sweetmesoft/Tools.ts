@@ -181,7 +181,7 @@ namespace SweetMeSoft {
                         columns.push({
                             targets: index,
                             data: key,
-                            title: customFormat != undefined ? customFormat.title == '' ? customFormat.originalTitle : customFormat.title : capitalizeFirstLetter(key),
+                            title: customFormat != undefined ? customFormat.title == undefined ? customFormat.originalTitle : customFormat.title : capitalizeFirstLetter(key),
                             visible: !options.hiddenColumns.includes(key.toLowerCase()),
                             className: customFormat != undefined && (customFormat.format == 'currency' || customFormat.format == 'right' || customFormat.format == 'percentaje') ? 'dt-body-right' : '',
                             createdCell: (cell, cellData, rowData, rowIndex, colIndex) => {
