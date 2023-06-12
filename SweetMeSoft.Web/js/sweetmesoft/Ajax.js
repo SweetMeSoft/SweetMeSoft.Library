@@ -58,7 +58,7 @@
                                 }
                                 let smallText = '';
                                 if (!options.subTextOption.isNullOrEmpty()) {
-                                    smallText = '<small class="text-muted">' + val[options.subTextOption].slice(0, options.limitSubTextOption) + '</small>';
+                                    smallText = '<small class=\'text-muted\'>' + val[options.subTextOption].slice(0, options.limitSubTextOption) + '</small>';
                                 }
                                 let flag = options.isCountries ? 'data-content="<img src=\'https://flagsapi.com/' + val.code + '/flat/24.png\' style=\'margin-right: .7rem;\'>' + text + " " + smallText + ' "' : '';
                                 dropDown.append('<option ' + flag + ' value="' + val[options.internal] + '"' + extraText + '>' + text + '</option>');
