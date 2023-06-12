@@ -32,23 +32,19 @@ namespace SweetMeSoft {
                     $.each(data,
                         (key, val) => {
                             extraText = '';
-                            if (options.extraOption != null &&
-                                options.extraOption !== '') {
+                            if (options.extraOption.isNullOrEmpty()) {
                                 extraText += ' data-' + options.extraOption + '="' + val[options.extraOption] + '"';
                             }
 
-                            if (options.extraOption2 != null &&
-                                options.extraOption2 !== '') {
+                            if (options.extraOption2.isNullOrEmpty()) {
                                 extraText += ' data-' + options.extraOption2 + '="' + val[options.extraOption2] + '"';
                             }
 
-                            if (options.extraOption3 != null &&
-                                options.extraOption3 !== '') {
+                            if (options.extraOption3.isNullOrEmpty()) {
                                 extraText += ' data-' + options.extraOption3 + '="' + val[options.extraOption3] + '"';
                             }
 
-                            if (options.subTextOption != null &&
-                                options.subTextOption !== '') {
+                            if (options.subTextOption.isNullOrEmpty()) {
                                 extraText += ' data-subtext="' + val[options.subTextOption].slice(0, options.limitSubTextOption) + '"';
                             }
 
@@ -64,7 +60,12 @@ namespace SweetMeSoft {
                                         copy = val[item]
                                     }
 
-                                    let flag = options.isCountries ? 'data-content="<img src=\'https://flagsapi.com/' + val.code + '/flat/24.png\' style=\'margin-right: .7rem;\'>' + text + '"' : '';
+                                    let smallText = '';
+                                    if (options.subTextOption.isNullOrEmpty()) {
+                                        smallText = '<small class="text-muted">' + val[options.subTextOption].slice(0, options.limitSubTextOption) + '</small>';
+                                    }
+
+                                    let flag = options.isCountries ? 'data-content="<img src=\'https://flagsapi.com/' + val.code + '/flat/24.png\' style=\'margin-right: .7rem;\'>' + text + " " + smallText + ' "' : '';
 
                                     dropDown.append('<option ' + flag + ' value="' + val[options.internal] + '"' + extraText + '>' + text + '</option>');
                                 }
