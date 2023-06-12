@@ -45,7 +45,7 @@ namespace SweetMeSoft.Tools
                             dynamic obj = property.GetValue(entity, null);
                             var items = Enumerable.ToList(obj);
 
-                            if (!copyNames.Contains(items[0].GetType().Name))
+                            if (items.Count > 0 && !copyNames.Contains(items[0].GetType().Name))
                             {
                                 copyNames.Add(items[0].GetType().Name);
                                 foreach (var item in items)
@@ -55,7 +55,10 @@ namespace SweetMeSoft.Tools
                             }
                             else
                             {
-                                property.SetValue(entity, null);
+                                if (items.Count > 0)
+                                {
+                                    property.SetValue(entity, null);
+                                }
                             }
                         }
                     }
