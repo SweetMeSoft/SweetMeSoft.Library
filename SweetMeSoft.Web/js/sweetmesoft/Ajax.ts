@@ -32,19 +32,19 @@ namespace SweetMeSoft {
                     $.each(data,
                         (key, val) => {
                             extraText = '';
-                            if (options.extraOption.isNullOrEmpty()) {
+                            if (!options.extraOption.isNullOrEmpty()) {
                                 extraText += ' data-' + options.extraOption + '="' + val[options.extraOption] + '"';
                             }
 
-                            if (options.extraOption2.isNullOrEmpty()) {
+                            if (!options.extraOption2.isNullOrEmpty()) {
                                 extraText += ' data-' + options.extraOption2 + '="' + val[options.extraOption2] + '"';
                             }
 
-                            if (options.extraOption3.isNullOrEmpty()) {
+                            if (!options.extraOption3.isNullOrEmpty()) {
                                 extraText += ' data-' + options.extraOption3 + '="' + val[options.extraOption3] + '"';
                             }
 
-                            if (options.subTextOption.isNullOrEmpty()) {
+                            if (!options.subTextOption.isNullOrEmpty()) {
                                 extraText += ' data-subtext="' + val[options.subTextOption].slice(0, options.limitSubTextOption) + '"';
                             }
 
@@ -61,7 +61,7 @@ namespace SweetMeSoft {
                                     }
 
                                     let smallText = '';
-                                    if (options.subTextOption.isNullOrEmpty()) {
+                                    if (!options.subTextOption.isNullOrEmpty()) {
                                         smallText = '<small class="text-muted">' + val[options.subTextOption].slice(0, options.limitSubTextOption) + '</small>';
                                     }
 
