@@ -26,7 +26,7 @@
             dropDown.selectpicker({
                 width: 'auto'
             });
-            dropDown.selectpicker('refresh');					 
+            dropDown.selectpicker('refresh');
         });
     },
     toBlob: function () {
@@ -45,6 +45,10 @@
     }
 });
 
+String.prototype.isNullOrEmpty = function () {
+    return this.val() === null || this.val() === '' || this.val() === undefined;
+}
+
 interface JQuery {
     enable(): JQuery;
     disable(): JQuery;
@@ -52,4 +56,8 @@ interface JQuery {
     checkValidity(): JQuery;
     initializeSelect(): JQuery;
     toBlob(): JQuery;
+}
+
+interface String {
+    isNullOrEmpty(): boolean;
 }

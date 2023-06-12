@@ -6,3 +6,6 @@
     initializeSelect(): JQuery;
     toBlob(): JQuery;
 }
+interface String {
+    isNullOrEmpty(): boolean;
+}
