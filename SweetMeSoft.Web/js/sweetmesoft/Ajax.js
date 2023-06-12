@@ -44,6 +44,10 @@
                             options.extraOption3 !== '') {
                             extraText += ' data-' + options.extraOption3 + '="' + val[options.extraOption3] + '"';
                         }
+                        if (options.subTextOption != null &&
+                            options.subTextOption !== '') {
+                            extraText += ' data-subtext="' + options.subTextOption.slice(0, options.limitSubTextOption) + '"';
+                        }
                         if (val != null && options.text == '') {
                             dropDown.append('<option value="' + val + '"' + extraText + '>' + val + '</option>');
                         }

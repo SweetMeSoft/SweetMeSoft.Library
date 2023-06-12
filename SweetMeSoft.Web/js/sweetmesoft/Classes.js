@@ -38,7 +38,7 @@
         extraOption2: '',
         extraOption3: '',
         firstText: 'Select',
-        limitSubTextOption: 0,
+        limitSubTextOption: 20,
         subTextOption: '',
         text: 'description',
         internal: 'id',

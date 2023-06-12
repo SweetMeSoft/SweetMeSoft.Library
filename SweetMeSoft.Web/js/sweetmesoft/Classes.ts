@@ -72,7 +72,7 @@ namespace SweetMeSoft {
 
         /**
          * Max lenght of characters in the subtext
-         * @default 0
+         * @default 20
          */
         limitSubTextOption?: number;
 
@@ -514,7 +514,7 @@ namespace SweetMeSoft {
         extraOption2: '',
         extraOption3: '',
         firstText: 'Select',
-        limitSubTextOption: 0,
+        limitSubTextOption: 20,
         subTextOption: '',
         text: 'description',
         internal: 'id',

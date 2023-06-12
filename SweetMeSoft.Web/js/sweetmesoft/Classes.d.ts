@@ -59,7 +59,7 @@
         firstText?: string;
         /**
          * Max lenght of characters in the subtext
-         * @default 0
+         * @default 20
          */
         limitSubTextOption?: number;
         /**
