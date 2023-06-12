@@ -46,7 +46,7 @@
 });
 
 String.prototype.isNullOrEmpty = function () {
-    return this.val() === null || this.val() === '' || this.val() === undefined;
+    return this === null || this === '' || this === undefined;
 }
 
 interface JQuery {
