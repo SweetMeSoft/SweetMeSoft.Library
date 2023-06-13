@@ -46,5 +46,5 @@
     }
 });
 String.prototype.isNullOrEmpty = function () {
-    return this === null || this === '' || this === undefined;
+    return this == undefined || this === null || this.toString() === '';
 };
