@@ -356,27 +356,26 @@
                     options.onDblClick(data);
                 });
                 $("[name='" + id + "_length']").removeClass('form-select');
-                for (const callback of callbacks) {
-                    $('#btnTable' + callback.id).on('click', event => {
-                        if (callback.button.type == 'delete') {
-                            swal.fire({
-                                title: 'Delete item',
-                                text: 'Are you sure you want to delete this item? This action cannot be undone',
-                                icon: 'warning',
-                                showCancelButton: true,
-                                cancelButtonText: 'No',
-                                confirmButtonText: 'Yes'
-                            }).then(result => {
-                                if (result.value) {
-                                    callback.button.callback(callback.row);
-                                }
-                            });
-                        }
-                        else {
-                            callback.button.callback(callback.row);
-                        }
-                    });
-                }
+                //for (const callback of callbacks) {
+                //    $('#btnTable' + callback.id).on('click', event => {
+                //        if (callback.button.type == 'delete') {
+                //            swal.fire({
+                //                title: 'Delete item',
+                //                text: 'Are you sure you want to delete this item? This action cannot be undone',
+                //                icon: 'warning',
+                //                showCancelButton: true,
+                //                cancelButtonText: 'No',
+                //                confirmButtonText: 'Yes'
+                //            }).then(result => {
+                //                if (result.value) {
+                //                    callback.button.callback(callback.row);
+                //                }
+                //            });
+                //        } else {
+                //            callback.button.callback(callback.row);
+                //        }
+                //    });
+                //}
             }
         });
     }
