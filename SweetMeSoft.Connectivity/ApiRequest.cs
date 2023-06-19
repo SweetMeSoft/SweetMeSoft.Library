@@ -166,6 +166,25 @@ namespace SweetMeSoft.Connectivity
             }
         }
 
+        public async Task<GenericResponse> DeleteRequest<T>(GenericRequest<T> request)
+        {
+            try
+            {
+                var cookies = new CookieContainer();
+                using var httpClient = CreateClient(request, cookies);
+
+                return new GenericResponse()
+                {
+                    HttpResponse = await httpClient.DeleteAsync(request.Url),
+                    CookieContainer = cookies
+                };
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         private HttpClient CreateClient<T>(GenericRequest<T> request, CookieContainer cookies)
         {
             var handler = new HttpClientHandler
