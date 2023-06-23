@@ -298,6 +298,13 @@
          * @returns
          */
         callback?: (rowData: any) => void;
+        /**
+         * Function to show or hide the button
+         * @param rowData row data where the button was clicked
+         * @default return true
+         * @returns boolean
+         */
+        showButton?: (rowData: any) => boolean;
     }
     /**
      * Object for customize columns in the table

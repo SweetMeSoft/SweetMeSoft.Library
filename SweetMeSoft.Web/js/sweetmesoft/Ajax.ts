@@ -82,27 +82,22 @@ namespace SweetMeSoft {
                                     }
                                 }
                                 dropDown.val(array);
-                                //M.FormSelect.init(dropDown, { dropdownOptions: { container: document.body } });
-                                dropDown.change();
                             }
                         })
                     } else {
                         if (options.value != null && options.value !== 0 &&
                             options.value !== '') {
                             dropDown.val(options.value);
-                            dropDown.change();
                         } else {
                             if (data.length === 1 && options.autoSelect) {
                                 let uniqueOption = dropDown.find(':not([disabled]):first').val();
                                 // @ts-ignore
                                 dropDown.val(uniqueOption);
-                                dropDown.change();
                             }
                         }
                         if (options.value != null && options.value !== 0 &&
                             options.value !== '') {
                             dropDown.val(options.value);
-                            dropDown.change();
                         }
                     }
 

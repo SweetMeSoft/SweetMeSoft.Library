@@ -137,7 +137,7 @@ namespace SweetMeSoft {
 
         if (options.primaryCallback != undefined) {
             btnModalPrimary.show();
-            btnModalPrimary.unbind('click')
+            btnModalPrimary.off('click')
             btnModalPrimary.on('click', event => {
                 options.primaryCallback()
                 modal.hide()
@@ -146,7 +146,7 @@ namespace SweetMeSoft {
 
         if (options.cancelCallback != undefined) {
             btnModalCancel.show();
-            btnModalCancel.unbind('click')
+            btnModalCancel.off('click')
             btnModalCancel.on('click', event => {
                 options.cancelCallback()
             });
@@ -296,24 +296,28 @@ namespace SweetMeSoft {
                         render: (data, type, row) => {
                             let htmlButtons = '';
                             for (let button of options.buttons) {
-                                switch (button.type) {
-                                    case 'update':
-                                        htmlButtons += '<a id="btnTable' + indexButton + '" class="btn btn-primary btn-table"><i class="bi-pencil-fill icn-table"></i></a>';
-                                        break;
-                                    case 'delete':
-                                        htmlButtons += '<a id="btnTable' + indexButton + '" class="btn btn-danger btn-table"><i class="bi-trash3-fill icn-table"></i></a>';
-                                        break;
-                                    case 'custom':
-                                        htmlButtons += '<a id="btnTable' + indexButton + '" class="btn btn-table" style="background-color: ' + button.color + '"><i class="bi-' + button.icon + ' icn-table"></i></a>';
-                                        break;
-                                }
+                                const showButton = button.showButton == undefined ? true : button.showButton(row);
+                                if (showButton) {
+                                    switch (button.type) {
+                                        case 'update':
+                                            htmlButtons += '<a id="btnTable' + indexButton + '" class="btn btn-primary btn-table"><i class="bi-pencil-fill icn-table"></i></a>';
+                                            break;
+                                        case 'delete':
+                                            htmlButtons += '<a id="btnTable' + indexButton + '" class="btn btn-danger btn-table"><i class="bi-trash3-fill icn-table"></i></a>';
+                                            break;
+                                        case 'custom':
+                                            htmlButtons += '<a id="btnTable' + indexButton + '" class="btn btn-table" style="background-color: ' + button.color + '"><i class="bi-' + button.icon + ' icn-table"></i></a>';
+                                            break;
+                                    }
 
-                                callbacks.push({
-                                    id: indexButton,
-                                    button: button,
-                                    row: row
-                                })
-                                indexButton++;
+                                    callbacks.push({
+                                        id: indexButton,
+                                        button: button,
+                                        row: row
+                                    })
+
+                                    indexButton++;
+                                }
                             }
 
                             return htmlButtons;
