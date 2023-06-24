@@ -112,9 +112,9 @@ namespace SweetMeSoft {
         const body = $('#divModalBody');
         const title = $('#txtModalTitle');
         const btnModalPrimary = $('#btnModalPrimary');
-        const btnModalCancel = $('#btnModalCancel');
+        const btnModalSecondary = $('#btnModalCancel');
         btnModalPrimary.text(options.primaryText);
-        btnModalCancel.text(options.cancelText);
+        btnModalSecondary.text(options.cancelText);
         body.html('');
         title.text(options.title);
 
@@ -142,20 +142,30 @@ namespace SweetMeSoft {
                 options.primaryCallback()
                 modal.hide()
             });
+        } else {
+            btnModalPrimary.hide();
         }
 
         if (options.cancelCallback != undefined) {
-            btnModalCancel.show();
-            btnModalCancel.off('click')
-            btnModalCancel.on('click', event => {
+            btnModalSecondary.show();
+            btnModalSecondary.off('click')
+            btnModalSecondary.on('click', event => {
                 options.cancelCallback()
             });
+        } else {
+            btnModalSecondary.hide();
         }
 
-        if (options.size === 'big') {
-            $('.modal-dialog').css('max-width', '80%');
-            $('.modal-dialog').css('height', options.height);
+        switch (options.size) {
+            case 'big':
+                $('.modal-dialog').css('max-width', '80%');
+                break;
+            case 'small':
+                $('.modal-dialog').css('max-width', '500px');
+                break;
         }
+
+        $('.modal-dialog').css('height', options.height);
 
         modal.show();
     }
@@ -295,18 +305,19 @@ namespace SweetMeSoft {
                         className: 'action-row',
                         render: (data, type, row) => {
                             let htmlButtons = '';
+                            const tableId = options.table.attr('id');
                             for (let button of options.buttons) {
                                 const showButton = button.showButton == undefined ? true : button.showButton(row);
                                 if (showButton) {
                                     switch (button.type) {
                                         case 'update':
-                                            htmlButtons += '<a id="btnTable' + indexButton + '" class="btn btn-primary btn-table"><i class="bi-pencil-fill icn-table"></i></a>';
+                                            htmlButtons += '<a id="btn' + tableId + indexButton + '" class="btn btn-primary btn-table"><i class="bi-pencil-fill icn-table"></i></a>';
                                             break;
                                         case 'delete':
-                                            htmlButtons += '<a id="btnTable' + indexButton + '" class="btn btn-danger btn-table"><i class="bi-trash3-fill icn-table"></i></a>';
+                                            htmlButtons += '<a id="btn' + tableId + indexButton + '" class="btn btn-danger btn-table"><i class="bi-trash3-fill icn-table"></i></a>';
                                             break;
                                         case 'custom':
-                                            htmlButtons += '<a id="btnTable' + indexButton + '" class="btn btn-table" style="background-color: ' + button.color + '"><i class="bi-' + button.icon + ' icn-table"></i></a>';
+                                            htmlButtons += '<a id="btn' + tableId + indexButton + '" class="btn btn-table" style="background-color: ' + button.color + '"><i class="bi-' + button.icon + ' icn-table"></i></a>';
                                             break;
                                     }
 
@@ -344,7 +355,7 @@ namespace SweetMeSoft {
                     paging: options.showFooter,
                     info: options.showFooter,
                     drawCallback: settings => {
-                        const buttons = $('.btn-table');
+                        const buttons = options.table.find('.btn-table');
                         buttons.off('click');
                         buttons.each((index, button) => {
                             $(button).on('click', () => {
@@ -385,7 +396,7 @@ namespace SweetMeSoft {
                             next: 'Next',
                             previous: 'Previous'
                         },
-                    },
+                    }
                 })
 
                 options.table.off('dblclick');
