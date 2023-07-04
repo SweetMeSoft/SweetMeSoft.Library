@@ -54,7 +54,7 @@ namespace SweetMeSoft.Base
             { ContentType.dat, "text/plain" },
             { ContentType.gif, "image/gif" },
             { ContentType.jpg, "image/jpeg" },
-            { ContentType.msg, ",application/vnd.ms-outlook" },
+            { ContentType.msg, "application/vnd.ms-outlook" },
             { ContentType.pagos, "text/plain" },
             { ContentType.png, "image/png" },
             { ContentType.pdf, "application/pdf" },
