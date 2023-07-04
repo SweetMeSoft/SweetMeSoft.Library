@@ -24,34 +24,48 @@ namespace SweetMeSoft.Base
 
         public enum ContentType
         {
+            bin,
+            csv,
+            dat,
+            doc,
+            docx,
+            gif,
+            jpg,
+            msg,
+            pagos,
+            pdf,
+            png,
+            ppt,
+            pptx,
+            rar,
+            txt,
             xlsx,
             xls,
-            csv,
             xml,
-            zip,
-            txt,
-            jpg,
-            png,
-            gif,
-            pdf,
-            dat,
-            pagos
+            zip
         }
 
         public static readonly Dictionary<ContentType, string> ContentTypesDict = new()
         {
-            { ContentType.xlsx, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" },
-            { ContentType.xls, "application/vnd.ms-excel" },
+            { ContentType.bin, "application/octet-stream" },
             { ContentType.csv, "text/csv" },
+            { ContentType.doc, "application/msword" },
+            { ContentType.docx, "application/vnd.openxmlformats-officedocument.wordprocessingml.document" },
+            { ContentType.dat, "text/plain" },
+            { ContentType.gif, "image/gif" },
+            { ContentType.jpg, "image/jpeg" },
+            { ContentType.msg, ",application/vnd.ms-outlook" },
+            { ContentType.pagos, "text/plain" },
+            { ContentType.png, "image/png" },
+            { ContentType.pdf, "application/pdf" },
+            { ContentType.ppt, "application/vnd.ms-powerpoint" },
+            { ContentType.pptx, "application/vnd.openxmlformats-officedocument.presentationml.presentation" },
+            { ContentType.rar, "application/vnd.rar" },
+            { ContentType.txt, "text/plain" },
+            { ContentType.xls, "application/vnd.ms-excel" },
+            { ContentType.xlsx, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" },
             { ContentType.xml, "text/xml" },
             { ContentType.zip, "application/zip" },
-            { ContentType.txt, "text/plain" },
-            { ContentType.jpg, "image/jpeg" },
-            { ContentType.png, "image/png" },
-            { ContentType.gif, "image/gif" },
-            { ContentType.pdf, "application/pdf" },
-            { ContentType.dat, "text/plain" },
-            { ContentType.pagos, "text/plain" },
         };
 
         public static ContentType GetContentType(string extension)
