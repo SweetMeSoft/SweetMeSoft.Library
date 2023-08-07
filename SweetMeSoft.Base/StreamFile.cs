@@ -26,6 +26,22 @@ namespace SweetMeSoft.Base
             Created = created;
         }
 
+        public StreamFile(string fileName, string fileBase64, Constants.ContentType contentType)
+        {
+            FileName = fileName;
+            Stream = new MemoryStream(Convert.FromBase64String(fileBase64));
+            ContentType = contentType;
+            Created = DateTime.Now;
+        }
+
+        public StreamFile(string fileName, string fileBase64, Constants.ContentType contentType, DateTime created)
+        {
+            FileName = fileName;
+            Stream = new MemoryStream(Convert.FromBase64String(fileBase64));
+            ContentType = contentType;
+            Created = created;
+        }
+
         public StreamFile(IFormFile file)
         {
             FileName = file.FileName;

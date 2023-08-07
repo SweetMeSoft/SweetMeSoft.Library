@@ -13,9 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SweetMeSoft.Base", "SweetMe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SweetMeSoft.GCP", "SweetMeSoft.GCP\SweetMeSoft.GCP.csproj", "{7FBD479D-BDE3-4CC8-960A-B615A3F772F5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SweetMeSoft.Web", "SweetMeSoft.Web\SweetMeSoft.Web.csproj", "{3FC19625-5430-4151-9234-138665678313}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SweetMeSoft.Captcha", "SweetMeSoft.Captcha\SweetMeSoft.Captcha.csproj", "{63ABA4AD-0BA2-482E-A072-7033D6E97995}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SweetMeSoft.Captcha", "SweetMeSoft.Captcha\SweetMeSoft.Captcha.csproj", "{63ABA4AD-0BA2-482E-A072-7033D6E97995}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,10 +41,6 @@ Global
 		{7FBD479D-BDE3-4CC8-960A-B615A3F772F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7FBD479D-BDE3-4CC8-960A-B615A3F772F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7FBD479D-BDE3-4CC8-960A-B615A3F772F5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3FC19625-5430-4151-9234-138665678313}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3FC19625-5430-4151-9234-138665678313}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3FC19625-5430-4151-9234-138665678313}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3FC19625-5430-4151-9234-138665678313}.Release|Any CPU.Build.0 = Release|Any CPU
 		{63ABA4AD-0BA2-482E-A072-7033D6E97995}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{63ABA4AD-0BA2-482E-A072-7033D6E97995}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63ABA4AD-0BA2-482E-A072-7033D6E97995}.Release|Any CPU.ActiveCfg = Release|Any CPU
