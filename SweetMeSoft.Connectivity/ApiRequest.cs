@@ -10,6 +10,7 @@ using SweetMeSoft.Base.Attributes;
 using Newtonsoft.Json;
 using SweetMeSoft.Base.Connectivity;
 using System.Web;
+using SweetMeSoft.Base;
 
 namespace SweetMeSoft.Connectivity
 {
@@ -19,20 +20,44 @@ namespace SweetMeSoft.Connectivity
 
         public static ApiRequest Instance => instance ??= new ApiRequest();
 
-        public async Task<GenericResponse> PostRequest<T>(GenericRequest<T> request)
+        public async Task<GenericResponse<StreamFile>> GetImage(string url)
+        {
+            var request = new GenericRequest<StreamFile>()
+            {
+                Url = url
+            };
+            var cookies = new CookieContainer();
+            using var httpClient = CreateClient(request, cookies);
+            var response = await httpClient.GetAsync(request.Url);
+            return new GenericResponse<StreamFile>()
+            {
+                HttpResponse = response,
+                CookieContainer = cookies,
+                Object = new StreamFile()
+                {
+                    Stream = await response.Content.ReadAsStreamAsync(),
+                    FileName = response.Content.Headers.ContentDisposition.FileName,
+                    ContentType = Constants.GetContentType(response.Content.Headers.ContentType.MediaType)
+                }
+            };
+        }
+
+        public async Task<GenericResponse<T>> PostRequest<T>(GenericRequest<T> request)
         {
             try
             {
                 var cookies = new CookieContainer();
+                var response = new HttpResponseMessage();
                 using var httpClient = CreateClient(request, cookies);
 
                 if (request.Data == null)
                 {
-                    var response = await httpClient.PostAsync(request.Url, null);
-                    return new GenericResponse()
+                    response = await httpClient.PostAsync(request.Url, null);
+                    return new GenericResponse<T>()
                     {
                         HttpResponse = response,
-                        CookieContainer = cookies
+                        CookieContainer = cookies,
+                        Object = JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync())
                     };
                 }
 
@@ -66,10 +91,12 @@ namespace SweetMeSoft.Connectivity
 
                         bodyProperties.AddRange(request.AdditionalParams);
 
-                        return new GenericResponse()
+                        response = await httpClient.PostAsync(request.Url, new FormUrlEncodedContent(bodyProperties));
+                        return new GenericResponse<T>()
                         {
-                            HttpResponse = await httpClient.PostAsync(request.Url, new FormUrlEncodedContent(bodyProperties)),
-                            CookieContainer = cookies
+                            HttpResponse = response,
+                            CookieContainer = cookies,
+                            Object = JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync())
                         };
                     case HeaderType.formdata:
                         var formContent = new MultipartFormDataContent();
@@ -80,18 +107,22 @@ namespace SweetMeSoft.Connectivity
                             formContent.Add(new StringContent(property.GetValue(request.Data, null).ToString()), columnAttr.Name);
                         }
 
-                        return new GenericResponse()
+                        response = await httpClient.PostAsync(request.Url, formContent);
+                        return new GenericResponse<T>()
                         {
-                            HttpResponse = await httpClient.PostAsync(request.Url, formContent),
-                            CookieContainer = cookies
+                            HttpResponse = response,
+                            CookieContainer = cookies,
+                            Object = JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync())
                         };
                 }
 
                 var content = new StringContent(JsonConvert.SerializeObject(request.Data), Encoding.UTF8, "application/json");
-                return new GenericResponse()
+                response = await httpClient.PostAsync(request.Url, content);
+                return new GenericResponse<T>()
                 {
-                    HttpResponse = await httpClient.PostAsync(request.Url, content),
-                    CookieContainer = cookies
+                    HttpResponse = response,
+                    CookieContainer = cookies,
+                    Object = JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync())
                 };
             }
             catch
@@ -100,7 +131,7 @@ namespace SweetMeSoft.Connectivity
             }
         }
 
-        public async Task<GenericResponse> GetRequest<T>(GenericRequest<T> request) where T : class
+        public async Task<GenericResponse<T>> GetRequest<T>(GenericRequest<T> request) where T : class
         {
             try
             {
@@ -120,10 +151,12 @@ namespace SweetMeSoft.Connectivity
                     parameters = "?" + string.Join("&", properties);
                 }
 
-                return new GenericResponse()
+                var response = await httpClient.GetAsync(request.Url + parameters);
+                return new GenericResponse<T>()
                 {
-                    HttpResponse = await httpClient.GetAsync(request.Url + parameters),
-                    CookieContainer = cookies
+                    HttpResponse = response,
+                    CookieContainer = cookies,
+                    Object = JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync())
                 };
             }
             catch
@@ -132,21 +165,24 @@ namespace SweetMeSoft.Connectivity
             }
         }
 
-        public async Task<GenericResponse> PutRequest<T>(GenericRequest<T> request)
+        public async Task<GenericResponse<T>> PutRequest<T>(GenericRequest<T> request)
         {
             try
             {
                 var cookies = new CookieContainer();
+                var response = new HttpResponseMessage();
                 using var httpClient = CreateClient(request, cookies);
 
                 switch (request.HeaderType)
                 {
                     case HeaderType.json:
                         var content = new StringContent(JsonConvert.SerializeObject(request.Data), Encoding.UTF8, "application/json");
-                        return new GenericResponse()
+                        response = await httpClient.PutAsync(request.Url, content);
+                        return new GenericResponse<T>()
                         {
-                            HttpResponse = await httpClient.PutAsync(request.Url, content),
-                            CookieContainer = cookies
+                            HttpResponse = response,
+                            CookieContainer = cookies,
+                            Object = JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync())
                         };
                     case HeaderType.formdata:
                     case HeaderType.xwwwunlercoded:
@@ -154,10 +190,12 @@ namespace SweetMeSoft.Connectivity
                         break;
                 }
 
-                return new GenericResponse()
+                response = await httpClient.PutAsJsonAsync(request.Url, request.Data);
+                return new GenericResponse<T>()
                 {
-                    HttpResponse = await httpClient.PutAsJsonAsync(request.Url, request.Data),
-                    CookieContainer = cookies
+                    HttpResponse = response,
+                    CookieContainer = cookies,
+                    Object = JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync())
                 };
             }
             catch
@@ -166,17 +204,19 @@ namespace SweetMeSoft.Connectivity
             }
         }
 
-        public async Task<GenericResponse> DeleteRequest<T>(GenericRequest<T> request)
+        public async Task<GenericResponse<T>> DeleteRequest<T>(GenericRequest<T> request)
         {
             try
             {
                 var cookies = new CookieContainer();
                 using var httpClient = CreateClient(request, cookies);
 
-                return new GenericResponse()
+                var response = await httpClient.DeleteAsync(request.Url);
+                return new GenericResponse<T>()
                 {
-                    HttpResponse = await httpClient.DeleteAsync(request.Url),
-                    CookieContainer = cookies
+                    HttpResponse = response,
+                    CookieContainer = cookies,
+                    Object = JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync())
                 };
             }
             catch
