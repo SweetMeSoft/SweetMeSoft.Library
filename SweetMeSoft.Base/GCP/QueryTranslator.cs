@@ -8,7 +8,6 @@ namespace SweetMeSoft.Base.GCP
 {
     public class QueryTranslator : ExpressionVisitor
     {
-
         private StringBuilder sb;
 
         public int? Skip { get; set; }
@@ -46,7 +45,8 @@ namespace SweetMeSoft.Base.GCP
                 Visit(lambda.Body);
                 return m;
             }
-            else if (m.Method.Name == "Take")
+
+            if (m.Method.Name == "Take")
             {
                 if (ParseTakeExpression(m))
                 {
@@ -54,7 +54,8 @@ namespace SweetMeSoft.Base.GCP
                     return Visit(nextExpression);
                 }
             }
-            else if (m.Method.Name == "Skip")
+
+            if (m.Method.Name == "Skip")
             {
                 if (ParseSkipExpression(m))
                 {
@@ -62,7 +63,8 @@ namespace SweetMeSoft.Base.GCP
                     return Visit(nextExpression);
                 }
             }
-            else if (m.Method.Name == "OrderBy")
+
+            if (m.Method.Name == "OrderBy")
             {
                 if (ParseOrderByExpression(m, "ASC"))
                 {
@@ -70,7 +72,8 @@ namespace SweetMeSoft.Base.GCP
                     return Visit(nextExpression);
                 }
             }
-            else if (m.Method.Name == "OrderByDescending")
+
+            if (m.Method.Name == "OrderByDescending")
             {
                 if (ParseOrderByExpression(m, "DESC"))
                 {
@@ -78,14 +81,13 @@ namespace SweetMeSoft.Base.GCP
                     return Visit(nextExpression);
                 }
             }
-            else if (m.Method.Name == "StartsWith")
+
+            if (m.Method.Name == "StartsWith")
             {
-                if (ParseStartsWithExpression(m))
-                {
-                    Expression nextExpression = m.Arguments[0];
-                    return Visit(nextExpression);
-                    //var left = a.ToString().Replace("\"", "") + "%";
-                }
+                Visit(m.Object);
+                var a = (ConstantExpression)m.Arguments[0];
+                sb.Append(" LIKE '" + a.Value.ToString().Replace("\"", "") + "%' ");
+                return m;
             }
 
             throw new NotSupportedException(string.Format("The method '{0}' is not supported", m.Method.Name));
@@ -278,25 +280,6 @@ namespace SweetMeSoft.Base.GCP
                 else
                 {
                     OrderBy = string.Format("{0}, {1} {2}", OrderBy, body.Member.Name, order);
-                }
-
-                return true;
-            }
-
-            return false;
-        }
-
-        private bool ParseStartsWithExpression(MethodCallExpression expression)
-        {
-            var unary = (UnaryExpression)expression.Arguments[0];
-            var lambdaExpression = (LambdaExpression)unary.Operand;
-            lambdaExpression = (LambdaExpression)Evaluator.PartialEval(lambdaExpression);
-
-            if (lambdaExpression.Body is MemberExpression body)
-            {
-                if (string.IsNullOrEmpty(OrderBy))
-                {
-                    OrderBy = string.Format("{0} {1}", body.Member.Name, "%");
                 }
 
                 return true;
