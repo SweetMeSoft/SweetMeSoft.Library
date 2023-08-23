@@ -32,6 +32,21 @@ namespace SweetMeSoft.Files
             }
         }
 
+        public static T ReadString<T>(string xml)
+        {
+            try
+            {
+                var serializer = new XmlSerializer(typeof(T));
+                using var reader = new StringReader(xml);
+                var deserialized = serializer.Deserialize(reader);
+                return deserialized != null ? (T)deserialized : default;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public static StreamFile Create<T>(T obj, string fileName = "", bool indent = true)
         {
             fileName = string.IsNullOrEmpty(fileName) ? Guid.NewGuid().ToString("N") : fileName;
