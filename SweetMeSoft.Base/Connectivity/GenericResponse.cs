@@ -10,5 +10,7 @@ namespace SweetMeSoft.Base.Connectivity
         public CookieContainer CookieContainer { get; set; }
 
         public T Object { get; set; }
+
+        public ErrorDetails Error { get; set; }
     }
 }
