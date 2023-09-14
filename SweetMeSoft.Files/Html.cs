@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 using System.Globalization;
+using SweetMeSoft.Base.Connectivity;
 
 namespace SweetMeSoft.Files
 {

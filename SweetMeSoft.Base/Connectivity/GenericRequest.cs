@@ -12,9 +12,9 @@ namespace SweetMeSoft.Base.Connectivity
 
         public T Data { get; set; }
 
-        public List<KeyValuePair<string, string>> Headers { get; set; } = new List<KeyValuePair<string, string>>();
+        public Dictionary<string, string> Headers { get; set; } = new Dictionary<string, string>();
 
-        public List<KeyValuePair<string, string>> AdditionalParams { get; set; } = new List<KeyValuePair<string, string>>();
+        public Dictionary<string, string> AdditionalParams { get; set; } = new Dictionary<string, string>();
 
         public bool BypassSSL { get; set; } = false;
     }

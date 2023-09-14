@@ -20,15 +20,29 @@ namespace SweetMeSoft.Connectivity
 
         public static ApiRequest Instance => instance ??= new ApiRequest();
 
-        public async Task<GenericResponse<StreamFile>> GetImage(string url)
+        public static async Task<string> GetPageHtml(string url)
         {
-            var request = new GenericRequest<StreamFile>()
+            var response = await Instance.GetRequest<string, string>(new GenericRequest<string>
             {
                 Url = url
-            };
+            });
+            return await response.HttpResponse.Content.ReadAsStringAsync();
+        }
+
+        public async Task<GenericResponse<StreamFile>> DownloadFile(string url)
+        {
+            return await DownloadFile(new GenericRequest<StreamFile>()
+            {
+                Url = url
+            });
+        }
+
+        public async Task<GenericResponse<StreamFile>> DownloadFile<TReq>(GenericRequest<TReq> request)
+        {
             var cookies = new CookieContainer();
             using var httpClient = CreateClient(request, cookies);
             var response = await httpClient.GetAsync(request.Url);
+            var ct = response.Content.Headers.ContentType?.MediaType;
             return new GenericResponse<StreamFile>()
             {
                 HttpResponse = response,
@@ -37,7 +51,7 @@ namespace SweetMeSoft.Connectivity
                 {
                     Stream = await response.Content.ReadAsStreamAsync(),
                     FileName = Guid.NewGuid().ToString("N"),
-                    ContentType = Constants.ContentType.png
+                    ContentType = Constants.GetContentType(ct)
                 } : null,
                 Error = response.IsSuccessStatusCode ? null : new ErrorDetails { Detail = await response.Content.ReadAsStringAsync() }
             };
@@ -110,6 +124,14 @@ namespace SweetMeSoft.Connectivity
             {
                 throw;
             }
+        }
+
+        public async Task<GenericResponse<TRes>> GetRequest<TRes>(string url)
+        {
+            return await Instance.GetRequest<string, TRes>(new GenericRequest<string>
+            {
+                Url = url
+            });
         }
 
         public async Task<GenericResponse<TRes>> GetRequest<TReq, TRes>(GenericRequest<TReq> request) where TReq : class
@@ -225,7 +247,7 @@ namespace SweetMeSoft.Connectivity
             client.DefaultRequestHeaders.Accept.ParseAdd("text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
             client.DefaultRequestHeaders.AcceptLanguage.ParseAdd("en-US;q=0.7,en;q=0.3");
 
-            if (request.Headers.Count > 0)
+            if (request.Headers.Any())
             {
                 foreach (var header in request.Headers)
                 {
@@ -258,11 +280,22 @@ namespace SweetMeSoft.Connectivity
                 }
             }
 
+            if (typeof(TRes) == typeof(string))
+            {
+                return new GenericResponse<TRes>()
+                {
+                    HttpResponse = response,
+                    CookieContainer = cookies,
+                    Object = response.IsSuccessStatusCode ? (TRes)(object)(await response.Content.ReadAsStringAsync()) : default,
+                    Error = response.IsSuccessStatusCode ? null : error
+                };
+            }
+
             return new GenericResponse<TRes>()
             {
                 HttpResponse = response,
                 CookieContainer = cookies,
-                Object = response.IsSuccessStatusCode ? JsonConvert.DeserializeObject<TRes>(await response.Content.ReadAsStringAsync()) : default,
+                Object = response.IsSuccessStatusCode ? await response.Content.ReadAsAsync<TRes>() : default,
                 Error = response.IsSuccessStatusCode ? null : error
             };
         }

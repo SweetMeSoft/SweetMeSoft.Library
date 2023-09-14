@@ -78,8 +78,8 @@ namespace SweetMeSoft.Files
             var stream = new MemoryStream();
             using var writer = new StreamWriter(stream);
             using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
-            csv.WriteRecords(list);
-
+            await csv.WriteRecordsAsync(list);
+            await writer.FlushAsync();
             var copiedStream = new MemoryStream();
             stream.Position = 0L;
             await stream.CopyToAsync(copiedStream);
