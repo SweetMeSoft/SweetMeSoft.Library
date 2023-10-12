@@ -1,10 +1,6 @@
 ﻿using SweetMeSoft.Base;
-using System.Collections.Generic;
+
 using System.IO.Compression;
-using System.IO;
-using System.Threading.Tasks;
-using System.Linq;
-using System;
 
 namespace SweetMeSoft.Files
 {

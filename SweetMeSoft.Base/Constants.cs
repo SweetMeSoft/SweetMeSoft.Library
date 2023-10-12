@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace SweetMeSoft.Base
+﻿namespace SweetMeSoft.Base
 {
     public class Constants
     {

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace SweetMeSoft.Base.Tools
+﻿namespace SweetMeSoft.Base.Tools
 {
     public class EmailOptions
     {

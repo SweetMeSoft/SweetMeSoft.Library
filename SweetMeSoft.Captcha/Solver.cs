@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Threading;
-using SweetMeSoft.Base.Tools;
+﻿using SweetMeSoft.Base.Tools;
 using TwoCaptcha.Captcha;
 using SweetMeSoft.Tools;
 using SweetMeSoft.Base.Captcha;

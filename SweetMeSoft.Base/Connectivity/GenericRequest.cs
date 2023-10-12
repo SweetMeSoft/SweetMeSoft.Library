@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace SweetMeSoft.Base.Connectivity
+﻿namespace SweetMeSoft.Base.Connectivity
 {
     public class GenericRequest<T>
     {

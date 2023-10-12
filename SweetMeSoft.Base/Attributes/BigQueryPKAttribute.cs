@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SweetMeSoft.Base.Attributes
+﻿namespace SweetMeSoft.Base.Attributes
 {
     [AttributeUsage(AttributeTargets.Property)]
     public class BigQueryPKAttribute : Attribute

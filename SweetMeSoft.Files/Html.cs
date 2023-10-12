@@ -1,15 +1,8 @@
 ﻿using SweetMeSoft.Base.Attributes;
 using SweetMeSoft.Base;
 using SweetMeSoft.Tools;
-
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using HtmlAgilityPack;
 using System.Globalization;
-using SweetMeSoft.Base.Connectivity;
 
 namespace SweetMeSoft.Files
 {

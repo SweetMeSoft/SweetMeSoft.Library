@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-
-namespace SweetMeSoft.Base.Files
+﻿namespace SweetMeSoft.Base.Files
 {
     public class ExcelOptions
     {
