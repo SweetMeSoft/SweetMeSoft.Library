@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.IO.Pipes;
 using System.Linq;
 
 using Microsoft.AspNetCore.Http;
@@ -73,6 +74,14 @@ namespace SweetMeSoft.Base
         public string GetContentType()
         {
             return Constants.ContentTypesDict[ContentType];
+        }
+
+        public byte[] GetBytes()
+        {
+            using var memoryStream = new MemoryStream();
+            Stream.CopyTo(memoryStream);
+            Stream.Position = 0;
+            return memoryStream.ToArray();
         }
     }
 }

@@ -17,9 +17,19 @@ namespace SweetMeSoft.Files
             return await Read<T>(streamFile.Stream, hasHeader, delimiter);
         }
 
-        public static async Task<IEnumerable<T>> Read<T>(Stream stream, bool hasHeader = true, string delimiter = "|")
+        public static async Task<IEnumerable<T>> Read<T>(Stream stream, bool hasHeader = true, string delimiter = "|", string decimalSeparator = ".")
         {
-            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+            CultureInfo culture;
+            if(decimalSeparator != ".")
+            {
+                culture = CultureInfo.GetCultureInfo("en-US");
+            }
+            else
+            {
+                culture = CultureInfo.GetCultureInfo("es-CO");
+            }
+
+            var config = new CsvConfiguration(culture)
             {
                 Delimiter = delimiter,
                 IgnoreBlankLines = true,
@@ -47,9 +57,19 @@ namespace SweetMeSoft.Files
             return await Read<T, TMap>(streamFile.Stream, hasHeader, delimiter);
         }
 
-        public static async Task<IEnumerable<T>> Read<T, TMap>(Stream stream, bool hasHeader = true, string delimiter = "|") where TMap : ClassMap
+        public static async Task<IEnumerable<T>> Read<T, TMap>(Stream stream, bool hasHeader = true, string delimiter = "|", string decimalSeparator = ".") where TMap : ClassMap
         {
-            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+            CultureInfo culture;
+            if (decimalSeparator != ".")
+            {
+                culture = CultureInfo.GetCultureInfo("en-US");
+            }
+            else
+            {
+                culture = CultureInfo.GetCultureInfo("es-CO");
+            }
+
+            var config = new CsvConfiguration(culture)
             {
                 Delimiter = delimiter,
                 IgnoreBlankLines = true,

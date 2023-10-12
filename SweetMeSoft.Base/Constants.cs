@@ -24,6 +24,7 @@ namespace SweetMeSoft.Base
 
         public enum ContentType
         {
+            aac,
             bin,
             csv,
             dat,
@@ -31,6 +32,9 @@ namespace SweetMeSoft.Base
             docx,
             gif,
             jpg,
+            mov,
+            mp3,
+            mp4,
             msg,
             pagos,
             pdf,
@@ -39,6 +43,7 @@ namespace SweetMeSoft.Base
             pptx,
             rar,
             txt,
+            wav,
             xlsx,
             xls,
             xml,
@@ -47,6 +52,7 @@ namespace SweetMeSoft.Base
 
         public static readonly Dictionary<ContentType, string> ContentTypesDict = new()
         {
+            { ContentType.aac, "audio/x-aac" },
             { ContentType.bin, "application/octet-stream" },
             { ContentType.csv, "text/csv" },
             { ContentType.doc, "application/msword" },
@@ -54,6 +60,9 @@ namespace SweetMeSoft.Base
             { ContentType.dat, "text/plain" },
             { ContentType.gif, "image/gif" },
             { ContentType.jpg, "image/jpeg" },
+            { ContentType.mov, "video/quicktime" },
+            { ContentType.mp3, "audio/mpeg" },
+            { ContentType.mp4, "video/mp4" },
             { ContentType.msg, "application/vnd.ms-outlook" },
             { ContentType.pagos, "text/plain" },
             { ContentType.png, "image/png" },
@@ -62,6 +71,7 @@ namespace SweetMeSoft.Base
             { ContentType.pptx, "application/vnd.openxmlformats-officedocument.presentationml.presentation" },
             { ContentType.rar, "application/vnd.rar" },
             { ContentType.txt, "text/plain" },
+            { ContentType.wav, "audio/wav" },
             { ContentType.xls, "application/vnd.ms-excel" },
             { ContentType.xlsx, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" },
             { ContentType.xml, "text/xml" },
