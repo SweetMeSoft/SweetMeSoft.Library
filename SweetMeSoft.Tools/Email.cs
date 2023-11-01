@@ -20,18 +20,22 @@ namespace SweetMeSoft.Tools
 
             var port = options.Host == EmailHost.Gmail ? 587
                 : options.Host == EmailHost.Outlook ? 25
-                : options.Host == EmailHost.Webmail ? 25
+                : options.Host == EmailHost.Webmail ? 80
                 : 0;
             var host = options.Host == EmailHost.Gmail ? "smtp.gmail.com"
                 : options.Host == EmailHost.Outlook ? "smtp.live.com"
-                : options.Host == EmailHost.Webmail ? "relay-hosting.secureserver.net"
+                : options.Host == EmailHost.Webmail ? "smtpout.secureserver.net"
                 : "";
+            var ssl = options.Host == EmailHost.Gmail ? true
+                : options.Host == EmailHost.Outlook ? true
+                : options.Host == EmailHost.Webmail ? false
+                : false;
 
             try
             {
                 var client = new SmtpClient
                 {
-                    EnableSsl = true,
+                    EnableSsl = ssl,
                     UseDefaultCredentials = false,
                     Port = port,
                     Host = host,
