@@ -78,5 +78,10 @@ namespace SweetMeSoft.Base
             Stream.Position = 0;
             return memoryStream.ToArray();
         }
+
+        public string GetBase64()
+        {
+            return Convert.ToBase64String(GetBytes());
+        }
     }
 }

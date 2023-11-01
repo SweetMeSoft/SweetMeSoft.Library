@@ -5,7 +5,7 @@
     <ImplicitUsings>true</ImplicitUsings>
     <LangVersion>latest</LangVersion>
     <PackageId>SweetMeSoft.Base</PackageId>
-    <Version>1.10.126</Version>
+    <Version>1.10.127</Version>
     <Authors>Erick Velasco</Authors>
     <Company>SweetMeSoft</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
