@@ -18,14 +18,23 @@ namespace SweetMeSoft.Tools
                 throw new ArgumentException("The password must be initialized with EmailOptions.Password");
             }
 
+            var port = options.Host == EmailHost.Gmail ? 587
+                : options.Host == EmailHost.Outlook ? 25
+                : options.Host == EmailHost.Webmail ? 25
+                : 0;
+            var host = options.Host == EmailHost.Gmail ? "smtp.gmail.com"
+                : options.Host == EmailHost.Outlook ? "smtp.live.com"
+                : options.Host == EmailHost.Webmail ? "relay-hosting.secureserver.net"
+                : "";
+
             try
             {
                 var client = new SmtpClient
                 {
                     EnableSsl = true,
                     UseDefaultCredentials = false,
-                    Port = 587,
-                    Host = "smtp.gmail.com",
+                    Port = port,
+                    Host = host,
                     Credentials = new NetworkCredential(EmailOptions.Sender, EmailOptions.Password),
                     DeliveryMethod = SmtpDeliveryMethod.Network
                 };

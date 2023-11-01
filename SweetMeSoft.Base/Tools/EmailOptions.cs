@@ -3,7 +3,6 @@
     public class EmailOptions
     {
         public static string Sender { get; set; }
-
         public static string Password { get; set; }
 
 
@@ -22,6 +21,7 @@
         }
 
         public string Destinatary { get; set; }
+        public EmailHost Host { get; set; } = EmailHost.Gmail;
 
         public string Subject { get; set; } = "";
 
