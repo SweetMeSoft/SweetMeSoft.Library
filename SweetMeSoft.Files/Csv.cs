@@ -7,15 +7,15 @@ namespace SweetMeSoft.Files
 {
     public class Csv
     {
-        public static async Task<IEnumerable<T>> Read<T>(StreamFile streamFile, bool hasHeader = true, string delimiter = "|")
+        public static async Task<IEnumerable<T>> Read<T>(StreamFile streamFile, bool hasHeader = true, string delimiter = "|", string decimalSeparator = ".")
         {
-            return await Read<T>(streamFile.Stream, hasHeader, delimiter);
+            return await Read<T>(streamFile.Stream, hasHeader, delimiter, decimalSeparator);
         }
 
         public static async Task<IEnumerable<T>> Read<T>(Stream stream, bool hasHeader = true, string delimiter = "|", string decimalSeparator = ".")
         {
             CultureInfo culture;
-            if(decimalSeparator != ".")
+            if(decimalSeparator == ".")
             {
                 culture = CultureInfo.GetCultureInfo("en-US");
             }
@@ -47,15 +47,15 @@ namespace SweetMeSoft.Files
             return await csv.GetRecordsAsync<T>().ToListAsync();
         }
 
-        public static async Task<IEnumerable<T>> Read<T, TMap>(StreamFile streamFile, bool hasHeader = true, string delimiter = "|") where TMap : ClassMap
+        public static async Task<IEnumerable<T>> Read<T, TMap>(StreamFile streamFile, bool hasHeader = true, string delimiter = "|", string decimalSeparator = ".") where TMap : ClassMap
         {
-            return await Read<T, TMap>(streamFile.Stream, hasHeader, delimiter);
+            return await Read<T, TMap>(streamFile.Stream, hasHeader, delimiter, decimalSeparator);
         }
 
         public static async Task<IEnumerable<T>> Read<T, TMap>(Stream stream, bool hasHeader = true, string delimiter = "|", string decimalSeparator = ".") where TMap : ClassMap
         {
             CultureInfo culture;
-            if (decimalSeparator != ".")
+            if (decimalSeparator == ".")
             {
                 culture = CultureInfo.GetCultureInfo("en-US");
             }
