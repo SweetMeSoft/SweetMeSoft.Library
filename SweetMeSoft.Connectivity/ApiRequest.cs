@@ -286,6 +286,17 @@ namespace SweetMeSoft.Connectivity
                 };
             }
 
+            if (typeof(TRes) == typeof(int))
+            {
+                return new GenericResponse<TRes>()
+                {
+                    HttpResponse = response,
+                    CookieContainer = cookies,
+                    Object = response.IsSuccessStatusCode ? (TRes)(object)(await response.Content.ReadAsAsync<TRes>()) : default,
+                    Error = response.IsSuccessStatusCode ? null : error
+                };
+            }
+
             return new GenericResponse<TRes>()
             {
                 HttpResponse = response,
