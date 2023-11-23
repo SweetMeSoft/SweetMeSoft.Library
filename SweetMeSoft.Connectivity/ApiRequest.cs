@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using SweetMeSoft.Base.Connectivity;
 using System.Web;
 using SweetMeSoft.Base;
+using System.Buffers.Text;
 
 namespace SweetMeSoft.Connectivity
 {
@@ -228,6 +229,11 @@ namespace SweetMeSoft.Connectivity
                 {
                     case AuthenticationType.Bearer:
                         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.Authentication.Value);
+                        break;
+                    case AuthenticationType.Basic:
+                        byte[] encodedByte = Encoding.ASCII.GetBytes(request.Authentication.Key + ":" + request.Authentication.Value);
+                        var base64 = Convert.ToBase64String(encodedByte);
+                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", base64);
                         break;
                     case AuthenticationType.ApiKey:
                         client.DefaultRequestHeaders.Add(request.Authentication.Key, request.Authentication.Value);

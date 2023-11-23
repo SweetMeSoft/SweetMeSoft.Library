@@ -13,6 +13,7 @@
     {
         Bearer,
         ApiKey,
-        Cookie
+        Cookie,
+        Basic
     }
 }
