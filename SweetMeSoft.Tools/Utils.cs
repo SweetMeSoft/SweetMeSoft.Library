@@ -6,7 +6,7 @@ namespace SweetMeSoft.Tools
     {
         public static string GetException(Exception e)
         {
-            if (e.Message.Contains("An error occurred while updating the entries. See the inner exception for details."))
+            if (e.Message.Contains("See the inner exception"))
             {
                 return GetException(e.InnerException);
             }

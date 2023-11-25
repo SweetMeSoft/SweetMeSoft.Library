@@ -5,7 +5,7 @@
     <ImplicitUsings>true</ImplicitUsings>
     <LangVersion>latest</LangVersion>
     <PackageId>SweetMeSoft.Connectivity</PackageId>
-    <Version>1.10.117</Version>
+    <Version>1.10.118</Version>
     <Authors>Erick Velasco</Authors>
     <Company>SweetMeSoft</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
