@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <ImplicitUsings>true</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <PackageId>SweetMeSoft.Forms</PackageId>
+    <Version>1.10.101</Version>
+    <Authors>Erick Velasco</Authors>
+    <Company>SweetMeSoft</Company>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Title>SweetMeSoft Forms</Title>
+    <Description>SweetMeSoft Forms Library is a compilation utils and things important int Xamarin Forms project</Description>
+    <Copyright>SweetMeSoft</Copyright>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Acr.UserDialogs" Version="7.2.0.564" />
+    <PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.8.0" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2622" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SweetMeSoft.Base\SweetMeSoft.Base.csproj" />
+    <ProjectReference Include="..\SweetMeSoft.Connectivity\SweetMeSoft.Connectivity.csproj" />
+  </ItemGroup>
+
+</Project>

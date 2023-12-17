@@ -288,7 +288,6 @@ namespace SweetMeSoft.Files
                 {
                     var attr = property.GetCustomAttributes(true).FirstOrDefault(model => model.GetType().Name == "ColumnExcelAttribute");
                     var columnAttr = attr == null ? new ColumnExcelAttribute(property.Name) : attr as ColumnExcelAttribute;
-
                     sheet.SetValue(rowIndex, columnIndex, columnAttr.Name);
 
                     if (writeExplanations)
@@ -311,8 +310,8 @@ namespace SweetMeSoft.Files
             var properties = type.GetProperties();
             foreach (var property in properties)
             {
-                var attrs = property.GetCustomAttributes(true).Where(model => model.GetType().Name.Contains("Ignore"));
-                if (!attrs.Any())
+                var ignoreAttr = property.GetCustomAttributes(true).Where(model => model.GetType().Name.Contains("Ignore"));
+                if (!ignoreAttr.Any())
                 {
                     if (property.GetValue(obj, null) != null && property.GetValue(obj, null).ToString() != "")
                     {
@@ -323,6 +322,13 @@ namespace SweetMeSoft.Files
                         }
                         else
                         {
+                            var attr = property.GetCustomAttributes(true).FirstOrDefault(model => model.GetType().Name == "ColumnExcelAttribute");
+                            var columnAttr = attr == null ? new ColumnExcelAttribute(property.Name) : attr as ColumnExcelAttribute;
+                            if (attr != null && columnAttr.Type == ExcelColumnType.Currency)
+                            {
+                                sheet.Cells[rowIndex, columnIndex].Style.Numberformat.Format = "$ #,##0.00";
+                            }
+
                             if (property.Name.Contains("FECHA")
                                 || property.Name.Equals("CLIENTE_CODIGO_TRIBUTO")
                                 || property.Name.Equals("LINEA_IMPUESTO1_TIPO")

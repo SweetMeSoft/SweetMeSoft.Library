@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace SweetMeSoft.Base
+﻿namespace SweetMeSoft.Base
 {
     public class StreamFile
     {
@@ -38,13 +36,13 @@ namespace SweetMeSoft.Base
             Created = created;
         }
 
-        public StreamFile(IFormFile file)
-        {
-            FileName = file.FileName;
-            ContentType = Constants.ContentTypesDict.FirstOrDefault(model => model.Value == file.ContentType).Key;
-            Stream = file.OpenReadStream();
-            Created = DateTime.Now;
-        }
+        //public StreamFile(IFormFile file)
+        //{
+        //    FileName = file.FileName;
+        //    ContentType = Constants.ContentTypesDict.FirstOrDefault(model => model.Value == file.ContentType).Key;
+        //    Stream = file.OpenReadStream();
+        //    Created = DateTime.Now;
+        //}
 
         private string fileName;
 

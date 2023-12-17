@@ -1,11 +1,13 @@
-﻿namespace SweetMeSoft.Base.Attributes
+﻿using SweetMeSoft.Base.Files;
+
+namespace SweetMeSoft.Base.Attributes
 {
     [AttributeUsage(AttributeTargets.Property)]
     public class ColumnExcelAttribute : Attribute
     {
         public string Name { get; set; }
 
-        public string Type { get; set; }
+        public ExcelColumnType Type { get; set; }
 
         public string DateFormat { get; set; }
 
@@ -23,6 +25,7 @@
             DateFormat = "yyyy-MM-dd";
             BoolTrueValue = "1";
             BoolFalseValue = "0";
+            Type = ExcelColumnType.String;
         }
     }
 }

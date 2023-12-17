@@ -75,6 +75,14 @@
             { ContentType.zip, "application/zip" },
         };
 
+        public const string KEY_JWT_TOKEN = "KEY_JWT_TOKEN";
+        public const string KEY_CURRENT_USER = "CURRENT_USER";
+        public const string KEY_CURRENT_USER_ID = "CURRENT_USER_ID";
+        public const string KEY_NOTIFICATIONS_TOKEN = "KEY_NOTIFICATIONS_TOKEN";
+        public const string KEY_CURRENT_USER_TYPE = "CURRENT_USER_TYPE";
+        public const string KEY_IS_USER_COMPLETE = "IS_USER_COMPLETE";
+
+
         public static ContentType GetContentType(string extension)
         {
             extension = extension.ToLower();
