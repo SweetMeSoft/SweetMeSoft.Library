@@ -1,6 +1,8 @@
 ﻿using System.Net.Mail;
 using System.Net;
 using SweetMeSoft.Base.Tools;
+using System.Net.Mime;
+using System.Security.Cryptography;
 
 namespace SweetMeSoft.Tools
 {
@@ -48,7 +50,7 @@ namespace SweetMeSoft.Tools
                     From = new MailAddress(EmailOptions.Sender),
                     Subject = options.Subject,
                     IsBodyHtml = true,
-                    Body = options.HtmlBody
+                    Body = options.HtmlBody,
                 };
 
                 message.To.Add(new MailAddress(options.Destinatary));
@@ -62,10 +64,29 @@ namespace SweetMeSoft.Tools
                     message.CC.Add(new MailAddress(cc));
                 }
 
-                foreach (var file in options.StreamFiles)
+                foreach (var cco in options.CCO)
                 {
-                    file.Stream.Position = 0;
-                    message.Attachments.Add(new Attachment(file.Stream, file.FileName, file.GetContentType()));
+                    message.Bcc.Add(new MailAddress(cco));
+                }
+
+                foreach (var file in options.Attachments)
+                {
+                    file.Stream.Stream.Position = 0;
+                    if (file.IsLinked)
+                    {
+                        var linkedResource = new LinkedResource(file.Stream.Stream, file.Stream.GetContentType())
+                        {
+                            ContentId = file.Cdi
+                        };
+
+                        var alternateView = AlternateView.CreateAlternateViewFromString(options.HtmlBody, null, "text/html");
+                        alternateView.LinkedResources.Add(linkedResource);
+                        message.AlternateViews.Add(alternateView);
+                    }
+                    else
+                    {
+                        message.Attachments.Add(new Attachment(file.Stream.Stream, file.Stream.FileName, file.Stream.GetContentType()));
+                    }
                 }
 
                 client.Send(message);

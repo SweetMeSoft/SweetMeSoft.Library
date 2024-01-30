@@ -14,23 +14,23 @@
         public EmailOptions(string destinatary, StreamFile file)
         {
             Destinatary = destinatary;
-            StreamFiles = new List<StreamFile>()
-            {
-                file
-            };
+            Attachments = [new EmailAttachment(file)];
         }
 
         public string Destinatary { get; set; }
+
         public EmailHost Host { get; set; } = EmailHost.Gmail;
 
         public string Subject { get; set; } = "";
 
         public string HtmlBody { get; set; } = "";
 
-        public List<string> AdditionalDestinataries { get; set; } = new List<string>();
+        public List<string> AdditionalDestinataries { get; set; } = [];
 
-        public List<string> CC { get; set; } = new List<string>();
+        public List<string> CC { get; set; } = [];
 
-        public List<StreamFile> StreamFiles { get; set; } = new List<StreamFile>();
+        public List<string> CCO { get; set; } = [];
+
+        public List<EmailAttachment> Attachments { get; set; } = [];
     }
 }
