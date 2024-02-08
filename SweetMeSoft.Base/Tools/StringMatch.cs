@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SweetMeSoft.Base.Tools
+﻿namespace SweetMeSoft.Base.Tools
 {
     public class StringMatch
     {

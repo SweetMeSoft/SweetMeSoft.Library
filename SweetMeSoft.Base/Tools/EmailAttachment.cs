@@ -1,24 +1,23 @@
-﻿namespace SweetMeSoft.Base.Tools
+﻿namespace SweetMeSoft.Base.Tools;
+
+public class EmailAttachment
 {
-    public class EmailAttachment
+    public EmailAttachment(StreamFile streamFile)
     {
-        public EmailAttachment(StreamFile streamFile)
-        {
-            Stream = streamFile;
-            Cdi = "";
-        }
+        Stream = streamFile;
+        Cdi = "";
+    }
 
-        public EmailAttachment(StreamFile stream, string cdi)
-        {
-            Stream = stream;
-            Cdi = cdi;
-        }
+    public EmailAttachment(StreamFile stream, string cdi)
+    {
+        Stream = stream;
+        Cdi = cdi;
+    }
 
-        public StreamFile Stream { get; }
-        public string Cdi { get; }
-        public bool IsLinked
-        {
-            get => !string.IsNullOrEmpty(Cdi);
-        }
+    public StreamFile Stream { get; }
+    public string Cdi { get; }
+    public bool IsLinked
+    {
+        get => !string.IsNullOrEmpty(Cdi);
     }
 }
