@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SweetMeSoft.Captcha", "Swee
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SweetMeSoft.Middleware", "SweetMeSoft.Middleware\SweetMeSoft.Middleware.csproj", "{DBE968CE-1FCB-4443-9AF2-08362C86F1ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SweetMeSoft.Forms", "SweetMeSoft.Forms\SweetMeSoft.Forms.csproj", "{3800E021-9CCA-4505-B8E2-1FBF7092D955}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SweetMeSoft.Mobile.Base", "SweetMeSoft.Mobile.Base\SweetMeSoft.Mobile.Base.csproj", "{55A0338C-8301-40AE-9E8D-BBCFF2A1B8F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,10 +53,10 @@ Global
 		{DBE968CE-1FCB-4443-9AF2-08362C86F1ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DBE968CE-1FCB-4443-9AF2-08362C86F1ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DBE968CE-1FCB-4443-9AF2-08362C86F1ED}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3800E021-9CCA-4505-B8E2-1FBF7092D955}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3800E021-9CCA-4505-B8E2-1FBF7092D955}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3800E021-9CCA-4505-B8E2-1FBF7092D955}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3800E021-9CCA-4505-B8E2-1FBF7092D955}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55A0338C-8301-40AE-9E8D-BBCFF2A1B8F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55A0338C-8301-40AE-9E8D-BBCFF2A1B8F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55A0338C-8301-40AE-9E8D-BBCFF2A1B8F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55A0338C-8301-40AE-9E8D-BBCFF2A1B8F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
