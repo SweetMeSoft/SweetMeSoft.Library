@@ -10,6 +10,7 @@ namespace SweetMeSoft.Mobile.Base.ViewModels;
 
 public class AppBaseViewModel : BaseViewModel
 {
+    internal static int loadingCounter = 0;
     public AppBaseViewModel()
     {
     }
@@ -83,60 +84,93 @@ public class AppBaseViewModel : BaseViewModel
         });
     }
 
-    public async Task<TRes> Get<TReq, TRes>(string url, TReq data, bool useToken = true, bool showLoading = true) where TReq : class
+    public async Task<TRes> Get<TRes>(string url, bool useToken = true, bool showLoading = true)
     {
-        if (Microsoft.Maui.Networking.Connectivity.NetworkAccess != NetworkAccess.Internet)
-        {
-            await UserDialogs.Instance.AlertAsync("Revisa tu conexión a internet para poder continuar", "Error", "Ok");
-            return default;
-        }
-
-        if (showLoading)
-        {
-            UserDialogs.Instance.ShowLoading("Espera por favor...");
-        }
-
-        var token = useToken ? Preferences.Get(Constants.KEY_JWT_TOKEN, string.Empty) : string.Empty;
-        var response = await ApiRequest.Instance.Get<TReq, TRes>(new GenericRequest<TReq>
-        {
-            Url = url,
-            Data = data,
-            Authentication = string.IsNullOrEmpty(token) ? null : new Authentication
-            {
-                Type = AuthenticationType.Bearer,
-                Value = token
-            }
-        });
-
-        return await ManageResponse(response, url, showLoading);
+        return await Get<string, TRes>(url, null, useToken, showLoading);
     }
 
-    public async Task<TRes> Post<TReq, TRes>(string url, TReq data, bool useToken = true, bool showLoading = true)
+    public async Task<TRes> Get<TReq, TRes>(string url, TReq data, bool useToken = true, bool showLoading = true) where TReq : class
     {
-        if (Microsoft.Maui.Networking.Connectivity.NetworkAccess != NetworkAccess.Internet)
+        try
         {
-            await UserDialogs.Instance.AlertAsync("Revisa tu conexión a internet para poder continuar", "Error", "Ok");
-            return default;
-        }
-
-        if (showLoading)
-        {
-            UserDialogs.Instance.ShowLoading("Espera por favor...");
-        }
-
-        var token = useToken ? Preferences.Get(Constants.KEY_JWT_TOKEN, string.Empty) : string.Empty;
-        var response = await ApiRequest.Instance.Post<TReq, TRes>(new GenericRequest<TReq>
-        {
-            Url = url,
-            Data = data,
-            Authentication = string.IsNullOrEmpty(token) ? null : new Authentication
+            if (Microsoft.Maui.Networking.Connectivity.NetworkAccess != NetworkAccess.Internet)
             {
-                Type = AuthenticationType.Bearer,
-                Value = token
+                await UserDialogs.Instance.AlertAsync("Revisa tu conexión a internet para poder continuar", "Error", "Ok");
+                return default;
             }
-        });
 
-        return await ManageResponse(response, url, showLoading);
+            if (showLoading)
+            {
+                loadingCounter++;
+                UserDialogs.Instance.ShowLoading("Espera por favor...");
+            }
+
+            var token = useToken ? Preferences.Get(Constants.KEY_JWT_TOKEN, string.Empty) : string.Empty;
+            var response = await ApiRequest.Instance.Get<TReq, TRes>(new GenericRequest<TReq>
+            {
+                Url = url.StartsWith("http") ? url : Constants.API_URL + url,
+                Data = data,
+                Authentication = string.IsNullOrEmpty(token) ? null : new Authentication
+                {
+                    Type = AuthenticationType.Bearer,
+                    Value = token
+                }
+            });
+
+            return await ManageResponse(response, url, showLoading);
+        }
+        catch (Exception ex)
+        {
+            if (showLoading && --loadingCounter == 0)
+            {
+                UserDialogs.Instance.HideHud();
+            }
+
+            await UserDialogs.Instance.AlertAsync(ex.Message, "Service Error", "Ok");
+            throw;
+        }
+    }
+
+    public async Task<TRes> Post<TReq, TRes>(string url, TReq data, bool useToken = true, bool showLoading = true) where TRes : new()
+    {
+        try
+        {
+            if (Microsoft.Maui.Networking.Connectivity.NetworkAccess != NetworkAccess.Internet)
+            {
+                await UserDialogs.Instance.AlertAsync("Revisa tu conexión a internet para poder continuar", "Error", "Ok");
+                return default;
+            }
+
+            if (showLoading)
+            {
+                loadingCounter++;
+                UserDialogs.Instance.ShowLoading("Espera por favor...");
+            }
+
+            var token = useToken ? Preferences.Get(Constants.KEY_JWT_TOKEN, string.Empty) : string.Empty;
+            var response = await ApiRequest.Instance.Post<TReq, TRes>(new GenericRequest<TReq>
+            {
+                Url = url.StartsWith("http") ? url : Constants.API_URL + url,
+                Data = data,
+                Authentication = string.IsNullOrEmpty(token) ? null : new Authentication
+                {
+                    Type = AuthenticationType.Bearer,
+                    Value = token
+                }
+            });
+
+            return await ManageResponse(response, url, showLoading);
+        }
+        catch (Exception ex)
+        {
+            if (showLoading && --loadingCounter == 0)
+            {
+                UserDialogs.Instance.HideHud();
+            }
+
+            await UserDialogs.Instance.AlertAsync(ex.Message, "Service Error", "Ok");
+            throw;
+        }
     }
 
     public async Task<Location> GetCurrentLocation()
@@ -277,7 +311,7 @@ public class AppBaseViewModel : BaseViewModel
     {
         try
         {
-            if (showLoading)
+            if (showLoading && --loadingCounter == 0)
             {
                 UserDialogs.Instance.HideHud();
             }
@@ -306,5 +340,22 @@ public class AppBaseViewModel : BaseViewModel
         }
 
         return default;
+    }
+
+    public async void Logout<T>(bool showConfirmation = true, Action action = null) where T : Page, new()
+    {
+        if (!showConfirmation || await DisplayAlert("¿Estás seguro de que deseas cerrar sesión?", "Al cerrar sesión, se eliminarán todos los datos de tu cuenta en este dispositivo.", "Si", "No"))
+        {
+            var token = Preferences.Get(Constants.KEY_NOTIFICATIONS_TOKEN, "");
+            await Post<string, bool>("Notification/DeleteToken?token=" + token, null);
+            Preferences.Remove(Constants.KEY_CURRENT_USER);
+            Preferences.Remove(Constants.KEY_CURRENT_USER_ID);
+            Preferences.Remove(Constants.KEY_NOTIFICATIONS_TOKEN);
+            Preferences.Remove(Constants.KEY_JWT_TOKEN);
+            Preferences.Remove(Constants.KEY_IS_USER_COMPLETE);
+            Preferences.Remove(Constants.KEY_CURRENT_USER_TYPE);
+            action?.Invoke();
+            GoToNewRoot<T>();
+        }
     }
 }

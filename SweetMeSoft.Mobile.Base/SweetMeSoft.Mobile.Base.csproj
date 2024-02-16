@@ -20,13 +20,13 @@
 		<Title>SweetMeSoft Mobile Base</Title>
 		<Copyright>SweetMeSoft</Copyright>
 		<PackageProjectUrl>https:www.sweetmesoft.com</PackageProjectUrl>
-		<Version>1.11.102</Version>
+		<Version>1.11.104</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Controls.UserDialogs.Maui" Version="1.5.2" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.6" />
-		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.6" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.7" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.7" />
 		<PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
 	</ItemGroup>
 

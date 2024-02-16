@@ -53,7 +53,7 @@ public class ApiRequest
         };
     }
 
-    public async Task<GenericResponse<TRes>> Post<TReq, TRes>(GenericRequest<TReq> request)
+    public async Task<GenericResponse<TRes>> Post<TReq, TRes>(GenericRequest<TReq> request) where TRes : new()
     {
         try
         {
@@ -122,7 +122,7 @@ public class ApiRequest
         }
     }
 
-    public async Task<GenericResponse<TRes>> Get<TRes>(string url)
+    public async Task<GenericResponse<TRes>> Get<TRes>(string url) where TRes : new()
     {
         return await Instance.Get<string, TRes>(new GenericRequest<string>
         {
@@ -130,7 +130,7 @@ public class ApiRequest
         });
     }
 
-    public async Task<GenericResponse<TRes>> Get<TReq, TRes>(GenericRequest<TReq> request) where TReq : class
+    public async Task<GenericResponse<TRes>> Get<TReq, TRes>(GenericRequest<TReq> request) where TReq : class 
     {
         try
         {
