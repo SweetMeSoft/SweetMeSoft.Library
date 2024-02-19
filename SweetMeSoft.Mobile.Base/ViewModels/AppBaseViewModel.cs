@@ -8,80 +8,11 @@ using SweetMeSoft.Base;
 
 namespace SweetMeSoft.Mobile.Base.ViewModels;
 
-public class AppBaseViewModel : BaseViewModel
+public class AppBaseViewModel : NavigationViewModel
 {
     internal static int loadingCounter = 0;
     public AppBaseViewModel()
     {
-    }
-
-    public void DisplayAlert(string title, string message, string cancel)
-    {
-        MainThread.BeginInvokeOnMainThread(async () =>
-        {
-            await UserDialogs.Instance.AlertAsync(message, title, cancel);
-        });
-    }
-
-    public async Task<bool> DisplayAlert(string title, string message, string okText, string cancelText)
-    {
-        return await UserDialogs.Instance.ConfirmAsync(message, title, okText, cancelText);
-    }
-
-    public async Task<string> DisplayPrompt(string title, string message, string accept = "Ok", string cancel = "Cancel", Keyboard keyboard = null, string initial = "")
-    {
-        return await Application.Current.MainPage.DisplayPromptAsync(title, message, accept, cancel, "", 50, keyboard, initial);
-    }
-
-    public void GoTo<TClass>(TClass newPage, bool removePrevious = false) where TClass : Page
-    {
-        MainThread.BeginInvokeOnMainThread(async () =>
-        {
-            await Application.Current.MainPage.Navigation.PushAsync(newPage, true);
-            if (removePrevious)
-            {
-                var count = Application.Current.MainPage.Navigation.NavigationStack.Count;
-                if (count >= 1)
-                {
-                    Application.Current.MainPage.Navigation.RemovePage(Application.Current.MainPage.Navigation.NavigationStack[count - 2]);
-                }
-            }
-        });
-    }
-
-    public void GoTo<TClass>(bool removePrevious = false) where TClass : Page, new()
-    {
-        GoTo(new TClass(), removePrevious);
-    }
-
-    public void GoToNewRoot<TClass>(TClass newPage) where TClass : Page, new()
-    {
-        MainThread.BeginInvokeOnMainThread(async () =>
-        {
-            Application.Current.MainPage.Navigation.InsertPageBefore(newPage, Application.Current.MainPage.Navigation.NavigationStack[0]);
-            await Application.Current.MainPage.Navigation.PopToRootAsync();
-        });
-    }
-
-    public void GoToNewRoot<TClass>() where TClass : Page, new()
-    {
-        GoToNewRoot(new TClass());
-    }
-
-    public void BackToRoot()
-    {
-        MainThread.BeginInvokeOnMainThread(async () =>
-        {
-            await Application.Current.MainPage.Navigation.PopToRootAsync();
-        });
-    }
-
-    public void GoBack()
-    {
-        MainThread.BeginInvokeOnMainThread(async () =>
-        {
-            await Application.Current.MainPage.Navigation.PopAsync();
-        });
     }
 
     public async Task<TRes> Get<TRes>(string url, bool useToken = true, bool showLoading = true)
@@ -347,7 +278,6 @@ public class AppBaseViewModel : BaseViewModel
         if (!showConfirmation || await DisplayAlert("¿Estás seguro de que deseas cerrar sesión?", "Al cerrar sesión, se eliminarán todos los datos de tu cuenta en este dispositivo.", "Si", "No"))
         {
             var token = Preferences.Get(Constants.KEY_NOTIFICATIONS_TOKEN, "");
-            await Post<string, bool>("Notification/DeleteToken?token=" + token, null);
             Preferences.Remove(Constants.KEY_CURRENT_USER);
             Preferences.Remove(Constants.KEY_CURRENT_USER_ID);
             Preferences.Remove(Constants.KEY_NOTIFICATIONS_TOKEN);

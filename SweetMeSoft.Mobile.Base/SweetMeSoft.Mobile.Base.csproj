@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>net8.0-ios;net8.0-maccatalyst;net8.0-android34.0</TargetFrameworks>
@@ -19,8 +19,9 @@
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>SweetMeSoft Mobile Base</Title>
 		<Copyright>SweetMeSoft</Copyright>
-		<PackageProjectUrl>https:www.sweetmesoft.com</PackageProjectUrl>
-		<Version>1.11.104</Version>
+		<PackageProjectUrl>https://www.sweetmesoft.com</PackageProjectUrl>
+		<Version>1.11.105</Version>
+		<Description>SweetMeSoft Mobile Base Library is a compilation of different utils for MAUI apps</Description>
 	</PropertyGroup>
 
 	<ItemGroup>
