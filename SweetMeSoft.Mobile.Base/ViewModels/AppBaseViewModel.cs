@@ -1,16 +1,19 @@
 ﻿using Controls.UserDialogs.Maui;
-using MvvmHelpers;
-using System.Net;
-using static Microsoft.Maui.ApplicationModel.Permissions;
-using SweetMeSoft.Connectivity;
-using SweetMeSoft.Base.Connectivity;
+
 using SweetMeSoft.Base;
+using SweetMeSoft.Base.Connectivity;
+using SweetMeSoft.Connectivity;
+
+using System.Net;
+
+using static Microsoft.Maui.ApplicationModel.Permissions;
 
 namespace SweetMeSoft.Mobile.Base.ViewModels;
 
 public class AppBaseViewModel : NavigationViewModel
 {
     internal static int loadingCounter = 0;
+
     public AppBaseViewModel()
     {
     }
@@ -62,7 +65,7 @@ public class AppBaseViewModel : NavigationViewModel
         }
     }
 
-    public async Task<TRes> Post<TReq, TRes>(string url, TReq data, bool useToken = true, bool showLoading = true) where TRes : new()
+    public async Task<TRes> Post<TReq, TRes>(string url, TReq data, bool useToken = true, bool showLoading = true)
     {
         try
         {

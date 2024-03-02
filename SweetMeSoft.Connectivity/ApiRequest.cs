@@ -1,12 +1,14 @@
-﻿using System.Net.Http.Headers;
-using System.Net;
-using System.Text;
-using SweetMeSoft.Base.Attributes;
-using Newtonsoft.Json;
-using SweetMeSoft.Base.Connectivity;
-using System.Web;
+﻿using Newtonsoft.Json;
+
 using SweetMeSoft.Base;
+using SweetMeSoft.Base.Attributes;
+using SweetMeSoft.Base.Connectivity;
+
+using System.Net;
+using System.Net.Http.Headers;
 using System.Security.Authentication;
+using System.Text;
+using System.Web;
 
 namespace SweetMeSoft.Connectivity;
 
@@ -53,7 +55,7 @@ public class ApiRequest
         };
     }
 
-    public async Task<GenericResponse<TRes>> Post<TReq, TRes>(GenericRequest<TReq> request) where TRes : new()
+    public async Task<GenericResponse<TRes>> Post<TReq, TRes>(GenericRequest<TReq> request)
     {
         try
         {
@@ -99,6 +101,7 @@ public class ApiRequest
 
                     response = await httpClient.PostAsync(request.Url, new FormUrlEncodedContent(bodyProperties));
                     return await ManageResponse<TRes>(response, cookies);
+
                 case HeaderType.formdata:
                     var formContent = new MultipartFormDataContent();
                     foreach (var property in properties)
@@ -122,7 +125,7 @@ public class ApiRequest
         }
     }
 
-    public async Task<GenericResponse<TRes>> Get<TRes>(string url) where TRes : new()
+    public async Task<GenericResponse<TRes>> Get<TRes>(string url)
     {
         return await Instance.Get<string, TRes>(new GenericRequest<string>
         {
@@ -130,7 +133,7 @@ public class ApiRequest
         });
     }
 
-    public async Task<GenericResponse<TRes>> Get<TReq, TRes>(GenericRequest<TReq> request) where TReq : class 
+    public async Task<GenericResponse<TRes>> Get<TReq, TRes>(GenericRequest<TReq> request) where TReq : class
     {
         try
         {
@@ -173,6 +176,7 @@ public class ApiRequest
                     var content = new StringContent(JsonConvert.SerializeObject(request.Data), Encoding.UTF8, "application/json");
                     response = await httpClient.PutAsync(request.Url, content);
                     return await ManageResponse<TRes>(response, cookies);
+
                 case HeaderType.formdata:
                 case HeaderType.xwwwunlercoded:
                     //TODO
@@ -231,14 +235,17 @@ public class ApiRequest
                 case AuthenticationType.Bearer:
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.Authentication.Value);
                     break;
+
                 case AuthenticationType.Basic:
                     byte[] encodedByte = Encoding.ASCII.GetBytes(request.Authentication.Key + ":" + request.Authentication.Value);
                     var base64 = Convert.ToBase64String(encodedByte);
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", base64);
                     break;
+
                 case AuthenticationType.ApiKey:
                     client.DefaultRequestHeaders.Add(request.Authentication.Key, request.Authentication.Value);
                     break;
+
                 case AuthenticationType.Cookie:
                     client.DefaultRequestHeaders.Add("Cookie", request.Authentication.Value);
                     break;
