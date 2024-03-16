@@ -4,6 +4,7 @@ using SweetMeSoft.Base;
 using SweetMeSoft.Base.Connectivity;
 using SweetMeSoft.Connectivity;
 
+using System.Globalization;
 using System.Net;
 
 using static Microsoft.Maui.ApplicationModel.Permissions;
@@ -48,6 +49,11 @@ public class AppBaseViewModel : NavigationViewModel
                 {
                     Type = AuthenticationType.Bearer,
                     Value = token
+                },
+                Headers = new Dictionary<string, string>
+                {
+                    { "CurrentDate", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") },
+                    { "Language", CultureInfo.CurrentUICulture.TwoLetterISOLanguageName }
                 }
             });
 
@@ -90,6 +96,11 @@ public class AppBaseViewModel : NavigationViewModel
                 {
                     Type = AuthenticationType.Bearer,
                     Value = token
+                },
+                Headers = new Dictionary<string, string>
+                {
+                    { "CurrentDate", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") },
+                    { "Language", CultureInfo.CurrentUICulture.TwoLetterISOLanguageName }
                 }
             });
 
@@ -144,7 +155,7 @@ public class AppBaseViewModel : NavigationViewModel
             status = await permission.RequestAsync();
             if (status != PermissionStatus.Granted)
             {
-                await UserDialogs.Instance.AlertAsync("Ubicación solicitada", "Permiso requerido", "Ok");
+                await UserDialogs.Instance.AlertAsync("No se ha otorgado el permiso " + typeof(TPermission).Name + ". Puedes hacerlo en el menú de configuraciones.", "Error", "Ok");
             }
         }
 
