@@ -1,6 +1,4 @@
-﻿using MvvmHelpers;
-
-using SweetMeSoft.Mobile.Base.Custom;
+﻿using SweetMeSoft.Mobile.Base.Custom;
 
 namespace SweetMeSoft.Mobile.Base.ViewModels;
 
@@ -8,6 +6,7 @@ public class NavigationViewModel : DialogsViewModel
 {
     public void GoTo<TClass>(TClass newPage, bool removePrevious = false) where TClass : Page
     {
+        //TODO Check if TClass is a Modal
         MainThread.BeginInvokeOnMainThread(async () =>
         {
             await Application.Current.MainPage.Navigation.PushAsync(newPage, true);
@@ -90,5 +89,4 @@ public class NavigationViewModel : DialogsViewModel
             }
         });
     }
-
 }
