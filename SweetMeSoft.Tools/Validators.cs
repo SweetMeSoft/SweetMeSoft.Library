@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace SweetMeSoft.Tools;
 
-public class Validations
+public class Validators
 {
     public static bool IsValidEmail(string email)
     {
@@ -18,7 +18,7 @@ public class Validations
         }
     }
 
-    public bool IsValidPassword(string password)
+    public static bool IsValidPassword(string password)
     {
         var hasNumber = new Regex(@"[0-9]+");
         var hasUpperChar = new Regex(@"[A-Z]+");

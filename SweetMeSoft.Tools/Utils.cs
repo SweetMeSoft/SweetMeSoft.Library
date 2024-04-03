@@ -21,7 +21,7 @@ public class Utils
     {
         var result = "";
         var random = new Random();
-        for (var i = 0; i <= lenght; i++)
+        for (var i = 0; i < lenght; i++)
         {
             result += random.Next(0, 9);
         }
@@ -79,6 +79,7 @@ public class Utils
 
         return result;
     }
+
     /// <summary>
     /// Gets all letter pairs for each
     /// individual word in the string
@@ -111,7 +112,7 @@ public class Utils
     }
 
     /// <summary>
-    /// Generates an array containing every 
+    /// Generates an array containing every
     /// two consecutive letters in the input string
     /// </summary>
     /// <param name="str"></param>
