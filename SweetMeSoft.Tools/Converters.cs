@@ -1,86 +1,85 @@
 ﻿using System.Globalization;
 
-namespace SweetMeSoft.Tools
+namespace SweetMeSoft.Tools;
+
+public class Converters
 {
-    public class Converters
+    public static double StringToDouble(string number)
     {
-        public static double StringToDouble(string number)
+        if (number == null)
         {
-            if (number == null)
-            {
-                return 0;
-            }
-
-            number = number.Replace(".", CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
-            return double.Parse(number);
+            return 0;
         }
 
-        public static float StringToFloat(string number)
-        {
-            if (number == null)
-            {
-                return 0;
-            }
+        number = number.Replace(".", CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+        return double.Parse(number);
+    }
 
-            number = number.Replace(".", CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
-            return float.Parse(number);
+    public static float StringToFloat(string number)
+    {
+        if (number == null)
+        {
+            return 0;
         }
 
-        public static decimal StringToDecimal(string number)
-        {
-            if (number == null)
-            {
-                return 0;
-            }
+        number = number.Replace(".", CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+        return float.Parse(number);
+    }
 
-            number = number.Replace(".", CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
-            return decimal.Parse(number);
+    public static decimal StringToDecimal(string number)
+    {
+        if (number == null)
+        {
+            return 0;
         }
 
-        public static int StringToInt(string number)
+        number = number.Replace(".", CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+        return decimal.Parse(number);
+    }
+
+    public static int StringToInt(string number)
+    {
+        if (number == null)
         {
-            if (number == null)
-            {
-                return 0;
-            }
-
-            number = number.Replace(".", CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
-            if (number.Contains(CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator))
-            {
-                number = number.Substring(0, number.IndexOf(CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator));
-            }
-
-            return int.Parse(number);
+            return 0;
         }
 
-        public static string IntToString(int number)
+        number = number.Replace(".", CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+        if (number.Contains(CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator))
         {
-            return number.ToString("0.#0", CultureInfo.InvariantCulture);
+            number = number.Substring(0, number.IndexOf(CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator));
         }
 
-        public static string DecimalToString(decimal number)
+        return int.Parse(number);
+    }
+
+    public static string IntToString(int number)
+    {
+        return number.ToString("0.#0", CultureInfo.InvariantCulture);
+    }
+
+    public static string DecimalToString(decimal number)
+    {
+        return number.ToString("0.#0", CultureInfo.InvariantCulture);
+    }
+
+    public static bool StringToBool(string stringCellValue)
+    {
+        if (string.IsNullOrEmpty(stringCellValue))
         {
-            return number.ToString("0.#0", CultureInfo.InvariantCulture);
+            throw new ArgumentNullException(nameof(stringCellValue));
         }
 
-        public static bool StringToBool(string stringCellValue)
+        if (stringCellValue.ToLower() is "true" or "1" or "t")
         {
-            if (string.IsNullOrEmpty(stringCellValue))
-            {
-                throw new ArgumentNullException(nameof(stringCellValue));
-            }
-
-            if (stringCellValue.ToLower() == "true" || stringCellValue.ToLower() == "1" || stringCellValue.ToLower() == "t")
-            {
-                return true;
-            }
-
-            if (stringCellValue.ToLower() == "false" || stringCellValue.ToLower() == "0" || stringCellValue.ToLower() == "f")
-            {
-                return false;
-            }
-
-            throw new ArgumentException("String value is not a boolean value");
+            return true;
         }
+
+        if (stringCellValue.ToLower() is "false" or "0" or "f")
+        {
+            return false;
+        }
+
+        throw new ArgumentException("String value is not a boolean value");
     }
 }
