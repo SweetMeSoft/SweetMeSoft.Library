@@ -1,10 +1,10 @@
-﻿using Controls.UserDialogs.Maui;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-using MvvmHelpers;
+using Controls.UserDialogs.Maui;
 
 namespace SweetMeSoft.Mobile.Base.ViewModels;
 
-public class DialogsViewModel : BaseViewModel
+public class DialogsViewModel : ObservableObject
 {
     public async Task DisplayAlert(string title, string message, string cancel)
     {

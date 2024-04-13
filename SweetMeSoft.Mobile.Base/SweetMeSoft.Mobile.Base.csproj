@@ -20,21 +20,23 @@
 		<Title>SweetMeSoft Mobile Base</Title>
 		<Copyright>SweetMeSoft</Copyright>
 		<PackageProjectUrl>https://www.sweetmesoft.com</PackageProjectUrl>
-		<Version>1.11.113</Version>
+		<Version>1.11.114</Version>
 		<Description>SweetMeSoft Mobile Base Library is a compilation of different utils for MAUI apps</Description>
     <Icon>logo_sq_512.png</Icon>
     <PackageIcon>logo_sq_512.png</PackageIcon>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Include="logo_sq_512.png" Pack="true" PackagePath=""/>
+	  <None Include="logo_sq_512.png" Pack="true" PackagePath="" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Controls.UserDialogs.Maui" Version="1.5.2" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.7" />
-		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.7" />
-		<PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="8.0.1" />
+		<PackageReference Include="CommunityToolkit.Maui.Core" Version="8.0.1" />
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+		<PackageReference Include="Controls.UserDialogs.Maui" Version="1.5.4" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.20" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.20" />
 	</ItemGroup>
 
 	<ItemGroup>
