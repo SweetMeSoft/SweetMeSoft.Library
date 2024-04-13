@@ -5,14 +5,20 @@
     <ImplicitUsings>true</ImplicitUsings>
     <LangVersion>latest</LangVersion>
     <PackageId>SweetMeSoft.Tools</PackageId>
-    <Version>1.10.126</Version>
+    <Version>1.10.127</Version>
     <Authors>Erick Velasco</Authors>
     <Company>SweetMeSoft</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Title>SweetMeSoft Tools</Title>
     <Description>SweetMeSoft Tools Library is a compilation of basic tools to use</Description>
     <Copyright>SweetMeSoft</Copyright>
+    <Icon>logo_sq_512.png</Icon>
+    <PackageIcon>logo_sq_512.png</PackageIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="logo_sq_512.png" Pack="true" PackagePath=""/>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />

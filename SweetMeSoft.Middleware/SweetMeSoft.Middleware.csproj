@@ -12,7 +12,13 @@
     <Title>SweetMeSoft Middleware</Title>
     <Description>SweetMeSoft Middleware Library is a compilation of different middlewares for .Net core</Description>
     <Copyright>SweetMeSoft</Copyright>
+    <Icon>logo_sq_512.png</Icon>
+    <PackageIcon>logo_sq_512.png</PackageIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="logo_sq_512.png" Pack="true" PackagePath=""/>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />

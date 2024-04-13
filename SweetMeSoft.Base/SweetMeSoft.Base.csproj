@@ -12,7 +12,13 @@
     <Copyright>SweetMeSoft</Copyright>
     <Title>SweetMeSoft Base</Title>
     <Description>SweetMeSoft Base Library is the base of SweetMeSoft Libraries</Description>
+    <Icon>logo_sq_512.png</Icon>
+    <PackageIcon>logo_sq_512.png</PackageIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="logo_sq_512.png" Pack="true" PackagePath=""/>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="System.Text.Json" Version="8.0.0" />

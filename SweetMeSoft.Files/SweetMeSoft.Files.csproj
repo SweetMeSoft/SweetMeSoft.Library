@@ -12,7 +12,13 @@
     <Title>SweetMeSoft Files</Title>
     <Description>SweetMeSoft Files Library is a compilation of ways to read and generate different types of files like Excel, CSV, TXT, ZIP and more</Description>
     <Copyright>SweetMeSoft</Copyright>
+    <Icon>logo_sq_512.png</Icon>
+    <PackageIcon>logo_sq_512.png</PackageIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="logo_sq_512.png" Pack="true" PackagePath=""/>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="CsvHelper" Version="30.0.1" />

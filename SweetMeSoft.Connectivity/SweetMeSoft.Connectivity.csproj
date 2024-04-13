@@ -12,7 +12,13 @@
     <Title>SweetMeSoft Connectivity</Title>
     <Description>SweetMeSoft Connectivity Library is a compilation of easy to use tools to connect with ThirdParties services and APIs</Description>
     <Copyright>SweetMeSoft</Copyright>
+    <Icon>logo_sq_512.png</Icon>
+    <PackageIcon>logo_sq_512.png</PackageIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="logo_sq_512.png" Pack="true" PackagePath=""/>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
