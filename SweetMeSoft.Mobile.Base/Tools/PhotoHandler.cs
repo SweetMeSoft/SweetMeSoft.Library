@@ -16,7 +16,18 @@ public class PhotoHandler
                 await Task.Delay(1000); //Delay is needed to wait back to the previous page
                 if (photo != null)
                 {
-                    result.Path = photo.FullPath;
+                    if (DeviceInfo.Current.Platform == DevicePlatform.Android)
+                    {
+                        result.Path = photo.FullPath;
+                    }
+                    else
+                    {
+                        var fullPath = Path.Combine(FileSystem.CacheDirectory, photo.FileName);
+                        using var stream = await photo.OpenReadAsync();
+                        using var newStream = File.Create(fullPath);
+                        await stream.CopyToAsync(newStream);
+                        result.Path = fullPath;
+                    }
                     UserDialogs.Instance.HideHud();
                     return result;
                 }
