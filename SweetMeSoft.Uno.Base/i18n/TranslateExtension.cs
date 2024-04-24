@@ -1,4 +1,4 @@
-using Microsoft.UI.Xaml.Markup;
+﻿using Microsoft.UI.Xaml.Markup;
 
 using System.Globalization;
 using System.Reflection;

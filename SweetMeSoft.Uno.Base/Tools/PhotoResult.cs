@@ -1,4 +1,4 @@
-using Microsoft.UI.Xaml.Media;
+﻿using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Media.Imaging;
 
 namespace SweetMeSoft.Uno.Base.Tools;

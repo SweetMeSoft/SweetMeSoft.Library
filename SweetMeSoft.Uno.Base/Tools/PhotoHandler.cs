@@ -1,4 +1,4 @@
-using Windows.Foundation;
+﻿using Windows.Foundation;
 using Windows.Media.Capture;
 
 namespace SweetMeSoft.Uno.Base.Tools;

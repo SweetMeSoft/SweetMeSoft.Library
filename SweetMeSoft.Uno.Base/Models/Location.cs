@@ -1,4 +1,4 @@
-namespace SweetMeSoft.Uno.Base.Models;
+﻿namespace SweetMeSoft.Uno.Base.Models;
 
 public class Location
 {

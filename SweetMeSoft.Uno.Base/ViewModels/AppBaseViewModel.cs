@@ -1,4 +1,4 @@
-using Microsoft.UI.Xaml.Controls;
+﻿using Microsoft.UI.Xaml.Controls;
 
 using SweetMeSoft.Base;
 using SweetMeSoft.Base.Connectivity;
