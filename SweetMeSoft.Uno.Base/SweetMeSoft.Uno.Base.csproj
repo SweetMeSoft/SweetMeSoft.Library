@@ -9,16 +9,21 @@
     <Title>SweetMeSoft Uno Base</Title>
     <Copyright>SweetMeSoft</Copyright>
     <PackageProjectUrl>https://www.sweetmesoft.com</PackageProjectUrl>
-    <Version>1.01.001</Version>
+    <Version>1.10.102</Version>
     <Description>SweetMeSoft Uno Base Library is a compilation of different utils for UNO Platform apps</Description>
     <Icon>logo_sq_512.png</Icon>
     <PackageIcon>logo_sq_512.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="logo_sq_512.png" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+
+  <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
     <PackageReference Include="Uno.Extensions.Navigation" Version="4.0.0" />
-    <PackageReference Include="Uno.UI" Version="5.2.83" />
+    <PackageReference Include="Uno.WinUI" Version="5.2.83" />
   </ItemGroup>
 
   <ItemGroup>

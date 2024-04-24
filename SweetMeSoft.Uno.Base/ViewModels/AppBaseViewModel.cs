@@ -1,3 +1,5 @@
+using Microsoft.UI.Xaml.Controls;
+
 using SweetMeSoft.Base;
 using SweetMeSoft.Base.Connectivity;
 using SweetMeSoft.Connectivity;
@@ -9,7 +11,6 @@ using System.Globalization;
 using System.Net;
 
 using Windows.Networking.Connectivity;
-using Windows.UI.Xaml.Controls;
 
 namespace SweetMeSoft.Uno.Base.ViewModels;
 

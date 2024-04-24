@@ -1,8 +1,8 @@
+using Microsoft.UI.Xaml.Markup;
+
 using System.Globalization;
 using System.Reflection;
 using System.Resources;
-
-using Windows.UI.Xaml.Markup;
 
 namespace SweetMeSoft.Uno.Base.i18n;
 
