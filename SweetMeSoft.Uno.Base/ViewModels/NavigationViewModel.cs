@@ -9,6 +9,24 @@ public class NavigationViewModel : DialogsViewModel
     {
     }
 
+    public void BackToRoot()
+    {
+        var frame = (Frame)Window.Current.Content;
+        while (frame.CanGoBack)
+        {
+            frame.BackStack.Clear();
+        }
+    }
+
+    public void GoBack()
+    {
+        var frame = (Frame)Window.Current.Content;
+        if (frame.CanGoBack)
+        {
+            frame.GoBack();
+        }
+    }
+
     public void GoTo<TClass>(object parameter, bool removePrevious = false) where TClass : Page
     {
         var frame = (Frame)Window.Current.Content;
@@ -33,24 +51,6 @@ public class NavigationViewModel : DialogsViewModel
         var frame = (Frame)Window.Current.Content;
         frame.Navigate(typeof(TClass));
         frame.BackStack.Clear();
-    }
-
-    public void BackToRoot()
-    {
-        var frame = (Frame)Window.Current.Content;
-        while (frame.CanGoBack)
-        {
-            frame.BackStack.Clear();
-        }
-    }
-
-    public void GoBack()
-    {
-        var frame = (Frame)Window.Current.Content;
-        if (frame.CanGoBack)
-        {
-            frame.GoBack();
-        }
     }
 
     //public async Task<T> OpenModal<TClass, T>() where TClass : BaseContentPage<T>, new()

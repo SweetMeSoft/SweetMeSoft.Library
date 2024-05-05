@@ -135,13 +135,16 @@
   <data name="CloseSession" xml:space="preserve">
     <value>Cerrar la sesión</value>
   </data>
-  <data name="AreYouSure" xml:space="preserve">
-    <value>Está seguro</value>
-  </data>
   <data name="Yes" xml:space="preserve">
     <value>Sí</value>
   </data>
   <data name="Error" xml:space="preserve">
     <value>Error</value>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>¿Está seguro?</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancelar</value>
   </data>
 </root>

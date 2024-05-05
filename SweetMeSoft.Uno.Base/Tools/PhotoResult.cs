@@ -1,11 +1,17 @@
 ﻿using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Media.Imaging;
 
+using Windows.Devices.Sensors;
+
 namespace SweetMeSoft.Uno.Base.Tools;
 
 public class PhotoResult
 {
-    public string Path { get; set; }
+    public string OriginalPath { get; set; }
+
+    public byte[] EditedBytes { get; set; }
+
+    public SimpleOrientation Orientation { get; set; }
 
     public string GetBase64()
     {
@@ -15,7 +21,7 @@ public class PhotoResult
 
     public byte[] GetBytes()
     {
-        using Stream sourceStream = File.OpenRead(Path);
+        using Stream sourceStream = File.OpenRead(OriginalPath);
         using var memoryStream = new MemoryStream();
         sourceStream.CopyTo(memoryStream);
         return memoryStream.ToArray();
@@ -23,6 +29,11 @@ public class PhotoResult
 
     public ImageSource GetImageSource()
     {
-        return new BitmapImage(new Uri(Path));
+        return new BitmapImage(new Uri(OriginalPath));
+    }
+
+    public Stream GetStream()
+    {
+        return File.OpenRead(OriginalPath);
     }
 }

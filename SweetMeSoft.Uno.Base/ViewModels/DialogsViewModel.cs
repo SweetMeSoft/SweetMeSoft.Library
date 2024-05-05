@@ -3,12 +3,12 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
+using SweetMeSoft.Uno.Base.i18n.Resources;
+
 namespace SweetMeSoft.Uno.Base.ViewModels;
 
 public class DialogsViewModel() : ObservableObject
 {
-    private ContentDialog loading;
-
     public async Task DisplayAlert(string title, string message, string okText)
     {
         try
@@ -29,8 +29,10 @@ public class DialogsViewModel() : ObservableObject
         }
     }
 
-    public async Task<bool> DisplayAlert(string title, string message, string okText, string cancelText)
+    public async Task<bool> DisplayAlert(string title, string message, string okText = "", string cancelText = "")
     {
+        okText = string.IsNullOrEmpty(okText) ? Resources.Ok : okText;
+        cancelText = string.IsNullOrEmpty(cancelText) ? Resources.Cancel : cancelText;
         var dialog = new ContentDialog()
         {
             Title = title,
@@ -44,32 +46,36 @@ public class DialogsViewModel() : ObservableObject
         return result == ContentDialogResult.Primary;
     }
 
+    public async Task<string> DisplayList(string title, string message, string cancel, params string[] items)
+    {
+        var dialog = new ContentDialog()
+        {
+            Title = title,
+            Content = new ComboBox() { PlaceholderText = message, ItemsSource = items },
+            PrimaryButtonText = Resources.Ok,
+            CloseButtonText = cancel,
+            DefaultButton = ContentDialogButton.Primary,
+            XamlRoot = Window.Current.Content.XamlRoot
+        };
+
+        var result = await dialog.ShowAsync();
+        return result == ContentDialogResult.Primary ? (dialog.Content as ComboBox).SelectedItem.ToString() : string.Empty;
+    }
+
     public async void DisplayLoading(string message)
     {
-        if (loading == null || !loading.IsLoaded)
+        loadingCount++;
+        if ((loading == null || !loading.IsLoaded) && loadingCount == 1)
         {
-            loading = new ContentDialog()
-            {
-                Content = new ProgressRing() { IsActive = true },
-                Title = message,
-                AllowFocusOnInteraction = false,
-                XamlRoot = Window.Current.Content.XamlRoot
-            };
-
+            loading.Title = message;
             await loading.ShowAsync();
         }
     }
 
-    public void HideLoading()
+    public async Task<string> DisplayPrompt(string title, string message, string accept = "", string cancel = "", string initial = "")
     {
-        if (loading.IsLoaded)
-        {
-            loading.Hide();
-        }
-    }
-
-    public async Task<string> DisplayPrompt(string title, string message, string accept = "Ok", string cancel = "Cancel", string initial = "")
-    {
+        accept = string.IsNullOrEmpty(accept) ? Resources.Ok : accept;
+        cancel = string.IsNullOrEmpty(cancel) ? Resources.Cancel : cancel;
         var dialog = new ContentDialog()
         {
             Title = title,
@@ -84,39 +90,21 @@ public class DialogsViewModel() : ObservableObject
         return result == ContentDialogResult.Primary ? (dialog.Content as TextBox).Text : string.Empty;
     }
 
-    public async Task<string> DisplayList(string title, string message, string cancel, params string[] items)
+    public void HideLoading()
     {
-        //TODO Add Ok text
-        var dialog = new ContentDialog()
+        loadingCount--;
+        if (loading.IsLoaded && loadingCount == 0)
         {
-            Title = title,
-            Content = new ComboBox() { PlaceholderText = message, ItemsSource = items },
-            PrimaryButtonText = "Ok",
-            CloseButtonText = cancel,
-            DefaultButton = ContentDialogButton.Primary,
-            XamlRoot = Window.Current.Content.XamlRoot
-        };
-
-        var result = await dialog.ShowAsync();
-        return result == ContentDialogResult.Primary ? (dialog.Content as ComboBox).SelectedItem.ToString() : string.Empty;
+            loading.Hide();
+        }
     }
 
-    //public async Task<string> DisplayPrompt(string title, string message, string accept = "Ok", string cancel = "Cancel", Keyboard keyboard = null, string initial = "")
-    //{
-    //    var tcs = new TaskCompletionSource<string>();
-    //    Application.Current?.Dispatcher.Dispatch(async () =>
-    //    {
-    //        try
-    //        {
-    //            var t = await Application.Current.MainPage.DisplayPromptAsync(title, message, accept, cancel, "", 50, keyboard, initial);
-    //            tcs.SetResult(t);
-    //        }
-    //        catch (Exception e)
-    //        {
-    //            tcs.SetException(e);
-    //        }
-    //    });
+    private readonly ContentDialog loading = new ContentDialog()
+    {
+        Content = new ProgressRing() { IsActive = true },
+        AllowFocusOnInteraction = false,
+        XamlRoot = Window.Current.Content.XamlRoot
+    };
 
-    //    return await tcs.Task;
-    //}
+    private int loadingCount = 0;
 }

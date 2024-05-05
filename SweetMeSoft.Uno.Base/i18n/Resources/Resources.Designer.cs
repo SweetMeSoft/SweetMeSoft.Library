@@ -61,11 +61,20 @@ namespace SweetMeSoft.Uno.Base.i18n.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to AreYouSure.
+        ///   Looks up a localized string similar to Are you sure?.
         /// </summary>
         public static string AreYouSure {
             get {
                 return ResourceManager.GetString("AreYouSure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
             }
         }
         

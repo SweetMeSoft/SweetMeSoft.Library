@@ -113,7 +113,7 @@
     <value>Close session</value>
   </data>
   <data name="AreYouSure" xml:space="preserve">
-    <value>AreYouSure</value>
+    <value>Are you sure?</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>
@@ -123,5 +123,8 @@
   </data>
   <data name="Error" xml:space="preserve">
     <value>Error</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
   </data>
 </root>

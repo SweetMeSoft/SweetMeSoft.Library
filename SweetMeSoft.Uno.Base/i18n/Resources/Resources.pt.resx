@@ -132,9 +132,6 @@
   <data name="CloseSession" xml:space="preserve">
     <value>Fechar sessão</value>
   </data>
-  <data name="AreYouSure" xml:space="preserve">
-    <value>Tem certeza</value>
-  </data>
   <data name="Yes" xml:space="preserve">
     <value>Sim</value>
   </data>
@@ -143,5 +140,11 @@
   </data>
   <data name="Error" xml:space="preserve">
     <value>Erro</value>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>Tem certeza?</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancelar</value>
   </data>
 </root>
