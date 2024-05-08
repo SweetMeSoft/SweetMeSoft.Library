@@ -14,13 +14,11 @@ using Windows.Networking.Connectivity;
 
 namespace SweetMeSoft.Uno.Base.ViewModels;
 
-public class AppBaseViewModel : NavigationViewModel
+public class AppBaseViewModel() : NavigationViewModel
 {
     public static int loadingCounter = 0;
 
-    public AppBaseViewModel()
-    {
-    }
+    public Action UpdateView;
 
     //public async Task<PermissionStatus> CheckAndRequestPermissionAsync<TPermission>() where TPermission : BasePermission, new()
     //{
@@ -103,10 +101,8 @@ public class AppBaseViewModel : NavigationViewModel
     //    }
     //}
 
-
     public async Task<Location> GetCurrentLocation()
     {
-
         try
         {
             var access = await Windows.Devices.Geolocation.Geolocator.RequestAccessAsync();
