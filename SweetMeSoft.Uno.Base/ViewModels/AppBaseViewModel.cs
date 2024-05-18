@@ -1,5 +1,4 @@
-﻿using Microsoft.UI.Dispatching;
-using Microsoft.UI.Xaml.Controls;
+﻿using Microsoft.UI.Xaml.Controls;
 
 using SweetMeSoft.Base;
 using SweetMeSoft.Base.Connectivity;
@@ -19,7 +18,7 @@ public class AppBaseViewModel() : NavigationViewModel
 {
     public static int loadingCounter = 0;
 
-    public Action UpdateView;
+    public Action UpdateView = () => { };
 
     //public async Task<PermissionStatus> CheckAndRequestPermissionAsync<TPermission>() where TPermission : BasePermission, new()
     //{
@@ -37,23 +36,23 @@ public class AppBaseViewModel() : NavigationViewModel
     //    return status;
     //}
 
-    public void UpdateInLoop(int ticks = 10, int threshold = 1000)
-    {
-        var timer = DispatcherQueue.GetForCurrentThread().CreateTimer();
-        timer.Interval = TimeSpan.FromMilliseconds(threshold);
-        timer.Tick += (sender, args) =>
-        {
-            if (ticks == 0)
-            {
-                timer.Stop();
-                return;
-            }
+    //public void UpdateInLoop(int ticks = 10, int threshold = 1000)
+    //{
+    //    var timer = DispatcherQueue.GetForCurrentThread().CreateTimer();
+    //    timer.Interval = TimeSpan.FromMilliseconds(threshold);
+    //    timer.Tick += (sender, args) =>
+    //    {
+    //        if (ticks == 0)
+    //        {
+    //            timer.Stop();
+    //            return;
+    //        }
 
-            UpdateView();
-            ticks--;
-        };
-        timer.Start();
-    }
+    //        UpdateView();
+    //        ticks--;
+    //    };
+    //    timer.Start();
+    //}
 
     public async Task<TRes> Get<TRes>(string url, bool useToken = true, bool showLoading = true)
     {

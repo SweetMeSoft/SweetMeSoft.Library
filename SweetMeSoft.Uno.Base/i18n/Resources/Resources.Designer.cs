@@ -106,6 +106,15 @@ namespace SweetMeSoft.Uno.Base.i18n.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The file is too big. The maximum file size allowed is {fileSize}.
+        /// </summary>
+        public static string FileTooBig {
+            get {
+                return ResourceManager.GetString("FileTooBig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Loading....
         /// </summary>
         public static string Loading {

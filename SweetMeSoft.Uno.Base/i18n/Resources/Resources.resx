@@ -127,4 +127,7 @@
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="FileTooBig" xml:space="preserve">
+    <value>The file is too big. The maximum file size allowed is {fileSize}</value>
+  </data>
 </root>
