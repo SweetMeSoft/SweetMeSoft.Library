@@ -29,7 +29,7 @@ public class FileHandler
             return null;
         }
 
-        return new StreamFile(file.DisplayName, new MemoryStream(bytesFile), file.FileType);
+        return new StreamFile(file.DisplayName, new MemoryStream(bytesFile), file.FileType.Replace(".", ""));
     }
 
     public async Task<List<StreamFile>> PickFiles(int maxFileSize = int.MaxValue)
@@ -56,7 +56,7 @@ public class FileHandler
             }
             else
             {
-                fileList.Add(new StreamFile(file.DisplayName, new MemoryStream(bytesFile), file.FileType));
+                fileList.Add(new StreamFile(file.DisplayName, new MemoryStream(bytesFile), file.FileType.Replace(".", "")));
             }
         }
 
