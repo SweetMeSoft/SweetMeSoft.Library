@@ -56,6 +56,8 @@ public class PhotoHandler
             {
                 results.Add(photo);
             }
+
+            await Task.Delay(1000);
         }
         while (photo != null);
         return results;
