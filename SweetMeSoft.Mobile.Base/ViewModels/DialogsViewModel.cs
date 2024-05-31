@@ -50,7 +50,7 @@ public class DialogsViewModel : ObservableObject
         return await tcs.Task;
     }
 
-    public async Task DisplayToast(string message, Action action = null)
+    public async Task DisplaySnackbar(string message, Action action = null)
     {
         var result = await UserDialogs.Instance.ShowSnackbarAsync(message, actionText: action != null ? "Ok" : null, showCountDown: action != null);
         if (action != null)
@@ -60,5 +60,10 @@ public class DialogsViewModel : ObservableObject
                 action();
             }
         }
+    }
+
+    public void DisplayToast(string message, Action action = null)
+    {
+        UserDialogs.Instance.ShowToast(message);
     }
 }
