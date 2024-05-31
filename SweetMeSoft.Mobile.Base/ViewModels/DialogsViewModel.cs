@@ -49,4 +49,16 @@ public class DialogsViewModel : ObservableObject
 
         return await tcs.Task;
     }
+
+    public async Task DisplayToast(string message, Action action = null)
+    {
+        var result = await UserDialogs.Instance.ShowSnackbarAsync(message, actionText: action != null ? "Ok" : null, showCountDown: action != null);
+        if (action != null)
+        {
+            if (result == SnackbarActionType.UserInteraction)
+            {
+                action();
+            }
+        }
+    }
 }
