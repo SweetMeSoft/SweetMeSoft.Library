@@ -29,7 +29,8 @@ public class FileHandler
             return null;
         }
 
-        return new StreamFile(file.DisplayName, new MemoryStream(bytesFile), file.FileType.Replace(".", ""));
+        var contentType = Constants.GetContentType(file.FileType.Replace(".", ""));
+        return new StreamFile(file.DisplayName, new MemoryStream(bytesFile), contentType);
     }
 
     public async Task<List<StreamFile>> PickFiles(int maxFileSize = int.MaxValue)
@@ -56,7 +57,8 @@ public class FileHandler
             }
             else
             {
-                fileList.Add(new StreamFile(file.DisplayName, new MemoryStream(bytesFile), file.FileType.Replace(".", "")));
+                var contentType = Constants.GetContentType(file.FileType.Replace(".", ""));
+                fileList.Add(new StreamFile(file.DisplayName, new MemoryStream(bytesFile), contentType));
             }
         }
 

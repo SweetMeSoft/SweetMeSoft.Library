@@ -18,7 +18,9 @@ public class AppBaseViewModel() : NavigationViewModel
 {
     public static int loadingCounter = 0;
 
-    public Action UpdateView = () => { };
+    public Action UpdateView = () =>
+    {
+    };
 
     //public async Task<PermissionStatus> CheckAndRequestPermissionAsync<TPermission>() where TPermission : BasePermission, new()
     //{
