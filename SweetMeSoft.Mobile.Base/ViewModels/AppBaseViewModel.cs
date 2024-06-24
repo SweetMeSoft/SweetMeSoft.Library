@@ -13,8 +13,6 @@ namespace SweetMeSoft.Mobile.Base.ViewModels;
 
 public class AppBaseViewModel : NavigationViewModel
 {
-    internal static int loadingCounter = 0;
-
     public AppBaseViewModel()
     {
     }
@@ -100,10 +98,32 @@ public class AppBaseViewModel : NavigationViewModel
         }
     }
 
-    public async Task<Location> GetCurrentLocation()
+    public async Task<Location> GetCurrentLocation(bool showMessages = false)
     {
         try
         {
+#if ANDROID
+            var lm = Platform.CurrentActivity.GetSystemService(Android.Content.Context.LocationService) as Android.Locations.LocationManager;
+            var isenabled = lm.IsProviderEnabled(Android.Locations.LocationManager.GpsProvider);
+            // check if GPS is enabled
+            if (isenabled == false)
+            {
+                if(showMessages){
+                    Microsoft.Maui.ApplicationModel.Platform.CurrentActivity.StartActivity(new Android.Content.Intent(Android.Provider.Settings.ActionLocationSourceSettings));
+                }
+                return default;
+            }
+#elif IOS
+            if (CoreLocation.CLLocationManager.Status == CoreLocation.CLAuthorizationStatus.Denied)
+            {
+                if (showMessages)
+                {
+                    UserDialogs.Instance.Alert("No se ha otorgado el permiso de ubicación. Puedes hacerlo en el menú de configuraciones.", "Error", "Ok");
+                }
+                return default;
+            }
+#endif
+
             var status = await CheckStatusAsync<LocationWhenInUse>();
             if (status != PermissionStatus.Granted)
             {
@@ -114,15 +134,15 @@ public class AppBaseViewModel : NavigationViewModel
             {
                 UserDialogs.Instance.ShowLoading("Obteniendo ubicación actual...");
                 var request = new GeolocationRequest(GeolocationAccuracy.Best, TimeSpan.FromSeconds(10));
-                var location = await Geolocation.GetLocationAsync(request, new CancellationTokenSource().Token);
+                var location = await Geolocation.GetLastKnownLocationAsync() ?? await Geolocation.GetLocationAsync(request, new CancellationTokenSource().Token);
                 UserDialogs.Instance.HideHud();
                 return location;
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             UserDialogs.Instance.HideHud();
-            await UserDialogs.Instance.AlertAsync(ex.Message, "Service Error", "Ok");
+            //await UserDialogs.Instance.AlertAsync(ex.Message, "Service Error", "Ok");
         }
 
         return default;
@@ -225,4 +245,6 @@ public class AppBaseViewModel : NavigationViewModel
 
         return default;
     }
+
+    internal static int loadingCounter = 0;
 }

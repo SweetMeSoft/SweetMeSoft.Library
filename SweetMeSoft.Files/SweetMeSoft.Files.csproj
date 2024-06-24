@@ -17,14 +17,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="logo_sq_512.png" Pack="true" PackagePath=""/>
+    <None Include="logo_sq_512.png" Pack="true" PackagePath="" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CsvHelper" Version="30.0.1" />
-    <PackageReference Include="EPPlus" Version="7.0.4" />
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.55" />
-    <PackageReference Include="NPOI" Version="2.6.2" />
+    <PackageReference Include="CsvHelper" Version="33.0.1" />
+    <PackageReference Include="EPPlus" Version="7.2.0" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.61" />
+    <PackageReference Include="NPOI" Version="2.7.0" />
     <PackageReference Include="System.Linq.Async" Version="6.0.1" />
   </ItemGroup>
 

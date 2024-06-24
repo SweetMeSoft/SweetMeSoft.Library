@@ -17,11 +17,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="logo_sq_512.png" Pack="true" PackagePath=""/>
+    <None Include="logo_sq_512.png" Pack="true" PackagePath="" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Text.Json" Version="8.0.0" />
+    <PackageReference Include="System.Text.Json" Version="8.0.3" />
   </ItemGroup>
 
 </Project>
