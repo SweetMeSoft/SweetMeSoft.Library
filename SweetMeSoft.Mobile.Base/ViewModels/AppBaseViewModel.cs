@@ -33,9 +33,9 @@ public class AppBaseViewModel : NavigationViewModel
         return status;
     }
 
-    public async Task<TRes> Get<TRes>(string url, bool useToken = true, bool showLoading = true)
+    public Task<TRes> Get<TRes>(string url, bool useToken = true, bool showLoading = true)
     {
-        return await Get<string, TRes>(url, null, useToken, showLoading);
+        return Get<string, TRes>(url, null, useToken, showLoading);
     }
 
     public async Task<TRes> Get<TReq, TRes>(string url, TReq data, bool useToken = true, bool showLoading = true) where TReq : class

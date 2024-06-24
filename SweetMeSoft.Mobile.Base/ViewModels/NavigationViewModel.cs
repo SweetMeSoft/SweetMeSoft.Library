@@ -4,8 +4,60 @@ namespace SweetMeSoft.Mobile.Base.ViewModels;
 
 public class NavigationViewModel : DialogsViewModel
 {
+    public void BackToRoot()
+    {
+        if (isNavigating)
+        {
+            return;
+        }
+
+        isNavigating = true;
+        MainThread.BeginInvokeOnMainThread(async () =>
+        {
+            await Application.Current.MainPage.Navigation.PopToRootAsync();
+            isNavigating = false;
+        });
+    }
+
+    public void CloseModal<T>(T result)
+    {
+        MainThread.BeginInvokeOnMainThread(async () =>
+        {
+            if (Application.Current.MainPage.Navigation.ModalStack.FirstOrDefault() is BaseNavigationPage<T> newPage)
+            {
+                newPage.MyContentPage.result = result;
+                await Application.Current.MainPage.Navigation.PopModalAsync(true);
+            }
+            else
+            {
+                await DisplayAlert("Error", "Modal closing has an error", "Ok");
+            }
+        });
+    }
+
+    public void GoBack()
+    {
+        if (isNavigating)
+        {
+            return;
+        }
+
+        isNavigating = true;
+        MainThread.BeginInvokeOnMainThread(async () =>
+        {
+            await Application.Current.MainPage.Navigation.PopAsync();
+            isNavigating = false;
+        });
+    }
+
     public void GoTo<TClass>(TClass newPage, bool removePrevious = false) where TClass : Page
     {
+        if (isNavigating)
+        {
+            return;
+        }
+
+        isNavigating = true;
         //TODO Check if TClass is a Modal
         MainThread.BeginInvokeOnMainThread(async () =>
         {
@@ -18,6 +70,8 @@ public class NavigationViewModel : DialogsViewModel
                     Application.Current.MainPage.Navigation.RemovePage(Application.Current.MainPage.Navigation.NavigationStack[count - 2]);
                 }
             }
+
+            isNavigating = false;
         });
     }
 
@@ -28,10 +82,17 @@ public class NavigationViewModel : DialogsViewModel
 
     public void GoToNewRoot<TClass>(TClass newPage) where TClass : Page, new()
     {
+        if (isNavigating)
+        {
+            return;
+        }
+
+        isNavigating = true;
         MainThread.BeginInvokeOnMainThread(async () =>
         {
             Application.Current.MainPage.Navigation.InsertPageBefore(newPage, Application.Current.MainPage.Navigation.NavigationStack[0]);
             await Application.Current.MainPage.Navigation.PopToRootAsync();
+            isNavigating = false;
         });
     }
 
@@ -40,25 +101,9 @@ public class NavigationViewModel : DialogsViewModel
         GoToNewRoot(new TClass());
     }
 
-    public void BackToRoot()
+    public Task<T> OpenModal<TClass, T>() where TClass : BaseContentPage<T>, new()
     {
-        MainThread.BeginInvokeOnMainThread(async () =>
-        {
-            await Application.Current.MainPage.Navigation.PopToRootAsync();
-        });
-    }
-
-    public void GoBack()
-    {
-        MainThread.BeginInvokeOnMainThread(async () =>
-        {
-            await Application.Current.MainPage.Navigation.PopAsync();
-        });
-    }
-
-    public async Task<T> OpenModal<TClass, T>() where TClass : BaseContentPage<T>, new()
-    {
-        return await OpenModal<TClass, T>(new TClass());
+        return OpenModal<TClass, T>(new TClass());
     }
 
     public async Task<T> OpenModal<TClass, T>(TClass newPage) where TClass : BaseContentPage<T>
@@ -74,19 +119,5 @@ public class NavigationViewModel : DialogsViewModel
         return await source.Task;
     }
 
-    public void CloseModal<T>(T result)
-    {
-        MainThread.BeginInvokeOnMainThread(async () =>
-        {
-            if (Application.Current.MainPage.Navigation.ModalStack.FirstOrDefault() is BaseNavigationPage<T> newPage)
-            {
-                newPage.MyContentPage.result = result;
-                await Application.Current.MainPage.Navigation.PopModalAsync(true);
-            }
-            else
-            {
-                DisplayAlert("Error", "Modal closing has an error", "Ok");
-            }
-        });
-    }
+    private bool isNavigating;
 }

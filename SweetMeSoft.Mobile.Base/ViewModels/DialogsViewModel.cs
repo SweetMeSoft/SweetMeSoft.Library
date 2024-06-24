@@ -6,14 +6,14 @@ namespace SweetMeSoft.Mobile.Base.ViewModels;
 
 public class DialogsViewModel : ObservableObject
 {
-    public async Task DisplayAlert(string title, string message, string cancel)
+    public Task DisplayAlert(string title, string message, string cancel)
     {
-        await UserDialogs.Instance.AlertAsync(message, title, cancel);
+        return UserDialogs.Instance.AlertAsync(message, title, cancel);
     }
 
-    public async Task<bool> DisplayAlert(string title, string message, string okText, string cancelText)
+    public Task<bool> DisplayAlert(string title, string message, string okText, string cancelText)
     {
-        return await UserDialogs.Instance.ConfirmAsync(message, title, okText, cancelText);
+        return UserDialogs.Instance.ConfirmAsync(message, title, okText, cancelText);
         //var tcs = new TaskCompletionSource<bool>();
         //Application.Current?.Dispatcher.Dispatch(async () =>
         //{
