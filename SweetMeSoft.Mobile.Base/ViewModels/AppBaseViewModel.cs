@@ -102,27 +102,27 @@ public class AppBaseViewModel : NavigationViewModel
     {
         try
         {
-#if ANDROID
-            var lm = Platform.CurrentActivity.GetSystemService(Android.Content.Context.LocationService) as Android.Locations.LocationManager;
-            var isenabled = lm.IsProviderEnabled(Android.Locations.LocationManager.GpsProvider);
-            // check if GPS is enabled
-            if (isenabled == false)
-            {
-                if(showMessages){
-                    Microsoft.Maui.ApplicationModel.Platform.CurrentActivity.StartActivity(new Android.Content.Intent(Android.Provider.Settings.ActionLocationSourceSettings));
-                }
-                return default;
-            }
-#elif IOS
-            if (CoreLocation.CLLocationManager.Status == CoreLocation.CLAuthorizationStatus.Denied)
-            {
-                if (showMessages)
-                {
-                    UserDialogs.Instance.Alert("No se ha otorgado el permiso de ubicación. Puedes hacerlo en el menú de configuraciones.", "Error", "Ok");
-                }
-                return default;
-            }
-#endif
+            //#if ANDROID
+            //            var lm = Platform.CurrentActivity.GetSystemService(Android.Content.Context.LocationService) as Android.Locations.LocationManager;
+            //            var isenabled = lm.IsProviderEnabled(Android.Locations.LocationManager.GpsProvider);
+            //            // check if GPS is enabled
+            //            if (isenabled == false)
+            //            {
+            //                if(showMessages){
+            //                    Microsoft.Maui.ApplicationModel.Platform.CurrentActivity.StartActivity(new Android.Content.Intent(Android.Provider.Settings.ActionLocationSourceSettings));
+            //                }
+            //                return default;
+            //            }
+            //#elif IOS
+            //            if (CoreLocation.CLLocationManager.Status == CoreLocation.CLAuthorizationStatus.Denied)
+            //            {
+            //                if (showMessages)
+            //                {
+            //                    UserDialogs.Instance.Alert("No se ha otorgado el permiso de ubicación. Puedes hacerlo en el menú de configuraciones.", "Error", "Ok");
+            //                }
+            //                return default;
+            //            }
+            //#endif
 
             var status = await CheckStatusAsync<LocationWhenInUse>();
             if (status != PermissionStatus.Granted)

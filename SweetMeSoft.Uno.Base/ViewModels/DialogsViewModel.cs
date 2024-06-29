@@ -59,7 +59,8 @@ public class DialogsViewModel() : ObservableObject
         };
 
         var result = await dialog.ShowAsync();
-        return result == ContentDialogResult.Primary ? (dialog.Content as ComboBox).SelectedItem.ToString() : string.Empty;
+        var combobox = dialog.Content as ComboBox;
+        return result == ContentDialogResult.Primary && combobox.SelectedItem != null ? combobox.SelectedItem.ToString() : string.Empty;
     }
 
     public async void DisplayLoading(string message)
