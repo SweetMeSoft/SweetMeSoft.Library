@@ -11,54 +11,15 @@ using System.Globalization;
 using System.Net;
 
 using Windows.Networking.Connectivity;
+using Windows.Phone.Devices.Notification;
 
 namespace SweetMeSoft.Uno.Base.ViewModels;
 
 public class AppBaseViewModel() : NavigationViewModel
 {
-    public static int loadingCounter = 0;
-
-    public Action UpdateView = () =>
+    public Task<TRes> Get<TRes>(string url, bool useToken = true, bool showLoading = true)
     {
-    };
-
-    //public async Task<PermissionStatus> CheckAndRequestPermissionAsync<TPermission>() where TPermission : BasePermission, new()
-    //{
-    //    TPermission permission = new();
-    //    var status = await permission.CheckStatusAsync();
-    //    if (status != PermissionStatus.Granted)
-    //    {
-    //        status = await permission.RequestAsync();
-    //        if (status != PermissionStatus.Granted)
-    //        {
-    //            await DisplayAlert("No se ha otorgado el permiso " + typeof(TPermission).Name + ". Puedes hacerlo en el menú de configuraciones.", "Error", "Ok");
-    //        }
-    //    }
-
-    //    return status;
-    //}
-
-    //public void UpdateInLoop(int ticks = 10, int threshold = 1000)
-    //{
-    //    var timer = DispatcherQueue.GetForCurrentThread().CreateTimer();
-    //    timer.Interval = TimeSpan.FromMilliseconds(threshold);
-    //    timer.Tick += (sender, args) =>
-    //    {
-    //        if (ticks == 0)
-    //        {
-    //            timer.Stop();
-    //            return;
-    //        }
-
-    //        UpdateView();
-    //        ticks--;
-    //    };
-    //    timer.Start();
-    //}
-
-    public async Task<TRes> Get<TRes>(string url, bool useToken = true, bool showLoading = true)
-    {
-        return await Get<string, TRes>(url, null, useToken, showLoading);
+        return Get<string, TRes>(url, null, useToken, showLoading);
     }
 
     public async Task<TRes> Get<TReq, TRes>(string url, TReq data, bool useToken = true, bool showLoading = true) where TReq : class
@@ -108,19 +69,6 @@ public class AppBaseViewModel() : NavigationViewModel
         }
     }
 
-    //public Color GetColorFromResource(string colorName)
-    //{
-    //    var color = Application.Current.Resources[colorName] ?? throw new Exception("Color " + colorName + " not found in resources");
-    //    try
-    //    {
-    //        return (Color)color;
-    //    }
-    //    catch
-    //    {
-    //        throw new Exception(colorName + " is not a Color");
-    //    }
-    //}
-
     public async Task<Location> GetCurrentLocation()
     {
         try
@@ -144,6 +92,18 @@ public class AppBaseViewModel() : NavigationViewModel
         return default;
     }
 
+    //public Color GetColorFromResource(string colorName)
+    //{
+    //    var color = Application.Current.Resources[colorName] ?? throw new Exception("Color " + colorName + " not found in resources");
+    //    try
+    //    {
+    //        return (Color)color;
+    //    }
+    //    catch
+    //    {
+    //        throw new Exception(colorName + " is not a Color");
+    //    }
+    //}
     public async void Logout<T>(bool showConfirmation = true, Action action = null) where T : Page, new()
     {
         if (!showConfirmation || await DisplayAlert(Resources.CloseSession, Resources.AreYouSure, Resources.Yes, Resources.No))
@@ -207,6 +167,27 @@ public class AppBaseViewModel() : NavigationViewModel
         }
     }
 
+    public CancellationTokenSource StartVibration(int durationMillis, int waitMillis)
+    {
+        var cancellationTokenSource = new CancellationTokenSource();
+        Task.Run(async () =>
+        {
+            var vibrationCall = VibrationDevice.GetDefault();
+            while (!cancellationTokenSource.Token.IsCancellationRequested)
+            {
+                vibrationCall?.Vibrate(TimeSpan.FromMilliseconds(durationMillis));
+                await Task.Delay(waitMillis, cancellationTokenSource.Token);
+            }
+        }, cancellationTokenSource.Token);
+
+        return cancellationTokenSource;
+    }
+
+    //        UpdateView();
+    //        ticks--;
+    //    };
+    //    timer.Start();
+    //}
     private async Task<TRes> ManageResponse<TRes>(GenericResponse<TRes> response, string path, bool showLoading)
     {
         try
@@ -241,4 +222,38 @@ public class AppBaseViewModel() : NavigationViewModel
 
         return default;
     }
+
+    public static int loadingCounter = 0;
+
+    public Action UpdateView = () =>
+    {
+    };
+
+    //public async Task<PermissionStatus> CheckAndRequestPermissionAsync<TPermission>() where TPermission : BasePermission, new()
+    //{
+    //    TPermission permission = new();
+    //    var status = await permission.CheckStatusAsync();
+    //    if (status != PermissionStatus.Granted)
+    //    {
+    //        status = await permission.RequestAsync();
+    //        if (status != PermissionStatus.Granted)
+    //        {
+    //            await DisplayAlert("No se ha otorgado el permiso " + typeof(TPermission).Name + ". Puedes hacerlo en el menú de configuraciones.", "Error", "Ok");
+    //        }
+    //    }
+
+    //    return status;
+    //}
+
+    //public void UpdateInLoop(int ticks = 10, int threshold = 1000)
+    //{
+    //    var timer = DispatcherQueue.GetForCurrentThread().CreateTimer();
+    //    timer.Interval = TimeSpan.FromMilliseconds(threshold);
+    //    timer.Tick += (sender, args) =>
+    //    {
+    //        if (ticks == 0)
+    //        {
+    //            timer.Stop();
+    //            return;
+    //        }
 }
