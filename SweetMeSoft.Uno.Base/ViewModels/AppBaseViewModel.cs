@@ -167,6 +167,11 @@ public class AppBaseViewModel() : NavigationViewModel
         }
     }
 
+    public void RunInMainThread(Action action)
+    {
+        mainThread.TryEnqueue(Windows.System.DispatcherQueuePriority.Normal, () => action());
+    }
+
     public CancellationTokenSource StartVibration(int durationMillis, int waitMillis)
     {
         var cancellationTokenSource = new CancellationTokenSource();
@@ -228,6 +233,8 @@ public class AppBaseViewModel() : NavigationViewModel
     public Action UpdateView = () =>
     {
     };
+
+    private readonly Windows.System.DispatcherQueue mainThread = Windows.System.DispatcherQueue.GetForCurrentThread();
 
     //public async Task<PermissionStatus> CheckAndRequestPermissionAsync<TPermission>() where TPermission : BasePermission, new()
     //{
