@@ -10,17 +10,21 @@
 
         public T Data { get; set; }
 
-        public Dictionary<string, string> Headers { get; set; } = new Dictionary<string, string>();
+        public Dictionary<string, string> Headers { get; set; } = [];
 
-        public Dictionary<string, string> AdditionalParams { get; set; } = new Dictionary<string, string>();
+        public Dictionary<string, string> AdditionalParams { get; set; } = [];
 
         public bool BypassSSL { get; set; } = false;
+
+        public bool AllowAutoRedirect { get; set; } = true;
     }
 
     public enum HeaderType
     {
         json,
+
         xwwwunlercoded,
+
         formdata
     }
 }

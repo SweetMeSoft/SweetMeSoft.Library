@@ -214,6 +214,7 @@ public class ApiRequest
             CookieContainer = cookies,
             AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
             SslProtocols = SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls,
+            AllowAutoRedirect = request.AllowAutoRedirect,
         };
 
         if (request.BypassSSL)
