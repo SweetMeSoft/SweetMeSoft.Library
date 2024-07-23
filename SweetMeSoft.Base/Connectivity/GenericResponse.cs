@@ -4,7 +4,7 @@ public class GenericResponse<T>
 {
     public HttpResponseMessage HttpResponse { get; set; }
 
-    public Dictionary<string, string> Cookies { get; set; } = [];
+    public string Cookies { get; set; } = "";
 
     public T Object { get; set; }
 

@@ -37,21 +37,14 @@ public class ApiRequest
 
     public async Task<GenericResponse<StreamFile>> DownloadFile<TReq>(GenericRequest<TReq> request, string documentName = "")
     {
-        Dictionary<string, string> cookieDict = [];
         var cookies = new CookieContainer();
         using var httpClient = CreateClient(request, cookies);
         var response = await httpClient.GetAsync(request.Url);
         var ct = response.Content.Headers.ContentType?.MediaType;
-        var collection = cookies.GetCookies(new Uri(request.Url));
-        foreach (Cookie cookie in collection)
-        {
-            cookieDict.Add(cookie.Name, cookie.Value);
-        }
-
         return new GenericResponse<StreamFile>()
         {
             HttpResponse = response,
-            Cookies = cookieDict,
+            Cookies = cookies.GetCookieHeader(new Uri(request.Url)),
             Object = response.IsSuccessStatusCode ? new StreamFile()
             {
                 Stream = await response.Content.ReadAsStreamAsync(),
@@ -277,12 +270,6 @@ public class ApiRequest
 
     private async Task<GenericResponse<TRes>> ManageResponse<TRes>(HttpResponseMessage response, CookieContainer cookies)
     {
-        var cookieDict = new Dictionary<string, string>();
-        var collection = cookies.GetCookies(response.RequestMessage.RequestUri);
-        foreach (Cookie cookie in collection)
-        {
-            cookieDict.Add(cookie.Name, cookie.Value);
-        }
         var error = new ErrorDetails();
         if (!response.IsSuccessStatusCode)
         {
@@ -308,7 +295,7 @@ public class ApiRequest
             return new GenericResponse<TRes>()
             {
                 HttpResponse = response,
-                Cookies = cookieDict,
+                Cookies = cookies.GetCookieHeader(response.RequestMessage.RequestUri),
                 Object = response.IsSuccessStatusCode ? (TRes)(object)await response.Content.ReadAsStringAsync() : default,
                 Error = response.IsSuccessStatusCode ? null : error
             };
@@ -319,7 +306,7 @@ public class ApiRequest
             return new GenericResponse<TRes>()
             {
                 HttpResponse = response,
-                Cookies = cookieDict,
+                Cookies = cookies.GetCookieHeader(response.RequestMessage.RequestUri),
                 Object = response.IsSuccessStatusCode ? (TRes)(object)await response.Content.ReadAsAsync<TRes>() : default,
                 Error = response.IsSuccessStatusCode ? null : error
             };
@@ -328,7 +315,7 @@ public class ApiRequest
         return new GenericResponse<TRes>()
         {
             HttpResponse = response,
-            Cookies = cookieDict,
+            Cookies = cookies.GetCookieHeader(response.RequestMessage.RequestUri),
             Object = response.IsSuccessStatusCode ? await response.Content.ReadAsAsync<TRes>() : default,
             Error = response.IsSuccessStatusCode ? null : error
         };
