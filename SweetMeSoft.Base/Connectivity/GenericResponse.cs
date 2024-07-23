@@ -1,15 +1,12 @@
-﻿using System.Net;
+﻿namespace SweetMeSoft.Base.Connectivity;
 
-namespace SweetMeSoft.Base.Connectivity
+public class GenericResponse<T>
 {
-    public class GenericResponse<T>
-    {
-        public HttpResponseMessage HttpResponse { get; set; }
+    public HttpResponseMessage HttpResponse { get; set; }
 
-        public CookieContainer CookieContainer { get; set; }
+    public Dictionary<string, string> Cookies { get; set; } = [];
 
-        public T Object { get; set; }
+    public T Object { get; set; }
 
-        public ErrorDetails Error { get; set; }
-    }
+    public ErrorDetails Error { get; set; }
 }
