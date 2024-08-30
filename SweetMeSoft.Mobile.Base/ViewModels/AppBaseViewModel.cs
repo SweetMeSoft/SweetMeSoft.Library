@@ -26,7 +26,7 @@ public class AppBaseViewModel : NavigationViewModel
             status = await permission.RequestAsync();
             if (status != PermissionStatus.Granted)
             {
-                await UserDialogs.Instance.AlertAsync("No se ha otorgado el permiso " + typeof(TPermission).Name + ". Puedes hacerlo en el menú de configuraciones.", "Error", "Ok");
+                await DisplayAlert("No se ha otorgado el permiso " + typeof(TPermission).Name + ". Puedes hacerlo en el menú de configuraciones.", "Error", "Ok");
             }
         }
 

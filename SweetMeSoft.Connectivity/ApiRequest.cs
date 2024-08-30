@@ -312,11 +312,12 @@ public class ApiRequest
             };
         }
 
+        var st = await response.Content.ReadAsStringAsync();
         return new GenericResponse<TRes>()
         {
             HttpResponse = response,
             Cookies = cookies.GetCookieHeader(response.RequestMessage.RequestUri),
-            Object = response.IsSuccessStatusCode ? await response.Content.ReadAsAsync<TRes>() : default,
+            Object = response.IsSuccessStatusCode ? JsonConvert.DeserializeObject<TRes>(st) : default,
             Error = response.IsSuccessStatusCode ? null : error
         };
     }

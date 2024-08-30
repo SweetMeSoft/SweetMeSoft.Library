@@ -167,9 +167,24 @@ public class AppBaseViewModel() : NavigationViewModel
         }
     }
 
-    public void RunInMainThread(Action action)
+    public async Task<T> RunInMainThread<T>(Func<T> action)
     {
-        mainThread.TryEnqueue(Windows.System.DispatcherQueuePriority.Normal, () => action());
+        var tcs = new TaskCompletionSource<T>();
+
+        mainThread.TryEnqueue(Windows.System.DispatcherQueuePriority.Normal, () =>
+        {
+            try
+            {
+                T result = action();
+                tcs.SetResult(result);
+            }
+            catch (Exception ex)
+            {
+                tcs.SetException(ex);
+            }
+        });
+
+        return await tcs.Task;
     }
 
     public CancellationTokenSource StartVibration(int durationMillis, int waitMillis)
