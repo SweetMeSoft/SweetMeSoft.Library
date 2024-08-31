@@ -1,6 +1,7 @@
-﻿using System.Net.Mail;
+﻿using SweetMeSoft.Base.Tools;
+
 using System.Net;
-using SweetMeSoft.Base.Tools;
+using System.Net.Mail;
 
 namespace SweetMeSoft.Tools;
 
@@ -20,16 +21,13 @@ public class Email
 
         var port = options.Host == EmailHost.Gmail ? 587
             : options.Host == EmailHost.Outlook ? 25
-            : options.Host == EmailHost.Webmail ? 80
+            : options.Host == EmailHost.Webmail ? 587
             : 0;
         var host = options.Host == EmailHost.Gmail ? "smtp.gmail.com"
             : options.Host == EmailHost.Outlook ? "smtp.live.com"
             : options.Host == EmailHost.Webmail ? "smtpout.secureserver.net"
             : "";
-        var ssl = options.Host == EmailHost.Gmail ? true
-            : options.Host == EmailHost.Outlook ? true
-            : options.Host == EmailHost.Webmail ? false
-            : false;
+        var ssl = options.Host is EmailHost.Gmail or EmailHost.Outlook or EmailHost.Webmail;
 
         try
         {
