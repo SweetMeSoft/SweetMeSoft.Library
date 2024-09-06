@@ -71,10 +71,10 @@ public class Csv
         return await csv.GetRecordsAsync<T>().ToListAsync();
     }
 
-    public static async Task<StreamFile> Create<T>(IEnumerable<T> list, string fileName = "", string delimiter = ",")
+    public static async Task<StreamFile> Create<T>(IEnumerable<T> list, string fileName = "", string delimiter = ",", bool hasHeader = true)
     {
         var stream = new MemoryStream();
-        var config = new CsvConfiguration(CultureInfo.CurrentCulture) { Delimiter = delimiter };
+        var config = new CsvConfiguration(CultureInfo.CurrentCulture) { Delimiter = delimiter, HasHeaderRecord = hasHeader };
         using var writer = new StreamWriter(stream);
         using var csv = new CsvWriter(writer, config);
         await csv.WriteRecordsAsync(list);

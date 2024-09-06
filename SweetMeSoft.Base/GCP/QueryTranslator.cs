@@ -99,18 +99,19 @@ namespace SweetMeSoft.Base.GCP
                     sb.Append(" NOT ");
                     Visit(u.Operand);
                     break;
+
                 case ExpressionType.Convert:
                     Visit(u.Operand);
                     break;
+
                 default:
                     throw new NotSupportedException(string.Format("The unary operator '{0}' is not supported", u.NodeType));
             }
             return u;
         }
 
-
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="b"></param>
         /// <returns></returns>
@@ -171,7 +172,6 @@ namespace SweetMeSoft.Base.GCP
 
                 default:
                     throw new NotSupportedException(string.Format("The binary operator '{0}' is not supported", b.NodeType));
-
             }
 
             Visit(b.Right);
@@ -200,14 +200,17 @@ namespace SweetMeSoft.Base.GCP
             switch (Type.GetTypeCode(value.GetType()))
             {
                 case TypeCode.Boolean:
-                    sb.Append((bool)value ? 1 : 0);
+                    sb.Append((bool)value);
                     break;
+
                 case TypeCode.String:
                     sb.Append("'" + value.ToString().Replace("\"", "") + "'");
                     break;
+
                 case TypeCode.DateTime:
                     sb.Append("'" + DateTime.Parse(value.ToString()).ToString("yyyy-MM-dd HH:mm:ss.fff") + "'");
                     break;
+
                 case TypeCode.Object:
                     if (Guid.TryParse(value.ToString(), out var id))
                     {
@@ -260,7 +263,7 @@ namespace SweetMeSoft.Base.GCP
 
         protected bool IsNullConstant(Expression exp)
         {
-            return (exp.NodeType == ExpressionType.Constant && ((ConstantExpression)exp).Value == null);
+            return exp.NodeType == ExpressionType.Constant && ((ConstantExpression)exp).Value == null;
         }
 
         private bool ParseOrderByExpression(MethodCallExpression expression, string order)
