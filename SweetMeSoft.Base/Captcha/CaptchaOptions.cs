@@ -5,7 +5,7 @@
         public CaptchaOptions(CaptchaType captchaType, string twoCaptchaId)
         {
             CaptchaType = captchaType;
-            TwoCaptchaId = twoCaptchaId;
+            TwoCaptchaKey = twoCaptchaId;
         }
 
         public void InitNormal(string imageBase64, string hintText)
@@ -22,7 +22,7 @@
 
         public CaptchaType CaptchaType { get; }
 
-        public string TwoCaptchaId { get; }
+        public string TwoCaptchaKey { get; }
 
         public string SiteKey { get { return siteKey; } }
 

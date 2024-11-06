@@ -170,6 +170,7 @@ public class ApiRequest
             var response = new HttpResponseMessage();
             using var httpClient = CreateClient(request, cookies);
 
+            var properties = typeof(TReq).GetProperties();
             switch (request.HeaderType)
             {
                 case HeaderType.json:
@@ -177,10 +178,47 @@ public class ApiRequest
                     response = await httpClient.PutAsync(request.Url, content);
                     return await ManageResponse<TRes>(response, cookies);
 
-                case HeaderType.formdata:
                 case HeaderType.xwwwunlercoded:
-                    //TODO
-                    break;
+                    var bodyProperties = new List<KeyValuePair<string, string>>();
+
+                    foreach (var property in properties)
+                    {
+                        var attr = property.GetCustomAttributes(true).FirstOrDefault(model => model.GetType().Name == "RequestAttribute");
+                        var columnAttr = attr == null ? new RequestAttribute(property.Name) : attr as RequestAttribute;
+                        if (property.PropertyType == typeof(string) || property.PropertyType == typeof(int))
+                        {
+                            if (property.GetValue(request.Data) != null)
+                            {
+                                bodyProperties.Add(new KeyValuePair<string, string>(columnAttr.Name, property.GetValue(request.Data).ToString()));
+                            }
+                        }
+
+                        if (property.PropertyType == typeof(List<int>))
+                        {
+                            var list = property.GetValue(request.Data) as List<int>;
+                            foreach (var dir in list)
+                            {
+                                bodyProperties.Add(new KeyValuePair<string, string>(columnAttr.Name, dir.ToString()));
+                            }
+                        }
+                    }
+
+                    bodyProperties.AddRange(request.AdditionalParams);
+
+                    response = await httpClient.PostAsync(request.Url, new FormUrlEncodedContent(bodyProperties));
+                    return await ManageResponse<TRes>(response, cookies);
+
+                case HeaderType.formdata:
+                    var formContent = new MultipartFormDataContent();
+                    foreach (var property in properties)
+                    {
+                        var attr = property.GetCustomAttributes(true).FirstOrDefault(model => model.GetType().Name == "RequestAttribute");
+                        var columnAttr = attr == null ? new RequestAttribute(property.Name) : attr as RequestAttribute;
+                        formContent.Add(new StringContent(property.GetValue(request.Data, null).ToString()), columnAttr.Name);
+                    }
+
+                    response = await httpClient.PostAsync(request.Url, formContent);
+                    return await ManageResponse<TRes>(response, cookies);
             }
 
             response = await httpClient.PutAsJsonAsync(request.Url, request.Data);
