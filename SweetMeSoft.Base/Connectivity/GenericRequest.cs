@@ -1,30 +1,29 @@
-﻿namespace SweetMeSoft.Base.Connectivity
+﻿namespace SweetMeSoft.Base.Connectivity;
+
+public class GenericRequest<T>
 {
-    public class GenericRequest<T>
-    {
-        public string Url { get; set; }
+    public string Url { get; set; }
 
-        public Authentication Authentication { get; set; }
+    public Authentication Authentication { get; set; }
 
-        public HeaderType HeaderType { get; set; } = HeaderType.json;
+    public HeaderType HeaderType { get; set; } = HeaderType.json;
 
-        public T Data { get; set; }
+    public T Data { get; set; }
 
-        public Dictionary<string, string> Headers { get; set; } = [];
+    public Dictionary<string, string> Headers { get; set; } = [];
 
-        public Dictionary<string, string> AdditionalParams { get; set; } = [];
+    public Dictionary<string, string> AdditionalParams { get; set; } = [];
 
-        public bool BypassSSL { get; set; } = false;
+    public bool BypassSSL { get; set; } = false;
 
-        public bool AllowAutoRedirect { get; set; } = true;
-    }
+    public bool AllowAutoRedirect { get; set; } = true;
+}
 
-    public enum HeaderType
-    {
-        json,
+public enum HeaderType
+{
+    json,
 
-        xwwwunlercoded,
+    xwwwunlercoded,
 
-        formdata
-    }
+    formdata
 }

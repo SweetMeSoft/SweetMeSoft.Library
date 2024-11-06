@@ -3,8 +3,8 @@
 public class EmailOptions
 {
     public static string Sender { get; set; }
-    public static string Password { get; set; }
 
+    public static string Password { get; set; }
 
     public EmailOptions(string destinatary)
     {

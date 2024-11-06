@@ -1,10 +1,10 @@
-﻿namespace SweetMeSoft.Base.Attributes
-{
-    [AttributeUsage(AttributeTargets.Property)]
-    public class TemplateAttribute : Attribute
-    {
-        public string Explanation { get; set; }
+﻿namespace SweetMeSoft.Base.Attributes;
 
-        public TemplateAttribute() { }
-    }
+[AttributeUsage(AttributeTargets.Property)]
+public class TemplateAttribute : Attribute
+{
+    public string Explanation { get; set; }
+
+    public TemplateAttribute()
+    { }
 }

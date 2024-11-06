@@ -15,7 +15,9 @@ public class EmailAttachment
     }
 
     public StreamFile Stream { get; }
+
     public string Cdi { get; }
+
     public bool IsLinked
     {
         get => !string.IsNullOrEmpty(Cdi);

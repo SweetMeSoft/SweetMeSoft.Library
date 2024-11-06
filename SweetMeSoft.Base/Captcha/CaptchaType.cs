@@ -1,21 +1,34 @@
-﻿namespace SweetMeSoft.Base.Captcha
+﻿namespace SweetMeSoft.Base.Captcha;
+
+public enum CaptchaType
 {
-    public enum CaptchaType
-    {
-        Normal,
-        Text,
-        Click,
-        Rotate,
-        ReCaptchaV2,
-        ReCaptchaV2Callback,
-        ReCaptchaV2Invisible,
-        ReCaptchaV3,
-        ReCaptchaEnterprise,
-        KeyCaptcha,
-        GeeTest,
-        HCaptcha,
-        FunCaptcha,
-        CapyPuzzle,
-        TikTok
-    }
+    Normal,
+
+    Text,
+
+    Click,
+
+    Rotate,
+
+    ReCaptchaV2,
+
+    ReCaptchaV2Callback,
+
+    ReCaptchaV2Invisible,
+
+    ReCaptchaV3,
+
+    ReCaptchaEnterprise,
+
+    KeyCaptcha,
+
+    GeeTest,
+
+    HCaptcha,
+
+    FunCaptcha,
+
+    CapyPuzzle,
+
+    TikTok
 }

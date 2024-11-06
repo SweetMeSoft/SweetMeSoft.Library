@@ -1,8 +1,8 @@
-﻿namespace SweetMeSoft.Base.Files
+﻿namespace SweetMeSoft.Base.Files;
+
+public enum ExcelColumnType
 {
-    public enum ExcelColumnType
-    {
-        String,
-        Currency
-    }
+    String,
+
+    Currency
 }
