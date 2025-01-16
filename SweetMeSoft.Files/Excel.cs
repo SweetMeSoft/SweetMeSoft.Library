@@ -208,10 +208,10 @@ public class Excel
 
     public static StreamFile Generate<T>(IEnumerable<T> list, string sheetName, string fileName = "")
     {
-        return Generate(new List<ExcelSheet>()
-        {
+        return Generate(
+        [
             new ExcelSheet(sheetName, list)
-        }, fileName);
+        ], fileName);
     }
 
     public static StreamFile Generate(List<ExcelSheet> sheets, string fileName = "")
@@ -318,23 +318,30 @@ public class Excel
                     sheet.SetValue(rowIndex, columnIndex, property.GetValue(obj, null));
                     if (property.PropertyType == typeof(DateTime) || property.PropertyType == typeof(DateTime?))
                     {
-                        sheet.Cells[rowIndex, columnIndex].Style.Numberformat.Format = DateTimeFormatInfo.CurrentInfo.ShortDatePattern;
+                        sheet.Cells[rowIndex, columnIndex].Style.Numberformat.Format = "yyyy-MM-dd HH:mm:ss";//DateTimeFormatInfo.CurrentInfo.ShortDatePattern;
                     }
                     else
                     {
-                        var attr = property.GetCustomAttributes(true).FirstOrDefault(model => model.GetType().Name == "ColumnExcelAttribute");
-                        var columnAttr = attr == null ? new ColumnExcelAttribute(property.Name) : attr as ColumnExcelAttribute;
-                        if (attr != null && columnAttr.Type == ExcelColumnType.Currency)
+                        if (property.PropertyType == typeof(TimeSpan) || property.PropertyType == typeof(TimeSpan?))
                         {
-                            sheet.Cells[rowIndex, columnIndex].Style.Numberformat.Format = "$ #,##0.00";
+                            sheet.Cells[rowIndex, columnIndex].Style.Numberformat.Format = "HH:mm:ss";
                         }
-
-                        if (property.Name.Contains("FECHA")
-                            || property.Name.Equals("CLIENTE_CODIGO_TRIBUTO")
-                            || property.Name.Equals("LINEA_IMPUESTO1_TIPO")
-                            || property.Name.Equals("LINEA_IMPUESTO1_PORCENTAJE"))
+                        else
                         {
-                            sheet.Cells[rowIndex, columnIndex].Style.QuotePrefix = true;
+                            var attr = property.GetCustomAttributes(true).FirstOrDefault(model => model.GetType().Name == "ColumnExcelAttribute");
+                            var columnAttr = attr == null ? new ColumnExcelAttribute(property.Name) : attr as ColumnExcelAttribute;
+                            if (attr != null && columnAttr.Type == ExcelColumnType.Currency)
+                            {
+                                sheet.Cells[rowIndex, columnIndex].Style.Numberformat.Format = "$ #,##0.00";
+                            }
+
+                            if (property.Name.Contains("FECHA")
+                                || property.Name.Equals("CLIENTE_CODIGO_TRIBUTO")
+                                || property.Name.Equals("LINEA_IMPUESTO1_TIPO")
+                                || property.Name.Equals("LINEA_IMPUESTO1_PORCENTAJE"))
+                            {
+                                sheet.Cells[rowIndex, columnIndex].Style.QuotePrefix = true;
+                            }
                         }
                     }
                 }

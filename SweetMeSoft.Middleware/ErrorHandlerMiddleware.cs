@@ -1,15 +1,13 @@
-﻿namespace SweetMeSoft.Middlewares;
-
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-using System;
 using System.Globalization;
 using System.Net;
-using System.Threading.Tasks;
+
+namespace SweetMeSoft.Middleware;
 
 public class ErrorHandlerMiddleware
 {
@@ -33,9 +31,9 @@ public class ErrorHandlerMiddleware
 
             response.StatusCode = exception switch
             {
-                AppException e => (int)HttpStatusCode.BadRequest,// custom application error
-                KeyNotFoundException e => (int)HttpStatusCode.NotFound,// not found error
-                _ => (int)HttpStatusCode.InternalServerError,// unhandled error
+                AppException e => (int)HttpStatusCode.BadRequest,
+                KeyNotFoundException e => (int)HttpStatusCode.NotFound,
+                _ => (int)HttpStatusCode.InternalServerError
             };
             var result = JsonConvert.SerializeObject(new ProblemDetails
             {
@@ -58,16 +56,20 @@ public class ErrorHandlerMiddleware
     }
 }
 
-// custom exception class for throwing application specific exceptions (e.g. for validation) 
+// custom exception class for throwing application specific exceptions (e.g. for validation)
 // that can be caught and handled within the application
 public class AppException : Exception
 {
-    public AppException() : base() { }
+    public AppException() : base()
+    {
+    }
 
-    public AppException(string message) : base(message) { }
+    public AppException(string message) : base(message)
+    {
+    }
 
     public AppException(string message, params object[] args)
-        : base(String.Format(CultureInfo.CurrentCulture, message, args))
+        : base(string.Format(CultureInfo.CurrentCulture, message, args))
     {
     }
 }

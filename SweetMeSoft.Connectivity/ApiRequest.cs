@@ -27,9 +27,9 @@ public class ApiRequest
         return await response.HttpResponse.Content.ReadAsStringAsync();
     }
 
-    public async Task<GenericResponse<StreamFile>> DownloadFile(string url, string documentName = "")
+    public Task<GenericResponse<StreamFile>> DownloadFile(string url, string documentName = "")
     {
-        return await DownloadFile(new GenericRequest<StreamFile>()
+        return DownloadFile(new GenericRequest<StreamFile>()
         {
             Url = url
         }, documentName);
@@ -125,9 +125,9 @@ public class ApiRequest
         }
     }
 
-    public async Task<GenericResponse<TRes>> Get<TRes>(string url)
+    public Task<GenericResponse<TRes>> Get<TRes>(string url)
     {
-        return await Instance.Get<string, TRes>(new GenericRequest<string>
+        return Instance.Get<string, TRes>(new GenericRequest<string>
         {
             Url = url
         });
