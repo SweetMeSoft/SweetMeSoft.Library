@@ -1,6 +1,6 @@
 ﻿namespace SweetMeSoft.Base.Connectivity;
 
-public class GenericRequest<T>
+public class GenericReq<T>
 {
     public string Url { get; set; }
 

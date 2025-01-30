@@ -12,36 +12,47 @@ using System.Web;
 
 namespace SweetMeSoft.Connectivity;
 
-public class ApiRequest
+public class ApiReq
 {
-    private static ApiRequest instance;
-
-    public static ApiRequest Instance => instance ??= new ApiRequest();
-
     public static async Task<string> GetPageHtml(string url)
     {
-        var response = await Instance.Get<string, string>(new GenericRequest<string>
+        var response = await Instance.Get<string, string>(new GenericReq<string>
         {
             Url = url
         });
         return await response.HttpResponse.Content.ReadAsStringAsync();
     }
 
-    public Task<GenericResponse<StreamFile>> DownloadFile(string url, string documentName = "")
+    public async Task<GenericRes<TRes>> Delete<TReq, TRes>(GenericReq<TReq> request)
     {
-        return DownloadFile(new GenericRequest<StreamFile>()
+        try
+        {
+            var cookies = new CookieContainer();
+            using var httpClient = CreateClient(request, cookies);
+            var response = await httpClient.DeleteAsync(request.Url);
+            return await ManageResponse<TRes>(response, cookies);
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
+    public Task<GenericRes<StreamFile>> DownloadFile(string url, string documentName = "")
+    {
+        return DownloadFile(new GenericReq<StreamFile>()
         {
             Url = url
         }, documentName);
     }
 
-    public async Task<GenericResponse<StreamFile>> DownloadFile<TReq>(GenericRequest<TReq> request, string documentName = "")
+    public async Task<GenericRes<StreamFile>> DownloadFile<TReq>(GenericReq<TReq> request, string documentName = "")
     {
         var cookies = new CookieContainer();
         using var httpClient = CreateClient(request, cookies);
         var response = await httpClient.GetAsync(request.Url);
         var ct = response.Content.Headers.ContentType?.MediaType;
-        return new GenericResponse<StreamFile>()
+        return new GenericRes<StreamFile>()
         {
             HttpResponse = response,
             Cookies = cookies.GetCookieHeader(new Uri(request.Url)),
@@ -55,7 +66,44 @@ public class ApiRequest
         };
     }
 
-    public async Task<GenericResponse<TRes>> Post<TReq, TRes>(GenericRequest<TReq> request)
+    public Task<GenericRes<TRes>> Get<TRes>(string url)
+    {
+        return Instance.Get<string, TRes>(new GenericReq<string>
+        {
+            Url = url
+        });
+    }
+
+    public async Task<GenericRes<TRes>> Get<TReq, TRes>(GenericReq<TReq> request) where TReq : class
+    {
+        try
+        {
+            var cookies = new CookieContainer();
+            using var httpClient = CreateClient(request, cookies);
+            var parameters = "";
+            if (request.Data != null)
+            {
+                var properties = request.Data.GetType().GetProperties()
+                    .Select(model => new
+                    {
+                        Key = model.Name,
+                        Value = model.GetValue(request.Data)?.ToString()
+                    })
+                    .Where(p => !string.IsNullOrEmpty(p.Value))
+                    .Select(p => $"{HttpUtility.UrlEncode(p.Key)}={HttpUtility.UrlEncode(p.Value)}");
+                parameters = "?" + string.Join("&", properties);
+            }
+
+            var response = await httpClient.GetAsync(request.Url + parameters);
+            return await ManageResponse<TRes>(response, cookies);
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
+    public async Task<GenericRes<TRes>> Post<TReq, TRes>(GenericReq<TReq> request)
     {
         try
         {
@@ -125,44 +173,7 @@ public class ApiRequest
         }
     }
 
-    public Task<GenericResponse<TRes>> Get<TRes>(string url)
-    {
-        return Instance.Get<string, TRes>(new GenericRequest<string>
-        {
-            Url = url
-        });
-    }
-
-    public async Task<GenericResponse<TRes>> Get<TReq, TRes>(GenericRequest<TReq> request) where TReq : class
-    {
-        try
-        {
-            var cookies = new CookieContainer();
-            using var httpClient = CreateClient(request, cookies);
-            var parameters = "";
-            if (request.Data != null)
-            {
-                var properties = request.Data.GetType().GetProperties()
-                    .Select(model => new
-                    {
-                        Key = model.Name,
-                        Value = model.GetValue(request.Data)?.ToString()
-                    })
-                    .Where(p => !string.IsNullOrEmpty(p.Value))
-                    .Select(p => $"{HttpUtility.UrlEncode(p.Key)}={HttpUtility.UrlEncode(p.Value)}");
-                parameters = "?" + string.Join("&", properties);
-            }
-
-            var response = await httpClient.GetAsync(request.Url + parameters);
-            return await ManageResponse<TRes>(response, cookies);
-        }
-        catch
-        {
-            throw;
-        }
-    }
-
-    public async Task<GenericResponse<TRes>> Put<TReq, TRes>(GenericRequest<TReq> request)
+    public async Task<GenericRes<TRes>> Put<TReq, TRes>(GenericReq<TReq> request)
     {
         try
         {
@@ -230,22 +241,7 @@ public class ApiRequest
         }
     }
 
-    public async Task<GenericResponse<TRes>> DeleteRequest<TReq, TRes>(GenericRequest<TReq> request)
-    {
-        try
-        {
-            var cookies = new CookieContainer();
-            using var httpClient = CreateClient(request, cookies);
-            var response = await httpClient.DeleteAsync(request.Url);
-            return await ManageResponse<TRes>(response, cookies);
-        }
-        catch
-        {
-            throw;
-        }
-    }
-
-    private HttpClient CreateClient<T>(GenericRequest<T> request, CookieContainer cookies)
+    private HttpClient CreateClient<T>(GenericReq<T> request, CookieContainer cookies)
     {
         var handler = new HttpClientHandler
         {
@@ -306,7 +302,7 @@ public class ApiRequest
         return client;
     }
 
-    private async Task<GenericResponse<TRes>> ManageResponse<TRes>(HttpResponseMessage response, CookieContainer cookies)
+    private async Task<GenericRes<TRes>> ManageResponse<TRes>(HttpResponseMessage response, CookieContainer cookies)
     {
         var error = new ErrorDetails();
         if (!response.IsSuccessStatusCode)
@@ -330,7 +326,7 @@ public class ApiRequest
 
         if (typeof(TRes) == typeof(string))
         {
-            return new GenericResponse<TRes>()
+            return new GenericRes<TRes>()
             {
                 HttpResponse = response,
                 Cookies = cookies.GetCookieHeader(response.RequestMessage.RequestUri),
@@ -341,7 +337,7 @@ public class ApiRequest
 
         if (typeof(TRes) == typeof(int))
         {
-            return new GenericResponse<TRes>()
+            return new GenericRes<TRes>()
             {
                 HttpResponse = response,
                 Cookies = cookies.GetCookieHeader(response.RequestMessage.RequestUri),
@@ -351,7 +347,7 @@ public class ApiRequest
         }
 
         var st = await response.Content.ReadAsStringAsync();
-        return new GenericResponse<TRes>()
+        return new GenericRes<TRes>()
         {
             HttpResponse = response,
             Cookies = cookies.GetCookieHeader(response.RequestMessage.RequestUri),
@@ -359,4 +355,8 @@ public class ApiRequest
             Error = response.IsSuccessStatusCode ? null : error
         };
     }
+
+    public static ApiReq Instance => instance ??= new ApiReq();
+
+    private static ApiReq instance;
 }

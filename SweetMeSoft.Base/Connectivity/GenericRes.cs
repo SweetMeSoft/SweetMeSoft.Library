@@ -1,6 +1,6 @@
 ﻿namespace SweetMeSoft.Base.Connectivity;
 
-public class GenericResponse<T>
+public class GenericRes<T>
 {
     public HttpResponseMessage HttpResponse { get; set; }
 

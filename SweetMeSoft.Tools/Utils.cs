@@ -1,4 +1,6 @@
-﻿using SweetMeSoft.Base;
+﻿using Newtonsoft.Json;
+
+using SweetMeSoft.Base;
 using SweetMeSoft.Base.Tools;
 
 using System.Text.RegularExpressions;
@@ -70,7 +72,7 @@ public class Utils
                 }
             }
 
-            var match = (intersections / pairs1.Count);
+            var match = intersections / pairs1.Count;
             if (match > threshold)
             {
                 result.Add(new StringMatch(product, match));
@@ -129,5 +131,18 @@ public class Utils
         }
 
         return pairs;
+    }
+
+    public static string MinifyJson(string json)
+    {
+        try
+        {
+            var obj = JsonConvert.DeserializeObject(json);
+            return JsonConvert.SerializeObject(obj);
+        }
+        catch (Exception)
+        {
+            return json;
+        }
     }
 }
