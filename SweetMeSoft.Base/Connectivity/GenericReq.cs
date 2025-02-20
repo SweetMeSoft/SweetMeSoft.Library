@@ -17,6 +17,8 @@ public class GenericReq<T>
     public bool BypassSSL { get; set; } = false;
 
     public bool AllowAutoRedirect { get; set; } = true;
+
+    public int Timeout { get; set; } = 600;
 }
 
 public enum HeaderType

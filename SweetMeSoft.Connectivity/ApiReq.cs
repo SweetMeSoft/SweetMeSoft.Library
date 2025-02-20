@@ -262,7 +262,7 @@ public class ApiReq
 
         var client = new HttpClient(handler);
         client.DefaultRequestHeaders.Clear();
-        client.Timeout = TimeSpan.FromSeconds(600);
+        client.Timeout = TimeSpan.FromSeconds(request.Timeout);
         if (request.Authentication != null)
         {
             switch (request.Authentication.Type)
