@@ -1,5 +1,7 @@
 ﻿using Controls.UserDialogs.Maui;
 
+using SweetMeSoft.Mobile.Base.Popup;
+
 namespace SweetMeSoft.Mobile.Base.Tools;
 
 public class PhotoHandler
@@ -10,7 +12,7 @@ public class PhotoHandler
         {
             try
             {
-                UserDialogs.Instance.ShowLoading("Tomando foto...");
+                PopupsService.Instance.ShowLoading("Tomando foto...");
                 var result = new PhotoResult();
                 FileResult photo = await MediaPicker.Default.CapturePhotoAsync();
                 await Task.Delay(1000); //Delay is needed to wait back to the previous page
@@ -28,16 +30,16 @@ public class PhotoHandler
                         await stream.CopyToAsync(newStream);
                         result.Path = fullPath;
                     }
-                    UserDialogs.Instance.HideHud();
+                    PopupsService.Instance.HideLoading();
                     return result;
                 }
 
-                UserDialogs.Instance.HideHud();
+                PopupsService.Instance.HideLoading();
                 return null;
             }
             catch (Exception e)
             {
-                UserDialogs.Instance.HideHud();
+                PopupsService.Instance.HideLoading();
                 if (e.GetType() == typeof(PermissionException))
                 {
                     await UserDialogs.Instance.AlertAsync("No se tienen los permisos necesarios para tomar fotos. Habilita los permisos en los ajustes de la app para poder continuar.", "Error", "Aceptar");

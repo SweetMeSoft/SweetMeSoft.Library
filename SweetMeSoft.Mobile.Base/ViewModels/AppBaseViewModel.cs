@@ -3,6 +3,7 @@
 using SweetMeSoft.Base;
 using SweetMeSoft.Base.Connectivity;
 using SweetMeSoft.Connectivity;
+using SweetMeSoft.Mobile.Base.Popup;
 
 using System.Globalization;
 using System.Net;
@@ -13,10 +14,6 @@ namespace SweetMeSoft.Mobile.Base.ViewModels;
 
 public class AppBaseViewModel : NavigationViewModel
 {
-    public AppBaseViewModel()
-    {
-    }
-
     public async Task<PermissionStatus> CheckAndRequestPermissionAsync<TPermission>() where TPermission : BasePermission, new()
     {
         TPermission permission = new();
@@ -51,11 +48,11 @@ public class AppBaseViewModel : NavigationViewModel
             if (showLoading)
             {
                 loadingCounter++;
-                UserDialogs.Instance.ShowLoading("Espera por favor...");
+                PopupsService.Instance.ShowLoading("Espera por favor...");
             }
 
             var token = useToken ? Preferences.Get(Constants.KEY_JWT_TOKEN, string.Empty) : string.Empty;
-            var response = await ApiRequest.Instance.Get<TReq, TRes>(new GenericRequest<TReq>
+            var response = await ApiReq.Instance.Get<TReq, TRes>(new GenericReq<TReq>
             {
                 Url = url.StartsWith("http") ? url : Constants.API_URL + url,
                 Data = data,
@@ -77,7 +74,7 @@ public class AppBaseViewModel : NavigationViewModel
         {
             if (showLoading && --loadingCounter == 0)
             {
-                UserDialogs.Instance.HideHud();
+                PopupsService.Instance.HideLoading();
             }
 
             await UserDialogs.Instance.AlertAsync(ex.Message, "Service Error", "Ok");
@@ -132,16 +129,16 @@ public class AppBaseViewModel : NavigationViewModel
 
             if (status == PermissionStatus.Granted)
             {
-                UserDialogs.Instance.ShowLoading("Obteniendo ubicación actual...");
+                PopupsService.Instance.ShowLoading("Obteniendo ubicación actual...");
                 var request = new GeolocationRequest(GeolocationAccuracy.Best, TimeSpan.FromSeconds(10));
                 var location = await Geolocation.GetLastKnownLocationAsync() ?? await Geolocation.GetLocationAsync(request, new CancellationTokenSource().Token);
-                UserDialogs.Instance.HideHud();
+                PopupsService.Instance.HideLoading();
                 return location;
             }
         }
         catch (Exception)
         {
-            UserDialogs.Instance.HideHud();
+            PopupsService.Instance.HideLoading();
             //await UserDialogs.Instance.AlertAsync(ex.Message, "Service Error", "Ok");
         }
 
@@ -177,11 +174,11 @@ public class AppBaseViewModel : NavigationViewModel
             if (showLoading)
             {
                 loadingCounter++;
-                UserDialogs.Instance.ShowLoading("Espera por favor...");
+                PopupsService.Instance.ShowLoading("Espera por favor...");
             }
 
             var token = useToken ? Preferences.Get(Constants.KEY_JWT_TOKEN, string.Empty) : string.Empty;
-            var response = await ApiRequest.Instance.Post<TReq, TRes>(new GenericRequest<TReq>
+            var response = await ApiReq.Instance.Post<TReq, TRes>(new GenericReq<TReq>
             {
                 Url = url.StartsWith("http") ? url : Constants.API_URL + url,
                 Data = data,
@@ -203,7 +200,7 @@ public class AppBaseViewModel : NavigationViewModel
         {
             if (showLoading && --loadingCounter == 0)
             {
-                UserDialogs.Instance.HideHud();
+                PopupsService.Instance.HideLoading();
             }
 
             await UserDialogs.Instance.AlertAsync(ex.Message, "Service Error", "Ok");
@@ -211,13 +208,13 @@ public class AppBaseViewModel : NavigationViewModel
         }
     }
 
-    private async Task<TRes> ManageResponse<TRes>(GenericResponse<TRes> response, string path, bool showLoading)
+    private async Task<TRes> ManageResponse<TRes>(GenericRes<TRes> response, string path, bool showLoading)
     {
         try
         {
             if (showLoading && --loadingCounter == 0)
             {
-                UserDialogs.Instance.HideHud();
+                PopupsService.Instance.HideLoading();
             }
 
             if (response.HttpResponse.IsSuccessStatusCode)
