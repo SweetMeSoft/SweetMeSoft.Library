@@ -8,7 +8,7 @@
   <Frame CornerRadius="10"
          Padding="25"
          BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}"
-         BorderColor="{AppThemeBinding Light={StaticResource LightGray}, Dark={StaticResource Gray}}"
+         BorderColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray500}}"
          HasShadow="True"
          VerticalOptions="Center"
          HorizontalOptions="Center">
