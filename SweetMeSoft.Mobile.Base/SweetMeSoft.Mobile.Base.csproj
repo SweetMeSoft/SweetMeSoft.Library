@@ -20,7 +20,7 @@
 		<Title>SweetMeSoft Mobile MAUI Base</Title>
 		<Copyright>SweetMeSoft</Copyright>
 		<PackageProjectUrl>https://www.sweetmesoft.com</PackageProjectUrl>
-		<Version>1.11.127</Version>
+		<Version>1.11.128</Version>
 		<Description>SweetMeSoft Mobile MAUI Base Library is a compilation of different utils for MAUI apps</Description>
     <Icon>logo_sq_512.png</Icon>
     <PackageIcon>logo_sq_512.png</PackageIcon>

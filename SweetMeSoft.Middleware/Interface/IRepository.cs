@@ -22,6 +22,8 @@ public interface IRepository
 
     Task<IEnumerable<T>> GetByFieldAsc<T, TKey>(Expression<Func<T, bool>> where, Expression<Func<T, TKey>> orderBy, int take, params string[] routes) where T : class, IDBEntity, new();
 
+    Task<IEnumerable<T>> GetByFieldDistinct<T, TKey>(Expression<Func<T, bool>> where, Expression<Func<T, TKey>> distinctBy, params string[] routes) where T : class, IDBEntity, new();
+
     Task<IEnumerable<T>> GetByFieldDesc<T, TKey>(Expression<Func<T, bool>> where, Expression<Func<T, TKey>> orderBy, int take, params string[] routes) where T : class, IDBEntity, new();
 
     Task<T> GetById<T, TKey>(TKey key, params string[] routes) where T : class, IDBEntity, new();
