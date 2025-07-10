@@ -87,4 +87,22 @@ public class Csv
         fileName = string.IsNullOrEmpty(fileName) ? Guid.NewGuid().ToString("N") : fileName;
         return new StreamFile(fileName, copiedStream, Constants.ContentType.csv);
     }
+
+    public static async Task<StreamFile> Create<T, TMap>(IEnumerable<T> list, string fileName = "", string delimiter = ",", bool hasHeader = true) where TMap : ClassMap
+    {
+        var stream = new MemoryStream();
+        var config = new CsvConfiguration(CultureInfo.CurrentCulture) { Delimiter = delimiter, HasHeaderRecord = hasHeader };
+        using var writer = new StreamWriter(stream);
+        using var csv = new CsvWriter(writer, config);
+        csv.Context.RegisterClassMap<TMap>();
+        await csv.WriteRecordsAsync(list);
+        await writer.FlushAsync();
+        var copiedStream = new MemoryStream();
+        stream.Position = 0L;
+        await stream.CopyToAsync(copiedStream);
+        copiedStream.Position = 0L;
+
+        fileName = string.IsNullOrEmpty(fileName) ? Guid.NewGuid().ToString("N") : fileName;
+        return new StreamFile(fileName, copiedStream, Constants.ContentType.csv);
+    }
 }

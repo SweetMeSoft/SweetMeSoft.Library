@@ -12,12 +12,18 @@
     <Title>SweetMeSoft Connectivity</Title>
     <Description>SweetMeSoft Connectivity Library is a compilation of easy to use tools to connect with ThirdParties services and APIs</Description>
     <Copyright>SweetMeSoft</Copyright>
+    <PackageProjectUrl>https://github.com/SweetMeSoft/SweetMeSoft.Library</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/SweetMeSoft/SweetMeSoft.Library</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>http, api, connectivity, httpclient, web, request</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <Icon>logo_sq_512.png</Icon>
     <PackageIcon>logo_sq_512.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="logo_sq_512.png" Pack="true" PackagePath=""/>
+    <None Include="logo_sq_512.png" Pack="true" PackagePath="" />
+    <None Include="README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>

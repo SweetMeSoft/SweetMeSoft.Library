@@ -12,7 +12,19 @@
     <Title>SweetMeSoft Forms</Title>
     <Description>SweetMeSoft Forms Library is a compilation utils and things important int Xamarin Forms project</Description>
     <Copyright>SweetMeSoft</Copyright>
+    <PackageProjectUrl>https://github.com/SweetMeSoft/SweetMeSoft.Library</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/SweetMeSoft/SweetMeSoft.Library</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>xamarin, xamarin.forms, mvvm, viewmodel, basepage</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Icon>logo_sq_512.png</Icon>
+    <PackageIcon>logo_sq_512.png</PackageIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\SweetMeSoft.Base\logo_sq_512.png" Pack="true" PackagePath="" />
+    <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Acr.UserDialogs" Version="7.2.0.564" />

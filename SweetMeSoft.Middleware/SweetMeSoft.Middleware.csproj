@@ -12,12 +12,18 @@
     <Title>SweetMeSoft Middleware</Title>
     <Description>SweetMeSoft Middleware Library is a compilation of different middlewares for .Net core</Description>
     <Copyright>SweetMeSoft</Copyright>
+    <PackageProjectUrl>https://github.com/SweetMeSoft/SweetMeSoft.Library</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/SweetMeSoft/SweetMeSoft.Library</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>aspnetcore, middleware, errorhandling, requestlogging, servicefactory</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <Icon>logo_sq_512.png</Icon>
     <PackageIcon>logo_sq_512.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="logo_sq_512.png" Pack="true" PackagePath="" />
+    <None Include="README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>

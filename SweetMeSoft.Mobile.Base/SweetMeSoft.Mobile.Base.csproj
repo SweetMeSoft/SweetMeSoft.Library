@@ -19,7 +19,11 @@
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>SweetMeSoft Mobile MAUI Base</Title>
 		<Copyright>SweetMeSoft</Copyright>
-		<PackageProjectUrl>https://www.sweetmesoft.com</PackageProjectUrl>
+		<PackageProjectUrl>https://github.com/SweetMeSoft/SweetMeSoft.Library</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/SweetMeSoft/SweetMeSoft.Library</RepositoryUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageTags>maui, .net maui, viewmodel, mvvm, popups, dialogs</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
 		<Version>1.11.128</Version>
 		<Description>SweetMeSoft Mobile MAUI Base Library is a compilation of different utils for MAUI apps</Description>
     <Icon>logo_sq_512.png</Icon>
@@ -28,6 +32,7 @@
 
 	<ItemGroup>
 	  <None Include="logo_sq_512.png" Pack="true" PackagePath="" />
+    <None Include="README.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
 	<ItemGroup>

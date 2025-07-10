@@ -12,12 +12,18 @@
     <Title>SweetMeSoft Tools</Title>
     <Description>SweetMeSoft Tools Library is a compilation of basic tools to use</Description>
     <Copyright>SweetMeSoft</Copyright>
+    <PackageProjectUrl>https://github.com/SweetMeSoft/SweetMeSoft.Library</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/SweetMeSoft/SweetMeSoft.Library</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>tools, utilities, helpers, security, email, reflection, validation</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <Icon>logo_sq_512.png</Icon>
     <PackageIcon>logo_sq_512.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="logo_sq_512.png" Pack="true" PackagePath=""/>
+    <None Include="README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>

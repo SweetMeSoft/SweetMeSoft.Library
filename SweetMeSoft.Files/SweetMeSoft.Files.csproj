@@ -5,19 +5,25 @@
     <ImplicitUsings>true</ImplicitUsings>
     <LangVersion>latest</LangVersion>
     <PackageId>SweetMeSoft.Files</PackageId>
-    <Version>1.10.136</Version>
+    <Version>1.10.137</Version>
     <Authors>Erick Velasco</Authors>
     <Company>SweetMeSoft</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Title>SweetMeSoft Files</Title>
     <Description>SweetMeSoft Files Library is a compilation of ways to read and generate different types of files like Excel, CSV, TXT, ZIP and more</Description>
     <Copyright>SweetMeSoft</Copyright>
+    <PackageProjectUrl>https://github.com/SweetMeSoft/SweetMeSoft.Library</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/SweetMeSoft/SweetMeSoft.Library</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>files, excel, csv, txt, zip, html, xml, EPPlus, CsvHelper, NPOI, HtmlAgilityPack</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <Icon>logo_sq_512.png</Icon>
     <PackageIcon>logo_sq_512.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="logo_sq_512.png" Pack="true" PackagePath="" />
+    <None Include="README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>
