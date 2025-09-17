@@ -1,4 +1,4 @@
-﻿using NPOI.HSSF.UserModel;
+using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 
 using OfficeOpenXml;
@@ -204,6 +204,124 @@ public class Excel
         }
 
         return list;
+    }
+
+    public static List<List<T>> ReadAllSheets<T>(StreamFile file, int headerRow = 1) where T : new()
+    {
+        return ReadAllSheets<T>(file.Stream, headerRow);
+    }
+
+    public static List<List<T>> ReadAllSheets<T>(Stream file, int headerRow = 1) where T : new()
+    {
+        return ReadAllSheets<T>(new ExcelOptions(file, headerRow));
+    }
+
+    public static List<List<T>> ReadAllSheets<T>(ExcelOptions options) where T : new()
+    {
+        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+        var allSheets = new List<List<T>>();
+        using var excelFile = new ExcelPackage(options.Stream);
+        
+        foreach (var sheet in excelFile.Workbook.Worksheets)
+        {
+            var sheetList = new List<T>();
+            var headerFilled = false;
+            var header = new List<string>();
+            var start = sheet.Dimension.Start;
+            var end = sheet.Dimension.End;
+            var currentHeaderRow = options.HeaderRow < start.Row ? start.Row : options.HeaderRow;
+            
+            for (int rowIndex = currentHeaderRow; rowIndex <= end.Row; rowIndex++)
+            {
+                try
+                {
+                    if (!headerFilled)
+                    {
+                        for (int columnIndex = start.Column; columnIndex <= end.Column; columnIndex++)
+                        {
+                            header.Add(sheet.Cells[currentHeaderRow, columnIndex].Text);
+                        }
+
+                        rowIndex = currentHeaderRow;
+                        headerFilled = true;
+                    }
+                    else
+                    {
+                        var properties = typeof(T).GetProperties();
+                        var row = new T();
+                        foreach (var property in properties)
+                        {
+                            var attr = property.GetCustomAttributes(true).FirstOrDefault(model => model.GetType().Name == "ColumnExcelAttribute");
+                            var columnAttr = attr == null ? new ColumnExcelAttribute(property.Name) : attr as ColumnExcelAttribute;
+                            var headerCell = header.FindIndex(a => a == columnAttr.Name);
+                            if (headerCell != -1)
+                            {
+                                var cell = sheet.Cells[rowIndex, headerCell + start.Column];
+                                if (cell.Value != null)
+                                {
+                                    if (property.PropertyType == typeof(DateTime) || property.PropertyType == typeof(DateTime?))
+                                    {
+                                        if (cell.Value is double && cell.Value.ToString() != "NaN")
+                                        {
+                                            property.SetValue(row, DateTime.FromOADate(cell.GetValue<double>()));
+                                        }
+                                        else
+                                        {
+                                            property.SetValue(row, cell.Value is DateTime ? cell.GetValue<DateTime>() : DateTime.ParseExact(cell.GetValue<string>(), columnAttr.DateFormat, null));
+                                        }
+                                    }
+
+                                    if (property.PropertyType == typeof(decimal) || property.PropertyType == typeof(decimal?))
+                                    {
+                                        var value = cell.GetValue<string>();
+                                        if (value != null)
+                                        {
+                                            value = value.Replace(".", CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+                                            property.SetValue(row, Convert.ToDecimal(value));
+                                        }
+                                    }
+
+                                    if (property.PropertyType == typeof(int) || property.PropertyType == typeof(int?))
+                                    {
+                                        property.SetValue(row, cell.GetValue<int>());
+                                    }
+
+                                    if (property.PropertyType == typeof(bool) || property.PropertyType == typeof(bool?))
+                                    {
+                                        property.SetValue(row, cell.GetValue<bool>());
+                                    }
+
+                                    if (property.PropertyType == typeof(Guid) || property.PropertyType == typeof(Guid?))
+                                    {
+                                        property.SetValue(row, Guid.Parse(cell.GetValue<string>()));
+                                    }
+
+                                    if (cell.Value is ExcelErrorValue)
+                                    {
+                                        property.SetValue(row, cell.GetValue<ExcelErrorValue>().ToString());
+                                    }
+
+                                    if (property.PropertyType == typeof(string))
+                                    {
+                                        property.SetValue(row, cell.GetValue<string>());
+                                    }
+                                }
+                            }
+                        }
+
+                        sheetList.Add(row);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    options.ErrorCallback?.Invoke(rowIndex, ex);
+                }
+            }
+            
+            allSheets.Add(sheetList);
+        }
+
+        return allSheets;
     }
 
     public static StreamFile Generate<T>(IEnumerable<T> list, string sheetName, string fileName = "")
