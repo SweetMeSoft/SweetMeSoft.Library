@@ -1,15 +1,15 @@
 # SweetMeSoft.Tools
 
-Librería con un conjunto de herramientas y utilidades reutilizables para tareas comunes.
+Library with a set of reusable tools and utilities for common tasks.
 
-## Descripción
+## Description
 
-`SweetMeSoft.Tools` es una librería para .NET Standard 2.1 que agrupa una colección de clases de ayuda estáticas para realizar una variedad de tareas, desde conversiones de tipos y validaciones hasta envío de correos y cifrado de datos.
+`SweetMeSoft.Tools` is a library for .NET Standard 2.1 that groups a collection of static helper classes to perform a variety of tasks, from type conversions and validations to email sending and data encryption.
 
-## Componentes Principales
+## Main Components
 
 ### `Converters`
-Métodos para conversiones de tipos de datos, manejando la cultura local para separadores decimales.
+Methods for data type conversions, handling local culture for decimal separators.
 -   `StringToDouble(string)`
 -   `StringToFloat(string)`
 -   `StringToDecimal(string)`
@@ -19,65 +19,65 @@ Métodos para conversiones de tipos de datos, manejando la cultura local para se
 -   `StringToBool(string)`
 
 ### `Email`
-Una clase para enviar correos electrónicos a través de SMTP.
--   `Send(EmailOptions)`: Envía un correo electrónico configurado a través de un objeto `EmailOptions`.
-    -   Soporta hosts preconfigurados como Gmail, Outlook y Webmail.
-    -   Permite adjuntos normales e incrustados (linked).
-    -   Requiere que `EmailOptions.Sender` y `EmailOptions.Password` se establezcan estáticamente antes de su uso.
+A class for sending emails via SMTP.
+-   `Send(EmailOptions)`: Sends an email configured through an `EmailOptions` object.
+    -   Supports preconfigured hosts like Gmail, Outlook and Webmail.
+    -   Allows normal and embedded (linked) attachments.
+    -   Requires `EmailOptions.Sender` and `EmailOptions.Password` to be set statically before use.
 
 ### `Reflections`
-Utilidades que usan reflexión.
--   `CleanVirtualProperties<T>(T entity)`: Elimina referencias circulares en objetos (comúnmente entidades de base de datos) serializando y deserializando el objeto con `ReferenceLoopHandling.Ignore`. Muy útil para preparar datos para ser enviados a través de una API.
+Utilities that use reflection.
+-   `CleanVirtualProperties<T>(T entity)`: Removes circular references in objects (commonly database entities) by serializing and deserializing the object with `ReferenceLoopHandling.Ignore`. Very useful for preparing data to be sent through an API.
 
 ### `Security`
-Métodos para hashing de contraseñas y cifrado reversible.
--   `HashPasswordIrreversible(string)`: Crea un hash de una contraseña usando PBKDF2 con un salt.
--   `VerifyHashedPasswordIrreversible(string, string)`: Compara una contraseña en texto plano con su hash.
--   `CipherPasswordReversible(string, key, iv)`: Cifra un texto usando AES.
--   `DecipherPassword(string, key, iv)`: Descifra un texto cifrado con AES.
+Methods for password hashing and reversible encryption.
+-   `HashPasswordIrreversible(string)`: Creates a hash of a password using PBKDF2 with a salt.
+-   `VerifyHashedPasswordIrreversible(string, string)`: Compares a plain text password with its hash.
+-   `CipherPasswordReversible(string, key, iv)`: Encrypts text using AES.
+-   `DecipherPassword(string, key, iv)`: Decrypts encrypted text with AES.
 
 ### `Utils`
-Un conjunto de utilidades varias.
--   `GetException(Exception)`: Obtiene el mensaje de la excepción más interna.
--   `GetRandomNumber(int)`: Genera una cadena de N dígitos aleatorios.
--   `WriteToAPath(StreamFile, path)`: Guarda un `StreamFile` en una ruta del disco.
--   `StringMatchCompare(list, chain, threshold)`: Realiza una comparación de cadenas "fuzzy" para encontrar similitudes.
--   `MinifyJson(string)`: Elimina los espacios en blanco de un string JSON.
+A set of miscellaneous utilities.
+-   `GetException(Exception)`: Gets the innermost exception message.
+-   `GetRandomNumber(int)`: Generates a string of N random digits.
+-   `WriteToAPath(StreamFile, path)`: Saves a `StreamFile` to a disk path.
+-   `StringMatchCompare(list, chain, threshold)`: Performs a "fuzzy" string comparison to find similarities.
+-   `MinifyJson(string)`: Removes whitespace from a JSON string.
 
 ### `Validators`
-Métodos de validación comunes.
--   `IsValidEmail(string)`: Verifica si un string tiene un formato de correo electrónico válido.
--   `IsValidPassword(string)`: Verifica si una contraseña cumple con requisitos de complejidad (mayúsculas, minúsculas, números, símbolos y longitud mínima).
+Common validation methods.
+-   `IsValidEmail(string)`: Verifies if a string has a valid email format.
+-   `IsValidPassword(string)`: Verifies if a password meets complexity requirements (uppercase, lowercase, numbers, symbols and minimum length).
 
-## Dependencias
+## Dependencies
 
 -   [Microsoft.CSharp](https://www.nuget.org/packages/Microsoft.CSharp)
 -   [Newtonsoft.Json](https://www.nuget.org/packages/Newtonsoft.Json/)
 -   [SweetMeSoft.Base](https://www.nuget.org/packages/SweetMeSoft.Base/)
 
-## Instalación
+## Installation
 
 ```bash
 dotnet add package SweetMeSoft.Tools
 ```
 
-## Ejemplo de Uso
+## Usage Example
 
 ```csharp
 using SweetMeSoft.Tools;
 
-// --- Validación ---
+// --- Validation ---
 bool isValid = Validators.IsValidEmail("test@example.com");
 
-// --- Seguridad ---
+// --- Security ---
 string password = "MySecurePassword123!";
 string hashedPassword = Security.HashPasswordIrreversible(password);
 bool isPasswordCorrect = Security.VerifyHashedPasswordIrreversible(hashedPassword, password);
 
-// --- Conversores ---
-int number = Converters.StringToInt("123.45"); // Resulta en 123
+// --- Converters ---
+int number = Converters.StringToInt("123.45"); // Results in 123
 ```
 
-## Licencia
+## License
 
-Este proyecto está bajo la licencia MIT. 
+This project is under the MIT license.

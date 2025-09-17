@@ -1,127 +1,127 @@
 # SweetMeSoft.GCP
 
-Librería con herramientas para interactuar con servicios de Google Cloud Platform (GCP).
+Library with tools to interact with Google Cloud Platform (GCP) services.
 
-## Descripción
+## Description
 
-`SweetMeSoft.GCP` es una librería para .NET Standard 2.1 que simplifica la interacción con los servicios de Google Cloud, específicamente con **BigQuery** y **Cloud Storage**. Proporciona dos clases principales, `BigQueryRepo` y `GCPStorage`, que actúan como repositorios para facilitar las operaciones comunes.
+`SweetMeSoft.GCP` is a library for .NET Standard 2.1 that simplifies interaction with Google Cloud services, specifically with **BigQuery** and **Cloud Storage**. It provides two main classes, `BigQueryRepo` and `GCPStorage`, which act as repositories to facilitate common operations.
 
-## Componentes Principales
+## Main Components
 
 ### BigQueryRepo
 
-`BigQueryRepo` es un repositorio genérico para realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) en Google BigQuery.
+`BigQueryRepo` is a generic repository for performing CRUD (Create, Read, Update, Delete) operations on Google BigQuery.
 
-#### Inicialización
+#### Initialization
 
-Para usar `BigQueryRepo`, primero debes configurar las credenciales y el ID del proyecto. Puedes hacerlo de tres maneras:
+To use `BigQueryRepo`, you must first configure the credentials and project ID. You can do this in three ways:
 
-1.  **Por archivo de credenciales (JSON):**
+1.  **By credentials file (JSON):**
     ```csharp
-    BigQueryRepo.CredentialsFileName = "ruta/a/tu/archivo-credenciales.json";
-    BigQueryRepo.ProjectId = "tu-gcp-project-id";
+    BigQueryRepo.CredentialsFileName = "path/to/your/credentials-file.json";
+    BigQueryRepo.ProjectId = "your-gcp-project-id";
     ```
 
-2.  **Por contenido JSON de las credenciales:**
+2.  **By JSON content of credentials:**
     ```csharp
     BigQueryRepo.CredentialsJson = "{ \"type\": \"service_account\", ... }";
-    BigQueryRepo.ProjectId = "tu-gcp-project-id";
+    BigQueryRepo.ProjectId = "your-gcp-project-id";
     ```
 
-3.  **Por Token de Acceso:**
+3.  **By Access Token:**
     ```csharp
-    BigQueryRepo.CredentialsToken = "tu-token-de-acceso";
-    BigQueryRepo.ProjectId = "tu-gcp-project-id";
+    BigQueryRepo.CredentialsToken = "your-access-token";
+    BigQueryRepo.ProjectId = "your-gcp-project-id";
     ```
 
-Una vez configurado, puedes obtener la instancia del repositorio:
+Once configured, you can get the repository instance:
 
 ```csharp
 var repo = BigQueryRepo.Instance;
 ```
 
-#### Uso
+#### Usage
 
-El repositorio utiliza una clase genérica `T` que debe estar decorada con el atributo `BigQueryTable`.
+The repository uses a generic class `T` that must be decorated with the `BigQueryTable` attribute.
 
 ```csharp
-[BigQueryTable("mi_dataset")]
-public class MiEntidad
+[BigQueryTable("my_dataset")]
+public class MyEntity
 {
     public Guid Id { get; set; }
-    public string Nombre { get; set; }
-    public int Edad { get; set; }
+    public string Name { get; set; }
+    public int Age { get; set; }
 }
 ```
 
--   **Insertar un item:**
+-   **Insert an item:**
     ```csharp
-    await repo.InsertItem(new MiEntidad { ... });
+    await repo.InsertItem(new MyEntity { ... });
     ```
 
--   **Obtener todos los items:**
+-   **Get all items:**
     ```csharp
-    var todos = await repo.GetAll<MiEntidad>();
+    var all = await repo.GetAll<MyEntity>();
     ```
 
--   **Consultar con condiciones (LINQ):**
+-   **Query with conditions (LINQ):**
     ```csharp
-    var resultado = await repo.GetByField<MiEntidad>(e => e.Edad > 18);
+    var result = await repo.GetByField<MyEntity>(e => e.Age > 18);
     ```
 
--   **Actualizar:**
+-   **Update:**
     ```csharp
-    await repo.Update(miEntidadEditada, e => e.Id == miEntidadEditada.Id);
+    await repo.Update(myEditedEntity, e => e.Id == myEditedEntity.Id);
     ```
 
--   **Eliminar:**
+-   **Delete:**
     ```csharp
-    await repo.Delete<MiEntidad>(e => e.Nombre == "Juan");
+    await repo.Delete<MyEntity>(e => e.Name == "John");
     ```
 
 ### GCPStorage
 
-`GCPStorage` es una clase para gestionar archivos en Google Cloud Storage.
+`GCPStorage` is a class for managing files in Google Cloud Storage.
 
-#### Inicialización
+#### Initialization
 
-Para usar `GCPStorage`, debes proporcionar la ruta al archivo de credenciales:
+To use `GCPStorage`, you must provide the path to the credentials file:
 
 ```csharp
-GCPStorage.CredentialsFileName = "ruta/a/tu/archivo-credenciales.json";
+GCPStorage.CredentialsFileName = "path/to/your/credentials-file.json";
 var storage = GCPStorage.Instance;
 ```
 
-#### Uso
+#### Usage
 
--   **Subir un archivo:**
+-   **Upload a file:**
     ```csharp
-    var streamFile = new StreamFile("miarchivo.txt", memoryStream, ContentType.txt);
-    await storage.UploadFile("mi-bucket", "ruta/dentro/del/bucket", streamFile);
+    var streamFile = new StreamFile("myfile.txt", memoryStream, ContentType.txt);
+    await storage.UploadFile("my-bucket", "path/inside/bucket", streamFile);
     ```
 
--   **Descargar un archivo:**
+-   **Download a file:**
     ```csharp
-    var archivoDescargado = await storage.DownloadFile("mi-bucket", "ruta/dentro/del/bucket", "miarchivo.txt");
+    var downloadedFile = await storage.DownloadFile("my-bucket", "path/inside/bucket", "myfile.txt");
     ```
 
--   **Eliminar un archivo:**
+-   **Delete a file:**
     ```csharp
-    await storage.DeleteFile("mi-bucket", "ruta/dentro/del/bucket", "miarchivo.txt");
+    await storage.DeleteFile("my-bucket", "path/inside/bucket", "myfile.txt");
     ```
 
--   **Mover un archivo:**
+-   **Move a file:**
     ```csharp
-    await storage.MoveFile("bucket-origen", "ruta/origen", "bucket-destino", "ruta/destino", streamFile);
+    await storage.MoveFile("source-bucket", "source/path", "destination-bucket", "destination/path", streamFile);
     ```
 
-## Dependencias
+## Dependencies
 
 -   Google.Cloud.BigQuery.V2
 -   Google.Cloud.Storage.V1
 -   SweetMeSoft.Base
 -   SweetMeSoft.Tools
 
-## Licencia
+## License
 
-Este proyecto está bajo la licencia MIT. 
+This project is under the MIT license.

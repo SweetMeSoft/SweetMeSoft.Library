@@ -1,114 +1,114 @@
 # SweetMeSoft.Connectivity
 
-Librería para simplificar y estandarizar las peticiones a APIs y servicios web.
+Library to simplify and standardize requests to APIs and web services.
 
-## Descripción
+## Description
 
-`SweetMeSoft.Connectivity` es una librería para .NET Standard 2.1 que proporciona una clase `ApiReq` como un wrapper sobre `HttpClient`. Su objetivo es facilitar la realización de peticiones HTTP (GET, POST, PUT, DELETE), el manejo de diferentes tipos de contenido, la gestión de cookies y la deserialización de respuestas de una manera estructurada y reutilizable.
+`SweetMeSoft.Connectivity` is a library for .NET Standard 2.1 that provides an `ApiReq` class as a wrapper over `HttpClient`. Its goal is to facilitate making HTTP requests (GET, POST, PUT, DELETE), handling different content types, cookie management and response deserialization in a structured and reusable way.
 
-## Características
+## Features
 
--   **Wrapper de HttpClient:** Abstrae la complejidad de `HttpClient` en una API más simple.
--   **Soporte para Métodos HTTP:** Implementa `GET`, `POST`, `PUT` y `DELETE`.
--   **Manejo de Contenido:** Soporta `application/json`, `application/x-www-form-urlencoded` y `multipart/form-data`.
--   **Clases Genéricas:** Utiliza `GenericReq<T>` para las peticiones y `GenericRes<T>` para las respuestas, permitiendo un tipado fuerte.
--   **Gestión de Cookies:** Administra automáticamente las cookies entre peticiones.
--   **Descarga de Archivos:** Incluye un método `DownloadFile` para obtener archivos como un `StreamFile`.
--   **Patrón Singleton:** Proporciona una instancia única a través de `ApiReq.Instance` para un fácil acceso.
+-   **HttpClient Wrapper:** Abstracts the complexity of `HttpClient` into a simpler API.
+-   **HTTP Methods Support:** Implements `GET`, `POST`, `PUT` and `DELETE`.
+-   **Content Handling:** Supports `application/json`, `application/x-www-form-urlencoded` and `multipart/form-data`.
+-   **Generic Classes:** Uses `GenericReq<T>` for requests and `GenericRes<T>` for responses, allowing strong typing.
+-   **Cookie Management:** Automatically manages cookies between requests.
+-   **File Download:** Includes a `DownloadFile` method to get files as a `StreamFile`.
+-   **Singleton Pattern:** Provides a single instance through `ApiReq.Instance` for easy access.
 
-## Dependencias
+## Dependencies
 
 -   [Microsoft.AspNet.WebApi.Client](https://www.nuget.org/packages/Microsoft.AspNet.WebApi.Client/)
 -   [Newtonsoft.Json](https://www.nuget.org/packages/Newtonsoft.Json/)
 -   [SweetMeSoft.Base](https://www.nuget.org/packages/SweetMeSoft.Base/)
 
-## Instalación
+## Installation
 
 ```bash
 dotnet add package SweetMeSoft.Connectivity
 ```
 
-## Uso
+## Usage
 
-La librería se utiliza a través de la instancia singleton `ApiReq.Instance`.
+The library is used through the singleton instance `ApiReq.Instance`.
 
-### `GenericReq<T>`: La Petición
+### `GenericReq<T>`: The Request
 
-Este objeto se usa para configurar todos los detalles de la petición.
+This object is used to configure all request details.
 
-| Propiedad         | Tipo             | Descripción                                                                 |
+| Property          | Type             | Description                                                                 |
 | ----------------- | ---------------- | --------------------------------------------------------------------------- |
-| `Url`             | `string`         | **Requerido.** La URL del endpoint.                                         |
-| `Data`            | `T`              | El objeto con los datos a enviar en el cuerpo de la petición (para POST y PUT). |
-| `HeaderType`      | `HeaderType`     | El tipo de contenido (`json`, `xwwwunlercoded`, `formdata`).                |
-| `Authentication`  | `Authentication` | Objeto para configurar la autenticación (ej. Bearer Token).                 |
-| `Cookies`         | `string`         | Cookies a enviar en la petición.                                            |
-| `Headers`         | `HttpHeaders`    | Cabeceras HTTP adicionales.                                                 |
-| `AdditionalParams`| `List<KeyValuePair<string, string>>` | Parámetros adicionales para `xwwwunlercoded`.             |
+| `Url`             | `string`         | **Required.** The endpoint URL.                                            |
+| `Data`            | `T`              | The object with data to send in the request body (for POST and PUT).       |
+| `HeaderType`      | `HeaderType`     | The content type (`json`, `xwwwunlercoded`, `formdata`).                   |
+| `Authentication`  | `Authentication` | Object to configure authentication (e.g. Bearer Token).                    |
+| `Cookies`         | `string`         | Cookies to send in the request.                                            |
+| `Headers`         | `HttpHeaders`    | Additional HTTP headers.                                                    |
+| `AdditionalParams`| `List<KeyValuePair<string, string>>` | Additional parameters for `xwwwunlercoded`.              |
 
-### `GenericRes<T>`: La Respuesta
+### `GenericRes<T>`: The Response
 
-Este objeto contiene el resultado de la petición.
+This object contains the request result.
 
-| Propiedad        | Tipo                  | Descripción                                               |
+| Property         | Type                  | Description                                               |
 | ---------------- | --------------------- | --------------------------------------------------------- |
-| `Object`         | `T`                   | El objeto de respuesta deserializado (si la petición tuvo éxito). |
-| `HttpResponse`   | `HttpResponseMessage` | La respuesta HTTP original.                               |
-| `Error`          | `ErrorDetails`        | Detalles del error (si la petición falló).                |
-| `Cookies`        | `string`              | Los cookies recibidos en la respuesta.                    |
-| `IsSuccess`      | `bool`                | Indica si la petición fue exitosa (`true`/`false`).       |
+| `Object`         | `T`                   | The deserialized response object (if the request was successful). |
+| `HttpResponse`   | `HttpResponseMessage` | The original HTTP response.                               |
+| `Error`          | `ErrorDetails`        | Error details (if the request failed).                   |
+| `Cookies`        | `string`              | The cookies received in the response.                     |
+| `IsSuccess`      | `bool`                | Indicates if the request was successful (`true`/`false`). |
 
-### Ejemplo: Petición GET
+### Example: GET Request
 
 ```csharp
-// Definir el modelo de la respuesta esperada
+// Define the expected response model
 public class User
 {
     public int Id { get; set; }
     public string Name { get; set; }
 }
 
-// Realizar la petición
+// Make the request
 var response = await ApiReq.Instance.Get<User>("https://api.example.com/users/1");
 
 if (response.IsSuccess)
 {
     User user = response.Object;
-    // ... usar el objeto 'user'
+    // ... use the 'user' object
 }
 else
 {
-    // ... manejar el error con response.Error
+    // ... handle the error with response.Error
 }
 ```
 
-### Ejemplo: Petición POST
+### Example: POST Request
 
 ```csharp
-// Definir el modelo de la petición
+// Define the request model
 public class CreateUserInput
 {
     public string Name { get; set; }
     public string Email { get; set; }
 }
 
-// Definir el modelo de la respuesta
+// Define the response model
 public class CreateUserOutput
 {
     public int Id { get; set; }
     public string CreatedAt { get; set; }
 }
 
-// Preparar la petición
+// Prepare the request
 var requestData = new CreateUserInput { Name = "John Doe", Email = "john.doe@example.com" };
 var request = new GenericReq<CreateUserInput>
 {
     Url = "https://api.example.com/users",
     Data = requestData,
-    HeaderType = HeaderType.json // o xwwwunlercoded, formdata
+    HeaderType = HeaderType.json // or xwwwunlercoded, formdata
 };
 
-// Realizar la petición
+// Make the request
 var response = await ApiReq.Instance.Post<CreateUserInput, CreateUserOutput>(request);
 
 if (response.IsSuccess)
@@ -118,6 +118,6 @@ if (response.IsSuccess)
 }
 ```
 
-## Licencia
+## License
 
-Este proyecto está bajo la licencia MIT. 
+This project is under the MIT license.

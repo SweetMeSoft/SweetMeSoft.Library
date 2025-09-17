@@ -1,51 +1,51 @@
 # SweetMeSoft.Captcha
 
-Librería para la resolución automática de diferentes tipos de captchas utilizando el servicio 2Captcha.
+Library for automatic resolution of different types of captchas using the 2Captcha service.
 
-## Descripción
+## Description
 
-`SweetMeSoft.Captcha` es una librería para .NET Standard 2.1 que actúa como un wrapper para el servicio [2Captcha](https://2captcha.com/), simplificando el proceso de envío y resolución de captchas. Es compatible con varios tipos de captcha, incluyendo captchas de imagen, ReCaptcha (v2, v3, Invisible, Enterprise) y hCaptcha.
+`SweetMeSoft.Captcha` is a library for .NET Standard 2.1 that acts as a wrapper for the [2Captcha](https://2captcha.com/) service, simplifying the process of sending and solving captchas. It is compatible with various types of captcha, including image captchas, ReCaptcha (v2, v3, Invisible, Enterprise) and hCaptcha.
 
-## Características
+## Features
 
--   **Resolución de Múltiples Tipos de Captcha:**
-    -   `Normal`: Captchas de imagen a texto.
-    -   `ReCaptchaV2`: El clásico "No soy un robot".
-    -   `ReCaptchaV2Invisible`: ReCaptcha invisible que se activa por comportamiento.
-    -   `ReCaptchaV3`: ReCaptcha basado en puntuación.
-    -   `ReCaptchaEnterprise`: La versión empresarial de ReCaptcha.
--   **Notificación por Email:** Envía una notificación por correo electrónico cuando el saldo de la cuenta de 2Captcha es bajo, evitando interrupciones en el servicio.
--   **Configuración Sencilla:** Se configura fácilmente a través de la clase `CaptchaOptions`.
+-   **Resolution of Multiple Captcha Types:**
+    -   `Normal`: Image to text captchas.
+    -   `ReCaptchaV2`: The classic "I'm not a robot".
+    -   `ReCaptchaV2Invisible`: Invisible ReCaptcha that is activated by behavior.
+    -   `ReCaptchaV3`: Score-based ReCaptcha.
+    -   `ReCaptchaEnterprise`: The enterprise version of ReCaptcha.
+-   **Email Notification:** Sends an email notification when the 2Captcha account balance is low, avoiding service interruptions.
+-   **Simple Configuration:** Easily configured through the `CaptchaOptions` class.
 
-## Dependencias
+## Dependencies
 
 -   [SweetMeSoft.Base](https://www.nuget.org/packages/SweetMeSoft.Base/)
 -   [SweetMeSoft.Tools](https://www.nuget.org/packages/SweetMeSoft.Tools/)
--   `TwoCaptcha.dll` (Librería de terceros incluida en el proyecto).
+-   `TwoCaptcha.dll` (Third-party library included in the project).
 
-## Instalación
+## Installation
 
 ```bash
 dotnet add package SweetMeSoft.Captcha
 ```
 
-## Uso
+## Usage
 
-El uso de la librería se centra en la clase estática `Solver`. Debes crear una instancia de `CaptchaOptions` y pasarla al método `SolveAsync`.
+The library usage is centered on the static `Solver` class. You must create an instance of `CaptchaOptions` and pass it to the `SolveAsync` method.
 
 ### `CaptchaOptions`
 
-| Propiedad          | Tipo          | Descripción                                                                                              |
+| Property           | Type          | Description                                                                                              |
 | ------------------ | ------------- | -------------------------------------------------------------------------------------------------------- |
-| `TwoCaptchaKey`    | `string`      | **Requerido.** Tu clave API del servicio 2Captcha.                                                       |
-| `CaptchaType`      | `CaptchaType` | **Requerido.** El tipo de captcha que quieres resolver.                                                  |
-| `ImageBase64`      | `string`      | Requerido para `CaptchaType.Normal`. La imagen del captcha codificada en Base64.                         |
-| `HintText`         | `string`      | Opcional para `CaptchaType.Normal`. Una pista para resolver el captcha.                                  |
-| `SiteKey`          | `string`      | Requerido para todos los tipos de ReCaptcha. El `sitekey` de la página web donde está el captcha.        |
-| `SiteUrl`          | `string`      | Requerido para todos los tipos de ReCaptcha. La URL de la página donde se muestra el captcha.            |
-| `EmailNotifications` | `string`    | Opcional. Una dirección de correo para notificar cuando el saldo de 2Captcha es bajo.                    |
+| `TwoCaptchaKey`    | `string`      | **Required.** Your 2Captcha service API key.                                                            |
+| `CaptchaType`      | `CaptchaType` | **Required.** The type of captcha you want to solve.                                                    |
+| `ImageBase64`      | `string`      | Required for `CaptchaType.Normal`. The captcha image encoded in Base64.                                 |
+| `HintText`         | `string`      | Optional for `CaptchaType.Normal`. A hint to solve the captcha.                                         |
+| `SiteKey`          | `string`      | Required for all ReCaptcha types. The `sitekey` of the web page where the captcha is located.          |
+| `SiteUrl`          | `string`      | Required for all ReCaptcha types. The URL of the page where the captcha is displayed.                  |
+| `EmailNotifications` | `string`    | Optional. An email address to notify when the 2Captcha balance is low.                                  |
 
-### Ejemplo de Uso
+### Usage Example
 
 ```csharp
 using SweetMeSoft.Base.Captcha;
@@ -58,31 +58,31 @@ public class CaptchaExample
     {
         var options = new CaptchaOptions
         {
-            TwoCaptchaKey = "TU_API_KEY_DE_2CAPTCHA",
+            TwoCaptchaKey = "YOUR_2CAPTCHA_API_KEY",
             CaptchaType = CaptchaType.Normal,
-            ImageBase64 = "iVBORw0KGgoAAAANSUhEUgAA..." // Contenido de la imagen en Base64
+            ImageBase64 = "iVBORw0KGgoAAAANSUhEUgAA..." // Image content in Base64
         };
 
         string result = await Solver.SolveAsync(options);
-        // `result` contendrá el texto del captcha resuelto
+        // `result` will contain the solved captcha text
     }
 
     public async Task SolveReCaptchaV2()
     {
         var options = new CaptchaOptions
         {
-            TwoCaptchaKey = "TU_API_KEY_DE_2CAPTCHA",
+            TwoCaptchaKey = "YOUR_2CAPTCHA_API_KEY",
             CaptchaType = CaptchaType.ReCaptchaV2,
-            SiteKey = "EL_SITE_KEY_DE_LA_PAGINA",
+            SiteKey = "THE_PAGE_SITE_KEY",
             SiteUrl = "https://www.google.com/recaptcha/api2/demo"
         };
 
         string result = await Solver.SolveAsync(options);
-        // `result` contendrá el token de respuesta de ReCaptcha
+        // `result` will contain the ReCaptcha response token
     }
 }
 ```
 
-## Licencia
+## License
 
-Este proyecto está bajo la licencia MIT. 
+This project is under the MIT license.

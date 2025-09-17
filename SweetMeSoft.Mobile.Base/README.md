@@ -1,43 +1,43 @@
 # SweetMeSoft.Mobile.Base
 
-Librería base con un conjunto de utilidades, clases base y servicios para acelerar el desarrollo de aplicaciones .NET MAUI.
+Base library with a set of utilities, base classes and services to accelerate .NET MAUI application development.
 
-## Descripción
+## Description
 
-`SweetMeSoft.Mobile.Base` es una librería para .NET MAUI que proporciona una arquitectura base robusta para aplicaciones móviles, siguiendo el patrón MVVM. Incluye un ViewModel base con funcionalidades integradas, un servicio de popups, y extensiones para una configuración inicial sencilla.
+`SweetMeSoft.Mobile.Base` is a library for .NET MAUI that provides a robust base architecture for mobile applications, following the MVVM pattern. It includes a base ViewModel with integrated functionalities, a popup service, and extensions for simple initial configuration.
 
-## Características
+## Features
 
--   **Configuración Sencilla (`AppHostBuilderExtensions`):**
-    -   Un método de extensión `UseSweetMeSoftBase` para `MauiAppBuilder` que inicializa las dependencias necesarias como `CommunityToolkit.Maui` y `UserDialogs`.
--   **ViewModel Base (`AppBaseViewModel`):**
-    -   **Navegación:** Hereda de `NavigationViewModel` (no incluido pero implícito) para una gestión de navegación simple.
-    -   **Wrapper de API:** Métodos `Get` y `Post` que se integran con `SweetMeSoft.Connectivity` para realizar peticiones HTTP. Gestionan automáticamente la conectividad, los tokens de autenticación y los indicadores de carga.
-    -   **Diálogos y Popups:** Se integra con `Acr.UserDialogs` para alertas y confirmaciones, y utiliza un `PopupsService` propio para mostrar un popup de "cargando".
-    -   **Gestión de Permisos:** Helpers para verificar y solicitar permisos del dispositivo usando las APIs de MAUI.
-    -   **Acceso a Hardware:** Funciones para obtener la ubicación GPS.
-    -   **Gestión de Sesión:** Un método `Logout` para limpiar las preferencias de usuario y reiniciar la navegación.
--   **Servicio de Popups (`PopupsService`):**
-    -   Un servicio singleton para mostrar y ocultar un popup de carga (`LoadingPopup`) de forma consistente en toda la aplicación.
+-   **Simple Configuration (`AppHostBuilderExtensions`):**
+    -   An extension method `UseSweetMeSoftBase` for `MauiAppBuilder` that initializes necessary dependencies like `CommunityToolkit.Maui` and `UserDialogs`.
+-   **Base ViewModel (`AppBaseViewModel`):**
+    -   **Navigation:** Inherits from `NavigationViewModel` (not included but implicit) for simple navigation management.
+    -   **API Wrapper:** `Get` and `Post` methods that integrate with `SweetMeSoft.Connectivity` to perform HTTP requests. They automatically manage connectivity, authentication tokens and loading indicators.
+    -   **Dialogs and Popups:** Integrates with `Acr.UserDialogs` for alerts and confirmations, and uses its own `PopupsService` to show a "loading" popup.
+    -   **Permission Management:** Helpers to verify and request device permissions using MAUI APIs.
+    -   **Hardware Access:** Functions to get GPS location.
+    -   **Session Management:** A `Logout` method to clear user preferences and restart navigation.
+-   **Popup Service (`PopupsService`):**
+    -   A singleton service to show and hide a loading popup (`LoadingPopup`) consistently throughout the application.
 
-## Dependencias
+## Dependencies
 
 -   [Microsoft.Maui.Controls](https://www.nuget.org/packages/Microsoft.Maui.Controls)
 -   [CommunityToolkit.Maui](https://www.nuget.org/packages/CommunityToolkit.Maui)
 -   [Controls.UserDialogs.Maui](https://www.nuget.org/packages/Controls.UserDialogs.Maui)
 -   [SweetMeSoft.Connectivity](https://www.nuget.org/packages/SweetMeSoft.Connectivity)
 
-## Instalación
+## Installation
 
 ```bash
 dotnet add package SweetMeSoft.Mobile.Base
 ```
 
-## Uso
+## Usage
 
-### 1. Configuración en `MauiProgram.cs`
+### 1. Configuration in `MauiProgram.cs`
 
-En tu archivo `MauiProgram.cs`, utiliza el método `UseSweetMeSoftBase` para registrar la librería y sus dependencias.
+In your `MauiProgram.cs` file, use the `UseSweetMeSoftBase` method to register the library and its dependencies.
 
 ```csharp
 using SweetMeSoft.Mobile.Base;
@@ -49,15 +49,15 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
-            // Llama al método de extensión y pasa la URL base de tu API
-            .UseSweetMeSoftBase("https://api.tudominio.com") 
+            // Call the extension method and pass your API base URL
+            .UseSweetMeSoftBase("https://api.yourdomain.com") 
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
 
-        // ... Registra tus propias vistas y viewmodels
+        // ... Register your own views and viewmodels
         // builder.Services.AddSingleton<MyPage>();
         // builder.Services.AddSingleton<MyViewModel>();
 
@@ -66,36 +66,36 @@ public static class MauiProgram
 }
 ```
 
-### 2. Heredar de `AppBaseViewModel`
+### 2. Inherit from `AppBaseViewModel`
 
-Crea tus ViewModels heredando de `AppBaseViewModel` para acceder a toda la funcionalidad integrada.
+Create your ViewModels inheriting from `AppBaseViewModel` to access all the integrated functionality.
 
 ```csharp
 using SweetMeSoft.Mobile.Base.ViewModels;
-using CommunityToolkit.Mvvm.Input; // Necesario para [RelayCommand]
+using CommunityToolkit.Mvvm.Input; // Required for [RelayCommand]
 using System.Threading.Tasks;
 
 public partial class MyViewModel : AppBaseViewModel
 {
-    // Las propiedades observables se pueden definir con el CommunityToolkit.Mvvm
+    // Observable properties can be defined with CommunityToolkit.Mvvm
     // [ObservableProperty]
     // private string myData;
 
     public MyViewModel()
     {
-        // El AppBaseViewModel se encarga de la navegación a través del Shell o NavigationPage
+        // AppBaseViewModel handles navigation through Shell or NavigationPage
     }
 
     [RelayCommand]
     private async Task LoadDataAsync()
     {
-        // El 'true' en showLoading es el valor por defecto, lo que
-        // activará automáticamente el PopupsService.ShowLoading/HideLoading.
+        // The 'true' in showLoading is the default value, which
+        // will automatically activate PopupsService.ShowLoading/HideLoading.
         var result = await Get<MyDataModel>("/my-api/endpoint", showLoading: true);
         
         if (result != null)
         {
-            // ... procesar el resultado
+            // ... process the result
             // MyData = result.SomeProperty;
         }
     }
@@ -103,15 +103,15 @@ public partial class MyViewModel : AppBaseViewModel
     [RelayCommand]
     private async Task GoToDetailsAsync()
     {
-        // Navega a otra página registrada en el DI Container
+        // Navigate to another page registered in the DI Container
         await GoToAsync<DetailsPage>();
     }
 }
 ```
 
-### 3. Uso en la Vista (XAML)
+### 3. Usage in View (XAML)
 
-Enlaza los comandos de tu ViewModel a los controles de tu vista.
+Bind your ViewModel commands to your view controls.
 
 ```xml
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -121,13 +121,13 @@ Enlaza los comandos de tu ViewModel a los controles de tu vista.
              x:DataType="vm:MyViewModel">
 
     <VerticalStackLayout>
-        <Button Text="Cargar Datos" Command="{Binding LoadDataCommand}" />
-        <Button Text="Ver Detalles" Command="{Binding GoToDetailsCommand}" />
+        <Button Text="Load Data" Command="{Binding LoadDataCommand}" />
+        <Button Text="View Details" Command="{Binding GoToDetailsCommand}" />
     </VerticalStackLayout>
     
 </ContentPage>
 ```
 
-## Licencia
+## License
 
-Este proyecto está bajo la licencia MIT. 
+This project is under the MIT license.

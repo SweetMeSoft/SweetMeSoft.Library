@@ -40,7 +40,7 @@ public class RequestLoggingMiddleware(RequestDelegate next, Func<HttpContext, st
                 context.Response.ContentType = "application/json";
                 string result = JsonConvert.SerializeObject(new ProblemDetails
                 {
-                    Title = "401 Unauthorized",
+                    Title = "Unauthorized",
                     Status = context.Response.StatusCode,
                     Detail = "401 Unauthorized",
                     Instance = Guid.NewGuid().ToString(),
@@ -63,9 +63,9 @@ public class RequestLoggingMiddleware(RequestDelegate next, Func<HttpContext, st
             context.Response.StatusCode = statusCode;
             string result = JsonConvert.SerializeObject(new ProblemDetails
             {
-                Title = Utils.GetException(exception),
+                Title = exception.Source,
                 Status = context.Response.StatusCode,
-                Detail = exception.Source,
+                Detail = Utils.GetException(exception),
                 Instance = Guid.NewGuid().ToString(),
                 Type = exception.GetType().Name,
             }, jsonSettings);

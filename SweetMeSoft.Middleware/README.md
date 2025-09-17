@@ -1,53 +1,53 @@
 # SweetMeSoft.Middleware
 
-Librería con un conjunto de Middlewares y servicios para aplicaciones ASP.NET Core.
+Library with a set of Middlewares and services for ASP.NET Core applications.
 
-## Descripción
+## Description
 
-`SweetMeSoft.Middleware` es una librería para .NET Standard 2.1 que ofrece componentes para ASP.NET Core, diseñados para centralizar la gestión de errores, registrar peticiones y facilitar el acceso a servicios a través de un patrón Factory.
+`SweetMeSoft.Middleware` is a library for .NET Standard 2.1 that offers components for ASP.NET Core, designed to centralize error management, log requests and facilitate access to services through a Factory pattern.
 
-## Componentes Principales
+## Main Components
 
 ### 1. `ErrorHandlerMiddleware`
 
-Un middleware para la gestión global de excepciones. Captura las excepciones no controladas en la aplicación y las transforma en una respuesta JSON estandarizada con formato `ProblemDetails`.
+A middleware for global exception management. Captures unhandled exceptions in the application and transforms them into a standardized JSON response with `ProblemDetails` format.
 
-**Comportamiento:**
--   `AppException` (excepción personalizada): Devuelve `400 Bad Request`.
--   `KeyNotFoundException`: Devuelve `404 Not Found`.
--   Cualquier otra excepción: Devuelve `500 Internal Server Error`.
+**Behavior:**
+-   `AppException` (custom exception): Returns `400 Bad Request`.
+-   `KeyNotFoundException`: Returns `404 Not Found`.
+-   Any other exception: Returns `500 Internal Server Error`.
 
 ### 2. `RequestLoggingMiddleware`
 
-Un middleware para registrar los detalles de las peticiones y respuestas. Es altamente configurable, ya que permite inyectar una función de logging personalizada.
+A middleware to log request and response details. It is highly configurable, as it allows injecting a custom logging function.
 
-**Comportamiento:**
--   Intercepta la petición y la respuesta para leer sus cuerpos.
--   Invoca una función `writeLog` que le pasas en el constructor, entregándole el `HttpContext`, el cuerpo de la respuesta, el código de estado y el cuerpo de la petición.
--   También incluye su propio manejo de excepciones, que registra y formatea como `ProblemDetails`.
+**Behavior:**
+-   Intercepts the request and response to read their bodies.
+-   Invokes a `writeLog` function that you pass in the constructor, providing it with the `HttpContext`, response body, status code and request body.
+-   Also includes its own exception handling, which logs and formats as `ProblemDetails`.
 
 ### 3. `ServiceFactory`
 
-Una implementación del patrón Factory (`IServiceFactory`) que se integra con el contenedor de inyección de dependencias de ASP.NET Core. Permite desacoplar la lógica de negocio de la implementación directa de `IServiceProvider`.
+An implementation of the Factory pattern (`IServiceFactory`) that integrates with the ASP.NET Core dependency injection container. It allows decoupling business logic from direct implementation of `IServiceProvider`.
 
-## Dependencias
+## Dependencies
 
 -   [Microsoft.AspNetCore.Http.Abstractions](https://www.nuget.org/packages/Microsoft.AspNetCore.Http.Abstractions)
 -   [Microsoft.AspNetCore.Mvc.Core](https://www.nuget.org/packages/Microsoft.AspNetCore.Mvc.Core)
 -   [Newtonsoft.Json](https://www.nuget.org/packages/Newtonsoft.Json/)
 -   [SweetMeSoft.Tools](https://www.nuget.org/packages/SweetMeSoft.Tools/)
 
-## Instalación
+## Installation
 
 ```bash
 dotnet add package SweetMeSoft.Middleware
 ```
 
-## Uso
+## Usage
 
-### Configuración en `Startup.cs`
+### Configuration in `Startup.cs`
 
-Debes registrar los componentes en tu clase `Startup.cs` (o `Program.cs` en .NET 6+).
+You must register the components in your `Startup.cs` class (or `Program.cs` in .NET 6+).
 
 ```csharp
 using SweetMeSoft.Middleware;
@@ -58,27 +58,27 @@ public class Startup
 {
     public void ConfigureServices(IServiceCollection services)
     {
-        // ... otros servicios
+        // ... other services
         
-        // 1. Registrar el ServiceFactory
+        // 1. Register the ServiceFactory
         services.AddScoped<IServiceFactory, ServiceFactory>();
         
-        // ... registrar tus propios servicios (ej. IMyService, MyService)
+        // ... register your own services (e.g. IMyService, MyService)
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
         // ...
         
-        // 2. Añadir los middlewares al pipeline
-        // Es importante el orden. El ErrorHandler generalmente va primero.
+        // 2. Add middlewares to the pipeline
+        // Order is important. ErrorHandler usually goes first.
         app.UseMiddleware<ErrorHandlerMiddleware>();
 
-        // Para el RequestLoggingMiddleware, debes proporcionar tu propia lógica de logging
+        // For RequestLoggingMiddleware, you must provide your own logging logic
         app.UseMiddleware<RequestLoggingMiddleware>(async (httpContext, responseBody, statusCode, requestBody) => 
         {
-            // Tu lógica de logging aquí
-            // Ejemplo:
+            // Your logging logic here
+            // Example:
             Console.WriteLine($"Request: {requestBody} | Status: {statusCode} | Response: {responseBody}");
             await Task.CompletedTask;
         });
@@ -89,9 +89,9 @@ public class Startup
 }
 ```
 
-### Uso de `IServiceFactory` en un Controlador
+### Using `IServiceFactory` in a Controller
 
-Inyecta `IServiceFactory` en tus controladores o servicios para obtener instancias de otros servicios.
+Inject `IServiceFactory` into your controllers or services to get instances of other services.
 
 ```csharp
 using SweetMeSoft.Middleware.Interface;
@@ -103,10 +103,10 @@ public class MyController : ControllerBase
 {
     private readonly IMyService myService;
 
-    // Inyecta la factory en el constructor
+    // Inject the factory in the constructor
     public MyController(IServiceFactory factory)
     {
-        // Usa la factory para obtener el servicio que necesitas
+        // Use the factory to get the service you need
         this.myService = factory.Get<IMyService>();
     }
 
@@ -119,9 +119,9 @@ public class MyController : ControllerBase
 }
 ```
 
-### Lanzar Excepciones Personalizadas
+### Throw Custom Exceptions
 
-Desde tu lógica de negocio, puedes lanzar una `AppException` para generar una respuesta `400 Bad Request` controlada.
+From your business logic, you can throw an `AppException` to generate a controlled `400 Bad Request` response.
 
 ```csharp
 public class MyService : IMyService
@@ -131,14 +131,14 @@ public class MyService : IMyService
         // ...
         if (string.IsNullOrEmpty(someValue))
         {
-            // Esto será capturado por ErrorHandlerMiddleware
-            throw new AppException("El valor no puede ser nulo.");
+            // This will be caught by ErrorHandlerMiddleware
+            throw new AppException("The value cannot be null.");
         }
         // ...
     }
 }
 ```
 
-## Licencia
+## License
 
-Este proyecto está bajo la licencia MIT. 
+This project is under the MIT license.
