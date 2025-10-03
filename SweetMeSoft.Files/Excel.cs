@@ -14,6 +14,98 @@ namespace SweetMeSoft.Files;
 
 public class Excel
 {
+    public static StreamFile Generate<T>(IEnumerable<T> list, string sheetName, string fileName = "")
+    {
+        return Generate(
+        [
+            new ExcelSheet(sheetName, list)
+        ], fileName);
+    }
+
+    public static StreamFile Generate(List<ExcelSheet> sheets, string fileName = "")
+    {
+        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+        using var book = new ExcelPackage();
+        foreach (var sheet in sheets)
+        {
+            var rowIndex = 2;
+            var realSheet = book.Workbook.Worksheets.Add(sheet.Name);
+            var type = sheet.List.GetType().GetGenericArguments()[0];
+            WriteHeader(realSheet, type);
+            foreach (var item in sheet.List)
+            {
+                rowIndex = WriteRow(realSheet, rowIndex, item, type);
+            }
+
+            realSheet.Cells.AutoFitColumns();
+        }
+
+        fileName = string.IsNullOrEmpty(fileName) ? Guid.NewGuid().ToString("N") : fileName;
+        return new StreamFile(fileName, new MemoryStream(book.GetAsByteArray()), Constants.ContentType.xlsx);
+    }
+
+    public static StreamFile GenerateTemplate<T>()
+    {
+        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+        using var book = new ExcelPackage();
+        var realSheet = book.Workbook.Worksheets.Add("Template");
+        WriteHeader(realSheet, typeof(T), true);
+        realSheet.Cells.AutoFitColumns();
+        return new StreamFile("Template", new MemoryStream(book.GetAsByteArray()), Constants.ContentType.xlsx);
+    }
+
+    public static IEnumerable<T> Read<T>(StreamFile file, int headerRow = 1) where T : new()
+    {
+        return Read<T>(file.Stream, headerRow);
+    }
+
+    public static IEnumerable<T> Read<T>(Stream file, int headerRow = 1) where T : new()
+    {
+        return Read<T>(new ExcelOptions(file, headerRow));
+    }
+
+    public static IEnumerable<T> Read<T>(ExcelOptions options) where T : new()
+    {
+        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+        var list = new List<T>();
+        using var excelFile = new ExcelPackage(options.Stream);
+        foreach (var sheet in excelFile.Workbook.Worksheets)
+        {
+            var headerFilled = false;
+            var header = new List<string>();
+            var start = sheet.Dimension.Start;
+            var end = sheet.Dimension.End;
+            options.HeaderRow = options.HeaderRow < start.Row ? start.Row : options.HeaderRow;
+            for (int rowIndex = options.HeaderRow; rowIndex <= end.Row; rowIndex++)
+            {
+                try
+                {
+                    if (!headerFilled)
+                    {
+                        for (int columnIndex = start.Column; columnIndex <= end.Column; columnIndex++)
+                        {
+                            header.Add(sheet.Cells[options.HeaderRow, columnIndex].Text);
+                        }
+
+                        rowIndex = options.HeaderRow;
+                        headerFilled = true;
+                    }
+                    else
+                    {
+                        var row = ReadRow<T>(header, sheet, rowIndex, start);
+                        list.Add(row);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    options.ErrorCallback?.Invoke(rowIndex, ex);
+                }
+            }
+        }
+
+        return list;
+    }
+
     public static IEnumerable<T> Read2003File<T>(StreamFile file, int headerRowIndex = 0) where T : new()
     {
         return Read2003File<T>(file.Stream, headerRowIndex);
@@ -93,119 +185,6 @@ public class Excel
         return list;
     }
 
-    public static IEnumerable<T> Read<T>(StreamFile file, int headerRow = 1) where T : new()
-    {
-        return Read<T>(file.Stream, headerRow);
-    }
-
-    public static IEnumerable<T> Read<T>(Stream file, int headerRow = 1) where T : new()
-    {
-        return Read<T>(new ExcelOptions(file, headerRow));
-    }
-
-    public static IEnumerable<T> Read<T>(ExcelOptions options) where T : new()
-    {
-        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-        var list = new List<T>();
-        using var excelFile = new ExcelPackage(options.Stream);
-        foreach (var sheet in excelFile.Workbook.Worksheets)
-        {
-            var headerFilled = false;
-            var header = new List<string>();
-            var start = sheet.Dimension.Start;
-            var end = sheet.Dimension.End;
-            options.HeaderRow = options.HeaderRow < start.Row ? start.Row : options.HeaderRow;
-            for (int rowIndex = options.HeaderRow; rowIndex <= end.Row; rowIndex++)
-            {
-                try
-                {
-                    if (!headerFilled)
-                    {
-                        for (int columnIndex = start.Column; columnIndex <= end.Column; columnIndex++)
-                        {
-                            header.Add(sheet.Cells[options.HeaderRow, columnIndex].Text);
-                        }
-
-                        rowIndex = options.HeaderRow;
-                        headerFilled = true;
-                    }
-                    else
-                    {
-                        var properties = typeof(T).GetProperties();
-                        var row = new T();
-                        foreach (var property in properties)
-                        {
-                            var attr = property.GetCustomAttributes(true).FirstOrDefault(model => model.GetType().Name == "ColumnExcelAttribute");
-                            var columnAttr = attr == null ? new ColumnExcelAttribute(property.Name) : attr as ColumnExcelAttribute;
-                            var headerCell = header.FindIndex(a => a == columnAttr.Name);
-                            if (headerCell != -1)
-                            {
-                                var cell = sheet.Cells[rowIndex, headerCell + start.Column];
-                                if (cell.Value != null)
-                                {
-                                    if (property.PropertyType == typeof(DateTime) || property.PropertyType == typeof(DateTime?))
-                                    {
-                                        if (cell.Value is double && cell.Value.ToString() != "NaN")
-                                        {
-                                            property.SetValue(row, DateTime.FromOADate(cell.GetValue<double>()));
-                                        }
-                                        else
-                                        {
-                                            property.SetValue(row, cell.Value is DateTime ? cell.GetValue<DateTime>() : DateTime.ParseExact(cell.GetValue<string>(), columnAttr.DateFormat, null));
-                                        }
-                                    }
-
-                                    if (property.PropertyType == typeof(decimal) || property.PropertyType == typeof(decimal?))
-                                    {
-                                        var value = cell.GetValue<string>();
-                                        if (value != null)
-                                        {
-                                            value = value.Replace(".", CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
-                                            property.SetValue(row, Convert.ToDecimal(value));
-                                        }
-                                    }
-
-                                    if (property.PropertyType == typeof(int) || property.PropertyType == typeof(int?))
-                                    {
-                                        property.SetValue(row, cell.GetValue<int>());
-                                    }
-
-                                    if (property.PropertyType == typeof(bool) || property.PropertyType == typeof(bool?))
-                                    {
-                                        property.SetValue(row, cell.GetValue<bool>());
-                                    }
-
-                                    if (property.PropertyType == typeof(Guid) || property.PropertyType == typeof(Guid?))
-                                    {
-                                        property.SetValue(row, Guid.Parse(cell.GetValue<string>()));
-                                    }
-
-                                    if (cell.Value is ExcelErrorValue)
-                                    {
-                                        property.SetValue(row, cell.GetValue<ExcelErrorValue>().ToString());
-                                    }
-
-                                    if (property.PropertyType == typeof(string))
-                                    {
-                                        property.SetValue(row, cell.GetValue<string>());
-                                    }
-                                }
-                            }
-                        }
-
-                        list.Add(row);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    options.ErrorCallback?.Invoke(rowIndex, ex);
-                }
-            }
-        }
-
-        return list;
-    }
-
     public static List<List<T>> ReadAllSheets<T>(StreamFile file, int headerRow = 1) where T : new()
     {
         return ReadAllSheets<T>(file.Stream, headerRow);
@@ -221,7 +200,7 @@ public class Excel
         ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
         var allSheets = new List<List<T>>();
         using var excelFile = new ExcelPackage(options.Stream);
-        
+
         foreach (var sheet in excelFile.Workbook.Worksheets)
         {
             var sheetList = new List<T>();
@@ -230,7 +209,7 @@ public class Excel
             var start = sheet.Dimension.Start;
             var end = sheet.Dimension.End;
             var currentHeaderRow = options.HeaderRow < start.Row ? start.Row : options.HeaderRow;
-            
+
             for (int rowIndex = currentHeaderRow; rowIndex <= end.Row; rowIndex++)
             {
                 try
@@ -247,68 +226,7 @@ public class Excel
                     }
                     else
                     {
-                        var properties = typeof(T).GetProperties();
-                        var row = new T();
-                        foreach (var property in properties)
-                        {
-                            var attr = property.GetCustomAttributes(true).FirstOrDefault(model => model.GetType().Name == "ColumnExcelAttribute");
-                            var columnAttr = attr == null ? new ColumnExcelAttribute(property.Name) : attr as ColumnExcelAttribute;
-                            var headerCell = header.FindIndex(a => a == columnAttr.Name);
-                            if (headerCell != -1)
-                            {
-                                var cell = sheet.Cells[rowIndex, headerCell + start.Column];
-                                if (cell.Value != null)
-                                {
-                                    if (property.PropertyType == typeof(DateTime) || property.PropertyType == typeof(DateTime?))
-                                    {
-                                        if (cell.Value is double && cell.Value.ToString() != "NaN")
-                                        {
-                                            property.SetValue(row, DateTime.FromOADate(cell.GetValue<double>()));
-                                        }
-                                        else
-                                        {
-                                            property.SetValue(row, cell.Value is DateTime ? cell.GetValue<DateTime>() : DateTime.ParseExact(cell.GetValue<string>(), columnAttr.DateFormat, null));
-                                        }
-                                    }
-
-                                    if (property.PropertyType == typeof(decimal) || property.PropertyType == typeof(decimal?))
-                                    {
-                                        var value = cell.GetValue<string>();
-                                        if (value != null)
-                                        {
-                                            value = value.Replace(".", CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
-                                            property.SetValue(row, Convert.ToDecimal(value));
-                                        }
-                                    }
-
-                                    if (property.PropertyType == typeof(int) || property.PropertyType == typeof(int?))
-                                    {
-                                        property.SetValue(row, cell.GetValue<int>());
-                                    }
-
-                                    if (property.PropertyType == typeof(bool) || property.PropertyType == typeof(bool?))
-                                    {
-                                        property.SetValue(row, cell.GetValue<bool>());
-                                    }
-
-                                    if (property.PropertyType == typeof(Guid) || property.PropertyType == typeof(Guid?))
-                                    {
-                                        property.SetValue(row, Guid.Parse(cell.GetValue<string>()));
-                                    }
-
-                                    if (cell.Value is ExcelErrorValue)
-                                    {
-                                        property.SetValue(row, cell.GetValue<ExcelErrorValue>().ToString());
-                                    }
-
-                                    if (property.PropertyType == typeof(string))
-                                    {
-                                        property.SetValue(row, cell.GetValue<string>());
-                                    }
-                                }
-                            }
-                        }
-
+                        var row = ReadRow<T>(header, sheet, rowIndex, start);
                         sheetList.Add(row);
                     }
                 }
@@ -317,51 +235,11 @@ public class Excel
                     options.ErrorCallback?.Invoke(rowIndex, ex);
                 }
             }
-            
+
             allSheets.Add(sheetList);
         }
 
         return allSheets;
-    }
-
-    public static StreamFile Generate<T>(IEnumerable<T> list, string sheetName, string fileName = "")
-    {
-        return Generate(
-        [
-            new ExcelSheet(sheetName, list)
-        ], fileName);
-    }
-
-    public static StreamFile Generate(List<ExcelSheet> sheets, string fileName = "")
-    {
-        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-        using var book = new ExcelPackage();
-        foreach (var sheet in sheets)
-        {
-            var rowIndex = 2;
-            var realSheet = book.Workbook.Worksheets.Add(sheet.Name);
-            var type = sheet.List.GetType().GetGenericArguments()[0];
-            WriteHeader(realSheet, type);
-            foreach (var item in sheet.List)
-            {
-                rowIndex = WriteRow(realSheet, rowIndex, item, type);
-            }
-
-            realSheet.Cells.AutoFitColumns();
-        }
-
-        fileName = string.IsNullOrEmpty(fileName) ? Guid.NewGuid().ToString("N") : fileName;
-        return new StreamFile(fileName, new MemoryStream(book.GetAsByteArray()), Constants.ContentType.xlsx);
-    }
-
-    public static StreamFile GenerateTemplate<T>()
-    {
-        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-        using var book = new ExcelPackage();
-        var realSheet = book.Workbook.Worksheets.Add("Template");
-        WriteHeader(realSheet, typeof(T), true);
-        realSheet.Cells.AutoFitColumns();
-        return new StreamFile("Template", new MemoryStream(book.GetAsByteArray()), Constants.ContentType.xlsx);
     }
 
     public static string ValidateFormat<T>(StreamFile streamFile, int headerRow = 1)
@@ -392,6 +270,73 @@ public class Excel
         }
 
         return validations;
+    }
+
+    private static TRow ReadRow<TRow>(List<string> header, ExcelWorksheet sheet, int rowIndex, ExcelCellAddress start) where TRow : new()
+    {
+        var properties = typeof(TRow).GetProperties();
+        var row = new TRow();
+        foreach (var property in properties)
+        {
+            var attr = property.GetCustomAttributes(true).FirstOrDefault(model => model.GetType().Name == "ColumnExcelAttribute");
+            var columnAttr = attr == null ? new ColumnExcelAttribute(property.Name) : attr as ColumnExcelAttribute;
+            var headerCell = header.FindIndex(a => a == columnAttr.Name);
+            if (headerCell != -1)
+            {
+                var cell = sheet.Cells[rowIndex, headerCell + start.Column];
+                if (cell.Value != null)
+                {
+                    if (property.PropertyType == typeof(DateTime) || property.PropertyType == typeof(DateTime?))
+                    {
+                        if (cell.Value is double && cell.Value.ToString() != "NaN")
+                        {
+                            property.SetValue(row, DateTime.FromOADate(cell.GetValue<double>()));
+                        }
+                        else
+                        {
+                            property.SetValue(row, cell.Value is DateTime ? cell.GetValue<DateTime>() : DateTime.ParseExact(cell.GetValue<string>(), columnAttr.DateFormat, null));
+                        }
+                    }
+
+                    if (property.PropertyType == typeof(decimal) || property.PropertyType == typeof(decimal?))
+                    {
+                        var value = cell.GetValue<string>();
+                        if (value != null)
+                        {
+                            value = value.Replace(".", CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+                            property.SetValue(row, Convert.ToDecimal(value));
+                        }
+                    }
+
+                    if (property.PropertyType == typeof(int) || property.PropertyType == typeof(int?))
+                    {
+                        property.SetValue(row, cell.GetValue<int>());
+                    }
+
+                    if (property.PropertyType == typeof(bool) || property.PropertyType == typeof(bool?))
+                    {
+                        property.SetValue(row, cell.GetValue<bool>());
+                    }
+
+                    if (property.PropertyType == typeof(Guid) || property.PropertyType == typeof(Guid?))
+                    {
+                        property.SetValue(row, Guid.Parse(cell.GetValue<string>()));
+                    }
+
+                    if (cell.Value is ExcelErrorValue)
+                    {
+                        property.SetValue(row, cell.GetValue<ExcelErrorValue>().ToString());
+                    }
+
+                    if (property.PropertyType == typeof(string))
+                    {
+                        property.SetValue(row, cell.GetValue<string>());
+                    }
+                }
+            }
+        }
+
+        return row;
     }
 
     private static void WriteHeader(ExcelWorksheet sheet, Type type, bool writeExplanations = false)

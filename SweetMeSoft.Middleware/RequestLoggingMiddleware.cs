@@ -38,13 +38,14 @@ public class RequestLoggingMiddleware(RequestDelegate next, Func<HttpContext, st
             {
                 await writeLog(context, responseBody, context.Response.StatusCode, body);
                 context.Response.ContentType = "application/json";
+                var statusCode = context.Response.StatusCode;
                 string result = JsonConvert.SerializeObject(new ProblemDetails
                 {
-                    Title = "Unauthorized",
-                    Status = context.Response.StatusCode,
-                    Detail = "401 Unauthorized",
+                    Title = statusCode == 401 ? "Unauthorized" : statusCode == 403 ? "Forbidden" : statusCode == 404 ? "Not Found" : statusCode == 405 ? "Method Not Allowed" : "Error",
+                    Status = statusCode,
+                    Detail = statusCode == 401 ? "401 Unauthorized" : statusCode == 403 ? "403 Forbidden" : statusCode == 404 ? "404 Not Found" : statusCode == 405 ? "405 Method Not Allowed" : "Error",
                     Instance = Guid.NewGuid().ToString(),
-                    Type = "Unauthorized Exception",
+                    Type = statusCode == 401 ? "Unauthorized Exception" : statusCode == 403 ? "Forbidden Exception" : statusCode == 404 ? "Not Found Exception" : statusCode == 405 ? "Method Not Allowed Exception" : "Error Exception",
                 }, jsonSettings);
                 result = Utils.MinifyJson(result);
                 context.Response.Body = originalBody;
