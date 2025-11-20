@@ -24,7 +24,7 @@
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageTags>maui, .net maui, viewmodel, mvvm, popups, dialogs</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-		<Version>1.11.129</Version>
+		<Version>1.11.130</Version>
 		<Description>SweetMeSoft Mobile MAUI Base Library is a compilation of different utils for MAUI apps</Description>
     <Icon>logo_sq_512.png</Icon>
     <PackageIcon>logo_sq_512.png</PackageIcon>
@@ -41,8 +41,8 @@
 		<PackageReference Include="CommunityToolkit.Maui.Core" Version="11.2.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
 		<PackageReference Include="Controls.UserDialogs.Maui" Version="1.7.0" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.110" />
-		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.110" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.120" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.120" />
 	</ItemGroup>
 
 	<ItemGroup>

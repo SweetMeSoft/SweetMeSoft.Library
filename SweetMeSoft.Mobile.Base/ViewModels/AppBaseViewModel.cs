@@ -145,10 +145,11 @@ public class AppBaseViewModel : NavigationViewModel
         return default;
     }
 
-    public async void Logout<T>(bool showConfirmation = true, Action action = null) where T : Page, new()
+    public async void Logout<T>(bool showConfirmation = true, Action prelogout = null, Action postlogout = null) where T : Page, new()
     {
         if (!showConfirmation || await DisplayAlert("¿Estás seguro de que deseas cerrar sesión?", "Al cerrar sesión, se eliminarán todos los datos de tu cuenta en este dispositivo.", "Si", "No"))
         {
+            prelogout?.Invoke();
             var token = Preferences.Get(Constants.KEY_NOTIFICATIONS_TOKEN, "");
             Preferences.Remove(Constants.KEY_CURRENT_USER);
             Preferences.Remove(Constants.KEY_CURRENT_USER_ID);
@@ -156,7 +157,7 @@ public class AppBaseViewModel : NavigationViewModel
             Preferences.Remove(Constants.KEY_JWT_TOKEN);
             Preferences.Remove(Constants.KEY_IS_USER_COMPLETE);
             Preferences.Remove(Constants.KEY_CURRENT_USER_TYPE);
-            action?.Invoke();
+            postlogout?.Invoke();
             GoToNewRoot<T>();
         }
     }
@@ -233,7 +234,7 @@ public class AppBaseViewModel : NavigationViewModel
                     return default;
             }
 
-            await UserDialogs.Instance.AlertAsync(path + ":\n\r\n\r" + response.Error.Title, "Service Error", "Ok");
+            await UserDialogs.Instance.AlertAsync(path + ":\n\r\n\r" + response.Error.Detail, "Service Error", "Ok");
         }
         catch (Exception ex)
         {
