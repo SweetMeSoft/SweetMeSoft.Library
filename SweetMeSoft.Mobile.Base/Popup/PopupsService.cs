@@ -1,4 +1,4 @@
-using CommunityToolkit.Maui.Views;
+using CommunityToolkit.Maui.Extensions;
 
 namespace SweetMeSoft.Mobile.Base.Popup;
 
@@ -26,7 +26,7 @@ public class PopupsService
 
             _currentLoadingPopup = new LoadingPopup(message);
 
-            var currentPage = Application.Current?.MainPage;
+            Page currentPage = Application.Current?.MainPage;
             if (currentPage != null)
             {
                 currentPage.ShowPopup(_currentLoadingPopup);
@@ -42,7 +42,7 @@ public class PopupsService
     {
         MainThread.BeginInvokeOnMainThread(() =>
         {
-            _currentLoadingPopup?.Close();
+            _currentLoadingPopup?.CloseAsync();
             _currentLoadingPopup = null;
         });
     }

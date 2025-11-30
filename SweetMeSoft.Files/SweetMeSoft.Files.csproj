@@ -5,7 +5,7 @@
     <ImplicitUsings>true</ImplicitUsings>
     <LangVersion>latest</LangVersion>
     <PackageId>SweetMeSoft.Files</PackageId>
-    <Version>1.10.140</Version>
+    <Version>1.10.141</Version>
     <Authors>Erick Velasco</Authors>
     <Company>SweetMeSoft</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -31,7 +31,7 @@
     <PackageReference Include="EPPlus" Version="7.7.3" />
     <PackageReference Include="HtmlAgilityPack" Version="1.12.4" />
     <PackageReference Include="NPOI" Version="2.7.5" />
-    <PackageReference Include="System.Linq.Async" Version="6.0.3" />
+    <PackageReference Include="System.Linq.Async" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>

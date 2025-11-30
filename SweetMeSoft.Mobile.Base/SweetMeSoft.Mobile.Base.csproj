@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net9.0-ios;net9.0-maccatalyst;net9.0-android35.0</TargetFrameworks>
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>
+		<TargetFrameworks>net10.0-ios;net10.0-maccatalyst;net10.0-android</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net10.0-windows10.0.19041.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
 		<UseMaui>true</UseMaui>
@@ -24,7 +24,7 @@
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageTags>maui, .net maui, viewmodel, mvvm, popups, dialogs</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-		<Version>1.11.130</Version>
+		<Version>1.11.132</Version>
 		<Description>SweetMeSoft Mobile MAUI Base Library is a compilation of different utils for MAUI apps</Description>
     <Icon>logo_sq_512.png</Icon>
     <PackageIcon>logo_sq_512.png</PackageIcon>
@@ -37,12 +37,12 @@
 
 	<ItemGroup>
 		<PackageReference Include="Acr.UserDialogs" Version="9.2.2" />
-		<PackageReference Include="CommunityToolkit.Maui" Version="11.2.0" />
-		<PackageReference Include="CommunityToolkit.Maui.Core" Version="11.2.0" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="13.0.0" />
+		<PackageReference Include="CommunityToolkit.Maui.Core" Version="13.0.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-		<PackageReference Include="Controls.UserDialogs.Maui" Version="1.7.0" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.120" />
-		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.120" />
+		<PackageReference Include="Controls.UserDialogs.Maui" Version="1.12.0" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="10.0.11" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="10.0.11" />
 	</ItemGroup>
 
 	<ItemGroup>

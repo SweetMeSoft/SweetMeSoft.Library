@@ -5,7 +5,7 @@
     <ImplicitUsings>true</ImplicitUsings>
     <LangVersion>latest</LangVersion>
     <PackageId>SweetMeSoft.GCP</PackageId>
-    <Version>1.10.104</Version>
+    <Version>1.10.105</Version>
     <Authors>Erick Velasco</Authors>
     <Company>SweetMeSoft</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -29,7 +29,7 @@
   <ItemGroup>
     <PackageReference Include="Google.Cloud.BigQuery.V2" Version="3.11.0" />
     <PackageReference Include="Google.Cloud.Storage.V1" Version="4.13.0" />
-    <PackageReference Include="System.Linq.Async" Version="6.0.3" />
+    <PackageReference Include="System.Linq.Async" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
