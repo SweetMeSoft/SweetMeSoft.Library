@@ -4,26 +4,20 @@
                xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                x:Class="SweetMeSoft.Mobile.Base.Popup.LoadingPopup"
                CanBeDismissedByTappingOutsideOfPopup="False"
-               Color="Transparent">
-  <Frame CornerRadius="10"
-         Padding="25"
-         BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}"
-         BorderColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray500}}"
-         HasShadow="True"
-         VerticalOptions="Center"
-         HorizontalOptions="Center">
-    <VerticalStackLayout Spacing="15"
-                         VerticalOptions="Center"
-                         HorizontalOptions="Center">
-      <ActivityIndicator IsRunning="True"
-                         Color="{StaticResource Primary}"
-                         HeightRequest="50"
-                         WidthRequest="50"
-                         HorizontalOptions="Center" />
-      <Label x:Name="LoadingLabel"
-             Text="Cargando..."
-             HorizontalOptions="Center"
-             HorizontalTextAlignment="Center" />
-    </VerticalStackLayout>
-  </Frame>
+               IsClippedToBounds="True"
+               BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}">
+  <VerticalStackLayout Spacing="15"
+                       BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center">
+    <ActivityIndicator IsRunning="True"
+                       Color="{StaticResource Primary}"
+                       HeightRequest="50"
+                       WidthRequest="50"
+                       HorizontalOptions="Center" />
+    <Label x:Name="LoadingLabel"
+           Text="Cargando..."
+           HorizontalOptions="Center"
+           HorizontalTextAlignment="Center" />
+  </VerticalStackLayout>
 </toolkit:Popup>
