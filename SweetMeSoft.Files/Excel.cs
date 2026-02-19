@@ -76,13 +76,13 @@ public class Excel
             var start = sheet.Dimension.Start;
             var end = sheet.Dimension.End;
             options.HeaderRow = options.HeaderRow < start.Row ? start.Row : options.HeaderRow;
-            for (int rowIndex = options.HeaderRow; rowIndex <= end.Row; rowIndex++)
+            for (var rowIndex = options.HeaderRow; rowIndex <= end.Row; rowIndex++)
             {
                 try
                 {
                     if (!headerFilled)
                     {
-                        for (int columnIndex = start.Column; columnIndex <= end.Column; columnIndex++)
+                        for (var columnIndex = start.Column; columnIndex <= end.Column; columnIndex++)
                         {
                             header.Add(sheet.Cells[options.HeaderRow, columnIndex].Text);
                         }
@@ -210,13 +210,13 @@ public class Excel
             var end = sheet.Dimension.End;
             var currentHeaderRow = options.HeaderRow < start.Row ? start.Row : options.HeaderRow;
 
-            for (int rowIndex = currentHeaderRow; rowIndex <= end.Row; rowIndex++)
+            for (var rowIndex = currentHeaderRow; rowIndex <= end.Row; rowIndex++)
             {
                 try
                 {
                     if (!headerFilled)
                     {
-                        for (int columnIndex = start.Column; columnIndex <= end.Column; columnIndex++)
+                        for (var columnIndex = start.Column; columnIndex <= end.Column; columnIndex++)
                         {
                             header.Add(sheet.Cells[currentHeaderRow, columnIndex].Text);
                         }
@@ -252,7 +252,7 @@ public class Excel
         var start = sheet.Dimension.Start;
         var end = sheet.Dimension.End;
 
-        for (int columnIndex = start.Column; columnIndex <= end.Column; columnIndex++)
+        for (var columnIndex = start.Column; columnIndex <= end.Column; columnIndex++)
         {
             header.Add(sheet.Cells[headerRow, columnIndex].Text);
         }
@@ -381,7 +381,7 @@ public class Excel
                     sheet.SetValue(rowIndex, columnIndex, property.GetValue(obj, null));
                     if (property.PropertyType == typeof(DateTime) || property.PropertyType == typeof(DateTime?))
                     {
-                        sheet.Cells[rowIndex, columnIndex].Style.Numberformat.Format = "yyyy-MM-dd HH:mm:ss";//DateTimeFormatInfo.CurrentInfo.ShortDatePattern;
+                        sheet.Cells[rowIndex, columnIndex].Style.Numberformat.Format = "yyyy-MM-dd HH:mm:ss";
                     }
                     else
                     {

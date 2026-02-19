@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-using SweetMeSoft.Base;
+﻿using SweetMeSoft.Base;
 using SweetMeSoft.Base.Attributes;
 using SweetMeSoft.Base.Connectivity;
 
@@ -8,6 +6,7 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Security.Authentication;
 using System.Text;
+using System.Text.Json;
 using System.Web;
 
 namespace SweetMeSoft.Connectivity;
@@ -163,7 +162,8 @@ public class ApiReq
                     return await ManageResponse<TRes>(response, cookies);
             }
 
-            var content = new StringContent(JsonConvert.SerializeObject(request.Data), Encoding.UTF8, "application/json");
+            var s = JsonSerializer.Serialize(request.Data);
+            var content = new StringContent(s, Encoding.UTF8, "application/json");
             response = await httpClient.PostAsync(request.Url, content);
             return await ManageResponse<TRes>(response, cookies);
         }
@@ -185,7 +185,7 @@ public class ApiReq
             switch (request.HeaderType)
             {
                 case HeaderType.json:
-                    var content = new StringContent(JsonConvert.SerializeObject(request.Data), Encoding.UTF8, "application/json");
+                    var content = new StringContent(JsonSerializer.Serialize(request.Data), Encoding.UTF8, "application/json");
                     response = await httpClient.PutAsync(request.Url, content);
                     return await ManageResponse<TRes>(response, cookies);
 
@@ -272,7 +272,7 @@ public class ApiReq
                     break;
 
                 case AuthenticationType.Basic:
-                    byte[] encodedByte = Encoding.ASCII.GetBytes(request.Authentication.Key + ":" + request.Authentication.Value);
+                    var encodedByte = Encoding.ASCII.GetBytes(request.Authentication.Key + ":" + request.Authentication.Value);
                     var base64 = Convert.ToBase64String(encodedByte);
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", base64);
                     break;
@@ -309,7 +309,7 @@ public class ApiReq
         {
             try
             {
-                error = JsonConvert.DeserializeObject<ErrorDetails>(await response.Content.ReadAsStringAsync());
+                error = JsonSerializer.Deserialize<ErrorDetails>(await response.Content.ReadAsStringAsync());
             }
             catch
             {
@@ -351,7 +351,7 @@ public class ApiReq
         {
             HttpResponse = response,
             Cookies = cookies.GetCookieHeader(response.RequestMessage.RequestUri),
-            Object = response.IsSuccessStatusCode ? JsonConvert.DeserializeObject<TRes>(st) : default,
+            Object = response.IsSuccessStatusCode ? JsonSerializer.Deserialize<TRes>(st) : default,
             Error = response.IsSuccessStatusCode ? null : error
         };
     }

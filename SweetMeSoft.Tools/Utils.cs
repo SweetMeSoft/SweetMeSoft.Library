@@ -1,8 +1,7 @@
-﻿using Newtonsoft.Json;
-
-using SweetMeSoft.Base;
+﻿using SweetMeSoft.Base;
 using SweetMeSoft.Base.Tools;
 
+using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace SweetMeSoft.Tools;
@@ -11,12 +10,7 @@ public class Utils
 {
     public static string GetException(Exception e)
     {
-        if (e.Message.Contains("See the inner exception"))
-        {
-            return GetException(e.InnerException);
-        }
-
-        return e.Message;
+        return e.Message.Contains("See the inner exception") ? GetException(e.InnerException) : e.Message;
     }
 
     public static string GetRandomNumber(int lenght)
@@ -53,14 +47,14 @@ public class Utils
 
         foreach (var product in list)
         {
-            List<string> pairs1 = WordLetterPairs(chain.ToUpper());
-            List<string> pairs2 = WordLetterPairs(product.ToUpper());
+            var pairs1 = WordLetterPairs(chain.ToUpper());
+            var pairs2 = WordLetterPairs(product.ToUpper());
 
             var intersections = 0m;
 
-            for (int i = 0; i < pairs1.Count; i++)
+            for (var i = 0; i < pairs1.Count; i++)
             {
-                for (int j = 0; j < pairs2.Count; j++)
+                for (var j = 0; j < pairs2.Count; j++)
                 {
                     if (pairs1[i] == pairs2[j])
                     {
@@ -93,17 +87,17 @@ public class Utils
         List<string> AllPairs = new List<string>();
 
         // Tokenize the string and put the tokens/words into an array
-        string[] Words = Regex.Split(str, @"\s");
+        var Words = Regex.Split(str, @"\s");
 
         // For each word
-        for (int w = 0; w < Words.Length; w++)
+        for (var w = 0; w < Words.Length; w++)
         {
             if (!string.IsNullOrEmpty(Words[w]))
             {
                 // Find the pairs of characters
-                String[] PairsInWord = LetterPairs(Words[w]);
+                var PairsInWord = LetterPairs(Words[w]);
 
-                for (int p = 0; p < PairsInWord.Length; p++)
+                for (var p = 0; p < PairsInWord.Length; p++)
                 {
                     AllPairs.Add(PairsInWord[p]);
                 }
@@ -121,11 +115,11 @@ public class Utils
     /// <returns></returns>
     private static string[] LetterPairs(string str)
     {
-        int numPairs = str.Length - 1;
+        var numPairs = str.Length - 1;
 
-        string[] pairs = new string[numPairs];
+        var pairs = new string[numPairs];
 
-        for (int i = 0; i < numPairs; i++)
+        for (var i = 0; i < numPairs; i++)
         {
             pairs[i] = str.Substring(i, 2);
         }
@@ -137,8 +131,14 @@ public class Utils
     {
         try
         {
-            var obj = JsonConvert.DeserializeObject(json);
-            return JsonConvert.SerializeObject(obj);
+            var options = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                WriteIndented = true
+            };
+
+            using var doc = JsonDocument.Parse(json);
+            return JsonSerializer.Serialize(doc.RootElement, options);
         }
         catch (Exception)
         {
