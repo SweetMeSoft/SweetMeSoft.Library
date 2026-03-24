@@ -29,7 +29,7 @@ public class RequestLoggingMiddleware(RequestDelegate next, Func<HttpContext, st
             context.Response.Body = memStream;
             await next(context);
             memStream.Position = 0;
-            string responseBody = new StreamReader(memStream).ReadToEnd();
+            var responseBody = new StreamReader(memStream).ReadToEnd();
             memStream.Position = 0;
             await memStream.CopyToAsync(originalBody);
             context.Response.Body = originalBody;
@@ -37,19 +37,23 @@ public class RequestLoggingMiddleware(RequestDelegate next, Func<HttpContext, st
             if (context.Response.StatusCode != 200)
             {
                 await writeLog(context, responseBody, context.Response.StatusCode, body);
-                context.Response.ContentType = "application/json";
-                var statusCode = context.Response.StatusCode;
-                string result = JsonConvert.SerializeObject(new ProblemDetails
+
+                if (!context.Response.HasStarted)
                 {
-                    Title = statusCode == 401 ? "Unauthorized" : statusCode == 403 ? "Forbidden" : statusCode == 404 ? "Not Found" : statusCode == 405 ? "Method Not Allowed" : "Error",
-                    Status = statusCode,
-                    Detail = statusCode == 401 ? "401 Unauthorized" : statusCode == 403 ? "403 Forbidden" : statusCode == 404 ? "404 Not Found" : statusCode == 405 ? "405 Method Not Allowed" : "Error",
-                    Instance = Guid.NewGuid().ToString(),
-                    Type = statusCode == 401 ? "Unauthorized Exception" : statusCode == 403 ? "Forbidden Exception" : statusCode == 404 ? "Not Found Exception" : statusCode == 405 ? "Method Not Allowed Exception" : "Error Exception",
-                }, jsonSettings);
-                result = Utils.MinifyJson(result);
-                context.Response.Body = originalBody;
-                await context.Response.WriteAsync(result);
+                    context.Response.ContentType = "application/json";
+                    var statusCode = context.Response.StatusCode;
+                    var result = JsonConvert.SerializeObject(new ProblemDetails
+                    {
+                        Title = statusCode == 401 ? "Unauthorized" : statusCode == 403 ? "Forbidden" : statusCode == 404 ? "Not Found" : statusCode == 405 ? "Method Not Allowed" : "Error",
+                        Status = statusCode,
+                        Detail = statusCode == 401 ? "401 Unauthorized" : statusCode == 403 ? "403 Forbidden" : statusCode == 404 ? "404 Not Found" : statusCode == 405 ? "405 Method Not Allowed" : "Error",
+                        Instance = Guid.NewGuid().ToString(),
+                        Type = statusCode == 401 ? "Unauthorized Exception" : statusCode == 403 ? "Forbidden Exception" : statusCode == 404 ? "Not Found Exception" : statusCode == 405 ? "Method Not Allowed Exception" : "Error Exception",
+                    }, jsonSettings);
+                    result = Utils.MinifyJson(result);
+                    context.Response.Body = originalBody;
+                    await context.Response.WriteAsync(result);
+                }
             }
             else
             {
@@ -58,22 +62,24 @@ public class RequestLoggingMiddleware(RequestDelegate next, Func<HttpContext, st
         }
         catch (Exception exception)
         {
-            context.Response.ContentType = "application/json";
-            int statusCode = exception is AppException ? 400 : exception is not KeyNotFoundException ? 500 : 404;
-
-            context.Response.StatusCode = statusCode;
-            string result = JsonConvert.SerializeObject(new ProblemDetails
+            var result = JsonConvert.SerializeObject(new ProblemDetails
             {
                 Title = exception.Source,
-                Status = context.Response.StatusCode,
+                Status = 500,
                 Detail = Utils.GetException(exception),
                 Instance = Guid.NewGuid().ToString(),
                 Type = exception.GetType().Name,
             }, jsonSettings);
             result = Utils.MinifyJson(result);
-            await writeLog(context, result, statusCode, body);
-            context.Response.Body = originalBody;
-            await context.Response.WriteAsync(result);
+            await writeLog(context, result, 500, body);
+
+            if (!context.Response.HasStarted)
+            {
+                context.Response.ContentType = "application/json";
+                context.Response.StatusCode = 500;
+                context.Response.Body = originalBody;
+                await context.Response.WriteAsync(result);
+            }
         }
     }
 
