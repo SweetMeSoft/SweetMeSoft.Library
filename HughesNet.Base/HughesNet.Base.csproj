@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <ImplicitUsings>true</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <PackageId>HughesNet.Base</PackageId>
+    <Version>1.10.145</Version>
+    <Authors>Erick Velasco</Authors>
+    <Company>HughesNet</Company>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Copyright>HughesNet</Copyright>
+    <Title>HughesNet Base</Title>
+    <Description>HughesNet Base Library is the base of HughesNet Libraries</Description>
+    <PackageProjectUrl>https://github.com/HughesNet/HughesNet.Library</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/HughesNet/HughesNet.Library</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>base, helpers, attributes, connectivity, gcp, email, stream</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Icon>logo_sq_512.png</Icon>
+    <PackageIcon>logo_sq_512.png</PackageIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="logo_sq_512.png" Pack="true" PackagePath="" />
+    <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Text.Json" Version="10.0.3" />
+  </ItemGroup>
+
+</Project>

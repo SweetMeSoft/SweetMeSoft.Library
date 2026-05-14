@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <ImplicitUsings>true</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <PackageId>HughesNet.Connectivity</PackageId>
+    <Version>1.10.130</Version>
+    <Authors>Erick Velasco</Authors>
+    <Company>HughesNet</Company>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Title>HughesNet Connectivity</Title>
+    <Description>HughesNet Connectivity Library is a compilation of easy to use tools to connect with ThirdParties services and APIs</Description>
+    <Copyright>HughesNet</Copyright>
+    <PackageProjectUrl>https://github.com/HughesNet/HughesNet.Library</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/HughesNet/HughesNet.Library</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>http, api, connectivity, httpclient, web, request</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Icon>logo_sq_512.png</Icon>
+    <PackageIcon>logo_sq_512.png</PackageIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="logo_sq_512.png" Pack="true" PackagePath="" />
+    <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HughesNet.Base\HughesNet.Base.csproj" />
+  </ItemGroup>
+
+</Project>
