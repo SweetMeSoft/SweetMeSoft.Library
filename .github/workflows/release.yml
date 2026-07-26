@@ -28,14 +28,12 @@ jobs:
       - name: Build Release Solution
         run: dotnet build SweetMeSoft.Library.sln --configuration Release --no-restore
 
-      - name: Run Tests (if present)
+      - name: Run Tests
         run: dotnet test SweetMeSoft.Library.sln --configuration Release --no-build --verbosity normal
 
       - name: Pack NuGet Packages
         run: dotnet pack SweetMeSoft.Library.sln --configuration Release --no-build --output ./nupkgs
 
       - name: Publish to NuGet.org
-        if: env.NUGET_AUTH_TOKEN != ''
-        env:
-          NUGET_AUTH_TOKEN: ${{ secrets.NUGET_API_KEY }}
+        if: ${{ secrets.NUGET_API_KEY != '' }}
         run: dotnet nuget push "./nupkgs/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
