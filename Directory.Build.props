@@ -1,0 +1,16 @@
+<Project>
+  <PropertyGroup>
+    <Authors>Erick Velasco</Authors>
+    <Company>SweetMeSoft</Company>
+    <Copyright>SweetMeSoft</Copyright>
+    <PackageProjectUrl>https://github.com/SweetMeSoft/SweetMeSoft.Library</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/SweetMeSoft/SweetMeSoft.Library</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Icon>logo_sq_512.png</Icon>
+    <PackageIcon>logo_sq_512.png</PackageIcon>
+  </PropertyGroup>
+</Project>

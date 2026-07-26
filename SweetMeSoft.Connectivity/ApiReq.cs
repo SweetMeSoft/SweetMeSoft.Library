@@ -1,4 +1,4 @@
-﻿using SweetMeSoft.Base;
+using SweetMeSoft.Base;
 using SweetMeSoft.Base.Attributes;
 using SweetMeSoft.Base.Connectivity;
 
@@ -247,7 +247,11 @@ public class ApiReq
         {
             CookieContainer = cookies,
             AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
-            SslProtocols = SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls,
+#if NET6_0_OR_GREATER
+            SslProtocols = SslProtocols.Tls12 | SslProtocols.Tls13,
+#else
+            SslProtocols = SslProtocols.Tls12,
+#endif
             AllowAutoRedirect = request.AllowAutoRedirect,
         };
 

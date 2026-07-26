@@ -1,24 +1,13 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-    <ImplicitUsings>true</ImplicitUsings>
-    <LangVersion>latest</LangVersion>
+    <TargetFrameworks>netstandard2.1;net10.0</TargetFrameworks>
     <PackageId>SweetMeSoft.Tools</PackageId>
-    <Version>1.10.132</Version>
-    <Authors>Erick Velasco</Authors>
-    <Company>SweetMeSoft</Company>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.10.133</Version>
     <Title>SweetMeSoft Tools</Title>
     <Description>SweetMeSoft Tools Library is a compilation of basic tools to use</Description>
-    <Copyright>SweetMeSoft</Copyright>
-    <PackageProjectUrl>https://github.com/SweetMeSoft/SweetMeSoft.Library</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/SweetMeSoft/SweetMeSoft.Library</RepositoryUrl>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>tools, utilities, helpers, security, email, reflection, validation</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <Icon>logo_sq_512.png</Icon>
-    <PackageIcon>logo_sq_512.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>

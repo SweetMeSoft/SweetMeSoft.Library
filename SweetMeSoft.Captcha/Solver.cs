@@ -1,4 +1,4 @@
-﻿using SweetMeSoft.Base.Captcha;
+using SweetMeSoft.Base.Captcha;
 using SweetMeSoft.Base.Tools;
 using SweetMeSoft.Tools;
 
@@ -111,7 +111,7 @@ public class Solver
             var captchaId = await solver.Send(captcha);
             while (code is "" or null)
             {
-                Thread.Sleep(2000);
+                await Task.Delay(2000);
                 code = await solver.GetResult(captchaId);
             }
 

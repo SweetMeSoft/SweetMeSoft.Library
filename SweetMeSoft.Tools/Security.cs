@@ -1,53 +1,98 @@
-﻿using System.Security.Cryptography;
+using System.Security.Cryptography;
 
 namespace SweetMeSoft.Tools;
 
 public class Security
 {
+    private const int IterationsV1 = 1000;
+    private const int IterationsV2 = 600_000;
+    private const int SaltSize = 16;
+    private const int KeySize = 32;
+
     public static string HashPasswordIrreversible(string password)
     {
-        byte[] salt;
-        byte[] buffer2;
         if (password == null)
         {
-            throw new ArgumentNullException("password");
+            throw new ArgumentNullException(nameof(password));
         }
-        using (Rfc2898DeriveBytes bytes = new(password, 0x10, 0x3e8))
+
+        byte[] salt = new byte[SaltSize];
+        using (var rng = RandomNumberGenerator.Create())
         {
-            salt = bytes.Salt;
-            buffer2 = bytes.GetBytes(0x20);
+            rng.GetBytes(salt);
         }
-        byte[] dst = new byte[0x31];
-        Buffer.BlockCopy(salt, 0, dst, 1, 0x10);
-        Buffer.BlockCopy(buffer2, 0, dst, 0x11, 0x20);
+
+#if NET6_0_OR_GREATER
+        byte[] buffer2 = Rfc2898DeriveBytes.Pbkdf2(password, salt, IterationsV2, HashAlgorithmName.SHA256, KeySize);
+#else
+        using var pbkdf2 = new Rfc2898DeriveBytes(password, salt, IterationsV2, HashAlgorithmName.SHA256);
+        byte[] buffer2 = pbkdf2.GetBytes(KeySize);
+#endif
+
+        byte[] dst = new byte[1 + SaltSize + KeySize];
+        dst[0] = 0x01; // Format marker v2
+        Buffer.BlockCopy(salt, 0, dst, 1, SaltSize);
+        Buffer.BlockCopy(buffer2, 0, dst, 1 + SaltSize, KeySize);
         return Convert.ToBase64String(dst);
     }
 
     public static bool VerifyHashedPasswordIrreversible(string base64HashedPassword, string cleanPassword)
     {
-        byte[] buffer4;
         if (base64HashedPassword == null)
         {
             return false;
         }
         if (cleanPassword == null)
         {
-            throw new ArgumentNullException("password");
+            throw new ArgumentNullException(nameof(cleanPassword));
         }
-        byte[] src = Convert.FromBase64String(base64HashedPassword);
-        if ((src.Length != 0x31) || (src[0] != 0))
+
+        byte[] src;
+        try
+        {
+            src = Convert.FromBase64String(base64HashedPassword);
+        }
+        catch
         {
             return false;
         }
-        byte[] dst = new byte[0x10];
-        Buffer.BlockCopy(src, 1, dst, 0, 0x10);
-        byte[] buffer3 = new byte[0x20];
-        Buffer.BlockCopy(src, 0x11, buffer3, 0, 0x20);
-        using (Rfc2898DeriveBytes bytes = new(cleanPassword, dst, 0x3e8))
+
+        if (src.Length != (1 + SaltSize + KeySize))
         {
-            buffer4 = bytes.GetBytes(0x20);
+            return false;
         }
-        return ByteArraysEqual(buffer3, buffer4);
+
+        byte[] salt = new byte[SaltSize];
+        Buffer.BlockCopy(src, 1, salt, 0, SaltSize);
+
+        byte[] expectedHash = new byte[KeySize];
+        Buffer.BlockCopy(src, 1 + SaltSize, expectedHash, 0, KeySize);
+
+        byte[] actualHash;
+        if (src[0] == 0x00)
+        {
+            // Legacy V1 format: 1,000 iterations, SHA-1
+#pragma warning disable SYSLIB0041 // Type or member is obsolete
+            using Rfc2898DeriveBytes bytes = new(cleanPassword, salt, IterationsV1);
+            actualHash = bytes.GetBytes(KeySize);
+#pragma warning restore SYSLIB0041
+        }
+        else if (src[0] == 0x01)
+        {
+            // Modern V2 format: 600,000 iterations, SHA-256
+#if NET6_0_OR_GREATER
+            actualHash = Rfc2898DeriveBytes.Pbkdf2(cleanPassword, salt, IterationsV2, HashAlgorithmName.SHA256, KeySize);
+#else
+            using var pbkdf2 = new Rfc2898DeriveBytes(cleanPassword, salt, IterationsV2, HashAlgorithmName.SHA256);
+            actualHash = pbkdf2.GetBytes(KeySize);
+#endif
+        }
+        else
+        {
+            return false;
+        }
+
+        return CryptographicOperations.FixedTimeEquals(expectedHash, actualHash);
     }
 
     public static string CipherPasswordReversible(string password, string keyBase64, string vectorBase64)
@@ -123,15 +168,4 @@ public class Security
         return streamReader.ReadToEnd();
     }
 
-    private static bool ByteArraysEqual(byte[] firstHash, byte[] secondHash)
-    {
-        int _minHashLength = firstHash.Length <= secondHash.Length ? firstHash.Length : secondHash.Length;
-        var xor = firstHash.Length ^ secondHash.Length;
-        for (int i = 0; i < _minHashLength; i++)
-        {
-            xor |= firstHash[i] ^ secondHash[i];
-        }
-
-        return 0 == xor;
-    }
 }

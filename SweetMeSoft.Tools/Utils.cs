@@ -1,4 +1,4 @@
-﻿using SweetMeSoft.Base;
+using SweetMeSoft.Base;
 using SweetMeSoft.Base.Tools;
 
 using System.Text.Json;
@@ -134,7 +134,7 @@ public class Utils
             var options = new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                WriteIndented = true
+                WriteIndented = false
             };
 
             using var doc = JsonDocument.Parse(json);

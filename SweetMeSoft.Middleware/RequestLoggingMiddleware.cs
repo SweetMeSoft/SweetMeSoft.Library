@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+using System.Text;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using Newtonsoft.Json;
@@ -29,7 +30,11 @@ public class RequestLoggingMiddleware(RequestDelegate next, Func<HttpContext, st
             context.Response.Body = memStream;
             await next(context);
             memStream.Position = 0;
-            var responseBody = new StreamReader(memStream).ReadToEnd();
+            string responseBody;
+            using (var reader = new StreamReader(memStream, Encoding.UTF8, detectEncodingFromByteOrderMarks: false, bufferSize: 1024, leaveOpen: true))
+            {
+                responseBody = await reader.ReadToEndAsync();
+            }
             memStream.Position = 0;
             await memStream.CopyToAsync(originalBody);
             context.Response.Body = originalBody;
